@@ -5,7 +5,8 @@ using UnityEngine;
 /// <summary>
 /// 敵クラス
 /// </summary>
-public class Enemy : Character {
+public class Enemy : MonoBehaviour
+{
 
    
     // Use this for initialization

@@ -103,22 +103,22 @@ public class DropManager : MonoBehaviour {
 
      }
 
-     ///// <summary>
-     ///// 全てのレーンのドロップを一段落とす
-     ///// </summary>
-     //public void AllDropDown()
-     //{
-     //    for (int i = 0; i < MAX_RANE; i++)
-     //    {
-     //          DropRaneList[i].GetComponent<DropRane>().AllDropDown();
-     //    }
-     //}
+    ///// <summary>
+    ///// 全てのレーンのドロップを一段落とす
+    ///// </summary>
+    //public void AllDropDown()
+    //{
+    //    for (int i = 0; i < MAX_RANE; i++)
+    //    {
+    //          DropRaneList[i].GetComponent<DropRane>().AllDropDown();
+    //    }
+    //}
 
-     /// <summary>
-     /// 全てのレーンのターゲットドロップが同じ種類なら全削除する
-     /// </summary>
-     /// <returns>全削除したかどうか</returns>
-     public bool IfNeeded()
+    /// <summary>
+    /// 全てのレーンのターゲットドロップが同じ種類なら全削除する
+    /// </summary>
+    /// <returns>全削除したドロップ種類</returns>
+    public Drop.DROPTYPE IfNeeded()
      {
          Drop.DROPTYPE droptype = DropRaneList[(int)DropRane.LANEKIND.LANE1].GetComponent<DropRane>()._TargetDrop;
         Drop.DROPTYPE _droptype;
@@ -141,7 +141,7 @@ public class DropManager : MonoBehaviour {
                      {
                         DropRaneList[j].GetComponent<DropRane>().TargetDelete();
                      }
-                     return true;
+                     return droptype;
                  }
 
             }
@@ -149,7 +149,7 @@ public class DropManager : MonoBehaviour {
 
          }
 
-         return false;
+         return Drop.DROPTYPE.MAX;
      }
 
 }

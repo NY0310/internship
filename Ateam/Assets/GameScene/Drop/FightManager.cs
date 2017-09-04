@@ -8,12 +8,17 @@ public class FightManager : MonoBehaviour {
     public int TimeLimit;
     //現在の時間
     private int NowTime;
-    //スキルスタック
-    //List<>
-    //
+    //タッチできるか
     public bool IsTouch = true;
+    //動作のリスト
+    List<GameObject> MoveList = new List<GameObject>();
+    //動作のリストプロパティ
+    public List<GameObject> _MoveList
+    {
+        get { return MoveList; }
+        set { MoveList = value; }
 
-    int TouchCnt = 0;
+    }
 
 
     public bool _IsTouch
@@ -24,22 +29,21 @@ public class FightManager : MonoBehaviour {
     }
     // Use this for initialization
     void Start () {
-
     }
 	
 	// Update is called once per frame
 	void Update () {
-        //if (IsTouch)
-        //{
-        //    TouchCnt++;
-        //}
 
-        //if (TouchCnt > 60)
-        //{
-        //    TouchCnt = 0;
+        if (MoveList.Count == 0)
+        {
             IsTouch = true;
-        
-	}
+        }
+        else
+        {
+            IsTouch = false;
+        }
+
+    }
 
 
 

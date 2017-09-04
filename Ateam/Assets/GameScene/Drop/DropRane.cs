@@ -35,6 +35,18 @@ public class DropRane : MonoBehaviour{
     //どのレーンか
     LANEKIND LaneKind;
 
+    void Update()
+    {
+        if (DropList[(int)DropNumber.FIRST].transform.position.y == TargetPosition.y - INTERVAL_SIZE.y)
+        {
+            Create();
+
+            Destroy(DropList[(int)DropNumber.FIRST]);
+            DropList.RemoveAt((int)DropNumber.FIRST);
+
+        }
+    }
+
     /// <summary>
     /// 初期化処理
     /// </summary>
@@ -118,7 +130,7 @@ public class DropRane : MonoBehaviour{
     {
         GameObject inst;
         inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1));
-        inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y  * (MAX_DROP), transform.position.z);
+        inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y  * (MAX_DROP - 1), transform.position.z);
         DropList.Add(inst);
         return inst;
     }
@@ -162,16 +174,11 @@ public class DropRane : MonoBehaviour{
     {
         // int loopcnt = 0;
         bool MoveFlag = false;
-        if (DropList[(int)DropNumber.FIRST].transform.position.y == TargetPosition.y)
-        {
-            Create();
-
-            Destroy(DropList[(int)DropNumber.FIRST]);
-            DropList.RemoveAt((int)DropNumber.FIRST);
-
-        }
+    
         foreach (GameObject dropdata in DropList)
         {
+
+
                 if (dropdata.GetComponent<Drop>()._MoveGameObject == null && !MoveFlag)
                 {
                     dropdata.GetComponent<Drop>()._MoveGameObject = Instantiate(MovePregab);
@@ -187,6 +194,8 @@ public class DropRane : MonoBehaviour{
         }
     }
 
+
+    
 
     /// <summary>
     /// ターゲットドロップの種類プロパティ

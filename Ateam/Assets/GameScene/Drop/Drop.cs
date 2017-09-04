@@ -36,6 +36,17 @@ public  class Drop : MonoBehaviour {
     }
 
 
+    bool IsDeleate;
+
+
+    public bool _IsDeleate
+    {
+        get { return IsDeleate; }
+        set { IsDeleate = value; }
+
+    }
+
+
 }
 
 

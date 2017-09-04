@@ -2,31 +2,77 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : Character
+public class Player : MonoBehaviour
 {
-  
-
-    
-
-    int SkillPoint = 0;
+ 
 
     GameObject DropManager;
     //
     GameObject ButtlegameObject;
 
 
+    [SerializeField]
+    //合計攻撃慮k
+    int ToatalAttack;
+    //攻撃力
+    public int Attack;
+    //攻撃力のプロパティ
+    public int _Attack
+    {
+        get { return ToatalAttack; }
+        set { ToatalAttack = value; }
+    }
 
+    [SerializeField]
+    //体力
+    public int HP;
+    //HPのプロパティ
+    public int _HP
+    {
+        get { return HP; }
+        set { HP = value; }
+    }
 
+    //ドロップ属性
+    Drop.DROPTYPE DropType;
+    //ドロップ属性のプロパティ
+    public Drop.DROPTYPE _DropType
+    {
+        get { return DropType; }
+        set { DropType = value; }
+    }
+
+    //攻撃タイプの種類
+    public enum AttackType
+    {
+        Attack,
+        Recovery
+    }
+
+    //攻撃タイプ
+    AttackType attackType;
+    //攻撃タイプのプロパティ
+    public AttackType _AttackType
+    {
+        get { return attackType; }
+        set { attackType = value; }
+    }
+
+    //攻撃レベル
+    public enum AttackLevel
+    {
+        LevelOne,
+        LevelTwo,
+        LevelTree
+    }
 
     /// <summary>
     /// 攻撃(ターゲットドロップの中に)
     /// </summary>
-    protected void Attack()
+    public void DropJudgment()
     {
-        if (DropManager.GetComponent<DropManager>().TargetDelete(DropType) > 1)
-        {
-
-        } 
+        //プレイヤのキャラクタ属性と同一のターゲットドロップの数を求めてダメージ計算関数に渡す
+        DamageAdd((Player.AttackLevel)DropManager.GetComponent<DropManager>().TargetDelete(DropType));
     }   
 
     // Use this for initialization
@@ -45,16 +91,22 @@ public class Player : Character
         {
             if (Collision())
             {
-                Attack();
-            }
-            if (DropManager.GetComponent<DropManager>().IfNeeded())
-            {
-                SkillPoint++;
+                DropJudgment();
             }
 
         }
 
      
+    }
+
+
+    /// <summary>
+    /// ダメージ計算をして合計攻撃力に追加   
+    /// </summary>
+    /// <param name="level">攻撃レベル</param>
+    public void DamageAdd(AttackLevel level)
+    {
+        ToatalAttack += (int)level  * Attack;
     }
 
 

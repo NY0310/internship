@@ -23,7 +23,8 @@ public class Move : MonoBehaviour {
         this.Time = 0;
         //タッチ不可にする
         ButtlegameObject = GameObject.Find("FightManager");
-        ButtlegameObject.GetComponent<FightManager>()._IsTouch = false;
+        //ButtlegameObject.GetComponent<FightManager>()._IsTouch = false;
+        ButtlegameObject.GetComponent<FightManager>()._MoveList.Add(this.gameobject);
     }
 
     
@@ -71,6 +72,7 @@ public class Move : MonoBehaviour {
             }
         else
         {
+            ButtlegameObject.GetComponent<FightManager>()._MoveList.RemoveAt(0);
             Destroy(this.gameObject);
         }
 
@@ -78,8 +80,8 @@ public class Move : MonoBehaviour {
             {
                 //タッチ可にする
                 ButtlegameObject = GameObject.Find("FightManager");
-                ButtlegameObject.GetComponent<FightManager>()._IsTouch = true;
-                Destroy(this.gameObject);
+            ButtlegameObject.GetComponent<FightManager>()._MoveList.RemoveAt(0);
+            Destroy(this.gameObject);
              }
       
 
