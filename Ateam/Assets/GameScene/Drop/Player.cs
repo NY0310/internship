@@ -5,17 +5,18 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
  
-
+    //ドロップマネージャ
     GameObject DropManager;
-    //
+    //バトルマネージャ
     GameObject ButtlegameObject;
+    //HPゲージ
+    GameObject HpBarPrefab;
 
-
-    [SerializeField]
-    //合計攻撃慮k
+    //合計攻撃力
     int ToatalAttack;
+    [SerializeField]
     //攻撃力
-    public int Attack;
+    public int Attack = 10;
     //攻撃力のプロパティ
     public int _Attack
     {
@@ -25,7 +26,7 @@ public class Player : MonoBehaviour
 
     [SerializeField]
     //体力
-    public int HP;
+    public int HP = 100;
     //HPのプロパティ
     public int _HP
     {
@@ -72,33 +73,27 @@ public class Player : MonoBehaviour
     public void DropJudgment()
     {
         //プレイヤのキャラクタ属性と同一のターゲットドロップの数を求めてダメージ計算関数に渡す
-        DamageAdd((Player.AttackLevel)DropManager.GetComponent<DropManager>().TargetDelete(DropType));
+        DamageAdd((AttackLevel)DropManager.GetComponent<DropManager>().TargetDelete(DropType));
     }   
 
     // Use this for initialization
     void Start () {
         DropManager = GameObject.Find("DropManager");
+        ButtlegameObject = GameObject.Find("FightManager");
     }
 
     // Update is called once per frame
-    void Update () {
+    public bool IsUpdate()
+    { 
+       if (Collision())
+       {
+          DropJudgment();
+            return true;
+       }
 
-       
 
-        //タッチ不可にする
-        ButtlegameObject = GameObject.Find("FightManager");
-        if (ButtlegameObject.GetComponent<FightManager>()._IsTouch == true)
-        {
-            if (Collision())
-            {
-                DropJudgment();
-            }
-
-        }
-
-     
+       return false;
     }
-
 
     /// <summary>
     /// ダメージ計算をして合計攻撃力に追加   
@@ -114,7 +109,7 @@ public class Player : MonoBehaviour
     /// タッチされたかどうか
     /// </summary>
     /// <returns>真(押された)偽(押されてない)</returns>
-    protected bool Collision()
+    public bool Collision()
     {
         ////タッチ情報取得
         //if (Input.touchCount > 0)

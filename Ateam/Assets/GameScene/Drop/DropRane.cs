@@ -10,10 +10,10 @@ public class DropRane : MonoBehaviour{
 
     //ターゲットドロップの座標
     [SerializeField]
-    public Vector2 TargetPosition;
+    public Vector3 TargetPosition;
     //ドロップの縦間隔
     [SerializeField]
-    public Vector2 INTERVAL_SIZE;
+    public Vector3 INTERVAL_SIZE;
     //列に入るドロップの最大値
     [SerializeField]
     public int MAX_DROP = 4;
@@ -35,9 +35,12 @@ public class DropRane : MonoBehaviour{
     //どのレーンか
     LANEKIND LaneKind;
 
+    GameObject ButtlegameObject;
+
+
     void Update()
     {
-        if (DropList[(int)DropNumber.FIRST].transform.position.y == TargetPosition.y - INTERVAL_SIZE.y)
+        if (DropList[(int)DropNumber.FIRST].transform.position.y == TargetPosition.y - INTERVAL_SIZE.y / 2)
         {
             Create();
 
@@ -54,6 +57,8 @@ public class DropRane : MonoBehaviour{
     /// <param name="droptype">ドロップの種類</param>
     public void Init(LANEKIND lanekind, Drop.DROPTYPE droptype)
     {
+        ButtlegameObject= GameObject.Find("ButtleManager");
+
         //レーンを保存
         LaneKind = lanekind;
 
@@ -140,9 +145,8 @@ public class DropRane : MonoBehaviour{
     /// </summary>
     public void TargetDelete()
     {
-            GameObject ButtlegameObject = GameObject.Find("FightManager");
 
-            if (ButtlegameObject.GetComponent<FightManager>()._IsTouch == true)
+            if (ButtlegameObject.GetComponent<ButtleManager>()._IsTouch == true)
             {
                 //削除さる前にい
                 AllDropDown();

@@ -76,15 +76,22 @@
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\GameScene\Drop\ButtleManager.cs" />
     <Compile Include="Assets\GameScene\Drop\Character.cs" />
     <Compile Include="Assets\GameScene\Drop\Drop.cs" />
     <Compile Include="Assets\GameScene\Drop\DropManager.cs" />
     <Compile Include="Assets\GameScene\Drop\DropRane.cs" />
     <Compile Include="Assets\GameScene\Drop\Enemy.cs" />
-    <Compile Include="Assets\GameScene\Drop\FightManager.cs" />
     <Compile Include="Assets\GameScene\Drop\GameManager.cs" />
+    <Compile Include="Assets\GameScene\Drop\HpBar.cs" />
     <Compile Include="Assets\GameScene\Drop\Move.cs" />
     <Compile Include="Assets\GameScene\Drop\PlaySceneManager.cs" />
     <Compile Include="Assets\GameScene\Drop\Player.cs" />

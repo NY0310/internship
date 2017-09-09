@@ -35,12 +35,14 @@ public class DropManager : MonoBehaviour {
      public void Init()
      {
 
-        
-         for (int i = 0; i < MAX_RANE; i++)
-         {
             //前回のドロップ種類
             Drop.DROPTYPE OldDropType = Drop.DROPTYPE.MAX; 
+        
             Drop.DROPTYPE DropType = Drop.DROPTYPE.MAX;
+         for (int i = 0; i < MAX_RANE; i++)
+         {
+            DropType = ((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1));
+
             while (OldDropType == DropType)
             {
               DropType = ((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1));
