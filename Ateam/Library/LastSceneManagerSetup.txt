@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/GameScene/GameScene.unity
+- path: Assets/Scenes/Footer/Footer.unity
   isLoaded: 1
   isActive: 1
