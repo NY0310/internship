@@ -84,19 +84,30 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\GameScene\Drop\ButtleManager.cs" />
-    <Compile Include="Assets\GameScene\Drop\Character.cs" />
-    <Compile Include="Assets\GameScene\Drop\Drop.cs" />
-    <Compile Include="Assets\GameScene\Drop\DropManager.cs" />
-    <Compile Include="Assets\GameScene\Drop\DropRane.cs" />
-    <Compile Include="Assets\GameScene\Drop\Enemy.cs" />
-    <Compile Include="Assets\GameScene\Drop\GameManager.cs" />
-    <Compile Include="Assets\GameScene\Drop\HpBar.cs" />
-    <Compile Include="Assets\GameScene\Drop\Move.cs" />
-    <Compile Include="Assets\GameScene\Drop\PlaySceneManager.cs" />
-    <Compile Include="Assets\GameScene\Drop\Player.cs" />
-    <Compile Include="Assets\GameScene\Drop\PlayerManager.cs" />
-    <Compile Include="Assets\GameScene\Drop\Stage.cs" />
+    <Compile Include="Assets\GameScene\Script\AliceSkins.cs" />
+    <Compile Include="Assets\GameScene\Script\Botton.cs" />
+    <Compile Include="Assets\GameScene\Script\BottonManager.cs" />
+    <Compile Include="Assets\GameScene\Script\ButtleManager.cs" />
+    <Compile Include="Assets\GameScene\Script\Cinderella.cs" />
+    <Compile Include="Assets\GameScene\Script\Collision.cs" />
+    <Compile Include="Assets\GameScene\Script\Drop.cs" />
+    <Compile Include="Assets\GameScene\Script\DropManager.cs" />
+    <Compile Include="Assets\GameScene\Script\DropRane.cs" />
+    <Compile Include="Assets\GameScene\Script\Enemy.cs" />
+    <Compile Include="Assets\GameScene\Script\EnemyA.cs" />
+    <Compile Include="Assets\GameScene\Script\EnemyB.cs" />
+    <Compile Include="Assets\GameScene\Script\EnemyC.cs" />
+    <Compile Include="Assets\GameScene\Script\EnemyManager.cs" />
+    <Compile Include="Assets\GameScene\Script\GameManager.cs" />
+    <Compile Include="Assets\GameScene\Script\Hameln.cs" />
+    <Compile Include="Assets\GameScene\Script\HpBar.cs" />
+    <Compile Include="Assets\GameScene\Script\KaguyaPrincess.cs" />
+    <Compile Include="Assets\GameScene\Script\Move.cs" />
+    <Compile Include="Assets\GameScene\Script\PlaySceneManager.cs" />
+    <Compile Include="Assets\GameScene\Script\Player.cs" />
+    <Compile Include="Assets\GameScene\Script\PlayerManager.cs" />
+    <Compile Include="Assets\GameScene\Script\Stage.cs" />
+    <Compile Include="Assets\GameScene\Script\Unown.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>
