@@ -10,7 +10,7 @@ public class KaguyaPrincess : Player {
         Attack = 300;
         HP = 1100;
         Recovery = 500;
-        MaxSkillPoint = 3;
+        MaxSkillPoint = 7;
         attackData.droptype = Drop.DROPTYPE.Tryangle;
     }
 	
@@ -21,7 +21,7 @@ public class KaguyaPrincess : Player {
 
     public override void Skil()
     {
-        throw new NotImplementedException();
+        
     }
 
 }

@@ -9,7 +9,7 @@ public class Unown : Player {
     {
         HP = 800;
         Attack = 400;
-        MaxSkillPoint = 3;
+        MaxSkillPoint = 8;
         Recovery = 400;
         attackData.droptype = Drop.DROPTYPE.Tryangle;
     }

@@ -149,7 +149,7 @@ public class DropManager : MonoBehaviour {
              _droptype = DropRaneList[i].GetComponent<DropRane>()._TargetDrop;
 
 
-             if (droptype != _droptype)
+             if ((droptype != _droptype) && (droptype != Drop.DROPTYPE.Rainbow))
              {
                  break;
              }
@@ -173,5 +173,17 @@ public class DropManager : MonoBehaviour {
 
          return Drop.DROPTYPE.MAX;
      }
+
+    /// <summary>
+    /// シンデレラのスキル(UglyMagic)
+    /// </summary>
+    public void UglyMagic()
+    {
+        List<GameObject> dropRane = DropRaneList[(int)DropRane.LANEKIND.LANE2].GetComponent<DropRane>()._DropList;
+        Destroy(dropRane[(int)DropRane.DropNumber.FOURTH]);
+        dropRane.RemoveAt((int)DropRane.DropNumber.FOURTH);
+        DropRaneList[(int)DropRane.LANEKIND.LANE2].GetComponent<DropRane>().Create(Drop.DROPTYPE.Rainbow);
+    }
+
 
 }

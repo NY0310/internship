@@ -192,7 +192,7 @@ public class PlayerManager : MonoBehaviour {
         {
             ToatalHP -= item;
         }
-
+        SetHpBar();
 
     }
 
@@ -222,6 +222,17 @@ public class PlayerManager : MonoBehaviour {
         {
             HpPrefab.GetComponent<HpBar>()._Hp = 0.0f;
 
+        }
+    }
+
+    /// <summary>
+    /// ハーメルンのスキル(大樹の誘い)全プレイヤ攻撃力x1.2
+    /// </summary>
+    public void BigTreeInvitation()
+    {
+        foreach (var list in PlayerList)
+        {
+            list.GetComponent<Player>()._Attack *= 1.2f;
         }
     }
 

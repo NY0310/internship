@@ -32,6 +32,13 @@ public class DropRane : MonoBehaviour{
 
     //レーンに入ってるドロップリスト
     List<GameObject> DropList = new List<GameObject>();
+    public List<GameObject> _DropList
+    {
+        get { return DropList; }
+        set { _DropList = value; }
+
+    }
+
     //どのレーンか
     LANEKIND LaneKind;
 
@@ -76,7 +83,7 @@ public class DropRane : MonoBehaviour{
                 inst = Create();
             }
             //座標設定
-            inst.transform.position = new Vector3(Pos.x, Pos.y, transform.position.z);
+            inst.transform.position = new Vector3(Pos.x, Pos.y, INTERVAL_SIZE.z * i);
             Pos.y += INTERVAL_SIZE.y;
 
         }
@@ -150,7 +157,7 @@ public class DropRane : MonoBehaviour{
     {
         GameObject inst;
         inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1));
-        inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y  * (MAX_DROP - 1), transform.position.z);
+        inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y  * (MAX_DROP - 1), 0);
         DropList.Add(inst);
         return inst;
     }
@@ -177,7 +184,8 @@ public class DropRane : MonoBehaviour{
     /// <returns>成功か失敗か</returns>
     public bool TargetDelete(Drop.DROPTYPE droptype)
     {
-        if (DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType == droptype)
+        Drop.DROPTYPE DropType = DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType;
+        if ((DropType == droptype)||(DropType == Drop.DROPTYPE.Rainbow))
         {
             TargetDelete();
             return true;
@@ -209,8 +217,7 @@ public class DropRane : MonoBehaviour{
         }
     }
 
-
-    
+   
 
     /// <summary>
     /// ターゲットドロップの種類プロパティ
@@ -220,6 +227,15 @@ public class DropRane : MonoBehaviour{
         get { return DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType; }
         set { DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType = value; }
     }
+
+    ///// <summary>
+    ///// 一番上のドロップの種類プロパティ
+    ///// </summary>
+    //public Drop.DROPTYPE _BackDrop
+    //{
+    //    get { return DropList[(int)DropNumber.FOURTH].GetComponent<Drop>()._DropType; }
+    //    set { DropList[(int)DropNumber.FOURTH].GetComponent<Drop>()._DropType = value; }
+    //}
 
 
     //列の種類

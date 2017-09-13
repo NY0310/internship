@@ -15,7 +15,8 @@ public  class Drop : MonoBehaviour {
         Circle,
         Cross,
         Tryangle,
-        MAX
+        MAX,
+        Rainbow
     }
 
     DROPTYPE DropType;

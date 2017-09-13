@@ -253,7 +253,7 @@ public class Attack : ButtleState
         cnt++;
         if (cnt == 2)
         {
-            buttlemanager.ChangeState(Wait.GetInstance());
+           buttlemanager.ChangeState(Wait.GetInstance());
         }
     }
 

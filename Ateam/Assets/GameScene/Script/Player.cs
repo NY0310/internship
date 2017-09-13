@@ -4,23 +4,28 @@ using UnityEngine;
 
 public abstract class Player : MonoBehaviour
 {
-   [SerializeField]
     //ドロップマネージャ
     GameObject DropManager;
- //   [SerializeField]
+    public GameObject _DropManager
+    {
+        get { return DropManager; }
+        set { DropManager = value; }
+    }
+
+    //   [SerializeField]
 
 
     ////合計攻撃力
     //int ToatalAttack;
     //[SerializeField]
     //攻撃力
-    public int Attack;
+    public float Attack;
     ////攻撃力のプロパティ
-    //public int _Attack
-    //{
-    //    get { return ToatalAttack; }
-    //    set { ToatalAttack = value; }
-    //}
+    public float _Attack
+    {
+        get { return Attack; }
+        set { Attack = value; }
+    }
 
     [SerializeField]
     //体力
@@ -118,7 +123,7 @@ public abstract class Player : MonoBehaviour
     { 
        if (Collision())
        {
-            if (MaxSkillPoint == SkillPoint)
+            if (MaxSkillPoint <=  SkillPoint)
             {
               SkillPoint = 0;
               Skil();
@@ -158,11 +163,11 @@ public abstract class Player : MonoBehaviour
     {
         if (level < AttackLevel.LevelTree + 1)
         {
-            attackData.ToatalAttack += (int)level * Attack;
+            attackData.ToatalAttack += (int)((float)level * Attack);
         }
         else
         {
-            attackData.ToatalAttack += 5 * Attack;
+            attackData.ToatalAttack += (int)(5.0f * Attack);
 
         }
     }

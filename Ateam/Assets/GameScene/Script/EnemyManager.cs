@@ -44,26 +44,15 @@ public class EnemyManager : MonoBehaviour {
 
     // Update is called once per frame
     void Update () {
-        EnemyDelete();
 
-        //if (EnemyList.Count == 0)
-        //{
-        //    int dag = 0;
-        //}
-        //else if (EnemyList.Count == 1)
-        //{
-        //    int ad = 0;
-        //}
-        //else
-        //{
-        //    int adgaga = 0;
-        //}
-        //List<Player.AttackData> data = new List<Player.AttackData>();
-        //Player.AttackData a;
-        //a.ToatalAttack = 10;
-        //a.droptype = Drop.DROPTYPE.Circle;
-        //data.Add(a);
-        //HitDamage(data);
+        if (EnemyList != null)
+        {
+            EnemyDelete();
+
+        }
+
+
+
     }
 
   
@@ -73,16 +62,16 @@ public class EnemyManager : MonoBehaviour {
     /// </summary>
     void EnemyDelete()
     {
-        //int cnt = 0;
-        //foreach (var list in EnemyList)
-        //{
-        //    if (list._HP == 0)
-        //    {
-        //        Destroy(list);
-        //        EnemyList.RemoveAt(cnt);
-        //    }
-        //    cnt++;
-        //}
+        foreach (var item in EnemyList)
+        {
+            if (item._IsDestory == true)
+            {
+                Destroy(item.gameObject);
+                EnemyList.RemoveAt(0);
+                break;
+            }
+           
+        }
     }
 
     /// <summary>
@@ -92,17 +81,23 @@ public class EnemyManager : MonoBehaviour {
     /// <param name="droptype"></param>
     public void HitDamage(List<Player.AttackData> AttackDataList)
     {
+
+        int TargetCnt = 0;
         foreach (var list in AttackDataList)
         {
-            if (EnemyList.Count != 0)
+            if (EnemyList != null)
             {
-                EnemyList[0].HitDamage(list.ToatalAttack, list.droptype);
-                if (EnemyList[0]._HP == 0)
+                foreach (var item in EnemyList)
                 {
-                    Destroy(EnemyList[0]);
-                    EnemyList.RemoveAt(0);
+                    if (item._HP != 0)
+                    {
+                        EnemyList[TargetCnt].HitDamage(list.ToatalAttack, list.droptype);
+                        break;
+
+                    }
                 }
-                break;
+
+                
             }
 
         }

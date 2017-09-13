@@ -11,7 +11,7 @@ public abstract class Enemy : MonoBehaviour
     //[SerializeField]
     //public GameObject enemy;
     [SerializeField]
-    public GameObject HpPrefab;
+    GameObject HpPrefab;
     //HPゲージとの縦間隔
     [SerializeField]
     public float INTERVAL_POS;
@@ -43,6 +43,13 @@ public abstract class Enemy : MonoBehaviour
     }
 
     //GameObject ButtlegameObject;
+    bool IsDestory = false;
+    public bool _IsDestory
+    {
+        get { return IsDestory; }
+        set { IsDestory = value; }
+
+    }
 
 
 
@@ -76,6 +83,9 @@ public abstract class Enemy : MonoBehaviour
         HpPrefab.GetComponentInChildren<Slider>().GetComponent<RectTransform>().localScale = new Vector3(0.2f, 0.5f, 0.5f);
 
 
+
+        //自身を登録しHPbarが0二なったら削除してもらう
+        HpPrefab.GetComponent<HpBar>()._Enemy = this.gameObject;
     }
 
     protected void SetHp()
@@ -123,7 +133,7 @@ public abstract class CircleEnemy : Enemy
         if (_HP < 0)
         {
             _HP = 0;
-        }
+        }   
         SetHp();
     }
 

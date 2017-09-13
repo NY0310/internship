@@ -52,6 +52,13 @@ public class HpBar : MonoBehaviour
         get { return NowTime; }
         set { NowTime = value; }
     }
+
+    //敵
+    GameObject Enemy;
+    public GameObject _Enemy
+    {
+        set { Enemy = value; }
+    }
     void Start()
     {
         // スライダーを取得する
@@ -81,6 +88,17 @@ public class HpBar : MonoBehaviour
                 //ChangeState(HPWait.GetInstance());
             }
         }
+
+        //hp0二なったら削除
+        if (OldHp == 0)
+        {
+            if (Enemy != null)
+            {
+                Enemy.GetComponent<Enemy>()._IsDestory = true;
+                Destroy(this.gameObject);
+            }
+            
+        }
     }
 
 
@@ -89,6 +107,7 @@ public class HpBar : MonoBehaviour
         return (1 - time) * start + goral * time;
 
     }
+
 
 
     ////現在の状態を変更する

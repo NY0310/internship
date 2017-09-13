@@ -10,7 +10,7 @@ public class Cinderella : Player {
         HP = 1300;
         Attack = 300;
         Recovery = 500;
-        MaxSkillPoint = 3;
+        MaxSkillPoint = 5;
         attackData.droptype = Drop.DROPTYPE.Cross;
     }
 	
@@ -21,6 +21,6 @@ public class Cinderella : Player {
 
     public override void Skil()
     {
-        throw new NotImplementedException();
+        _DropManager.GetComponent<DropManager>().UglyMagic();
     }
 }
