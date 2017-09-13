@@ -74,6 +74,8 @@ public abstract class Enemy : MonoBehaviour
 
         HpPrefab.GetComponentInChildren<Slider>().GetComponent<RectTransform>().anchoredPosition = new Vector3(pos.x, pos.y + INTERVAL_POS, pos.z);
         HpPrefab.GetComponentInChildren<Slider>().GetComponent<RectTransform>().localScale = new Vector3(0.2f, 0.5f, 0.5f);
+
+
     }
 
     protected void SetHp()

@@ -6,7 +6,7 @@ using UnityEngine;
 public class KaguyaPrincess : Player {
 
 	// Use this for initialization
-	public override void Start () {
+	public override void Awake() {
         Attack = 300;
         HP = 1100;
         Recovery = 500;

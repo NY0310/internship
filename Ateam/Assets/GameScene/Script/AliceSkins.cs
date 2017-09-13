@@ -6,9 +6,9 @@ using UnityEngine;
 public class AliceSkins : Player {
 
 	// Use this for initialization
-	public override void Start () {
+	public override void Awake() {
         Attack = 500;
-        HP = 900;
+        _HP = 900;
         MaxSkillPoint = 3;
         Recovery = 300;
         attackData.droptype = Drop.DROPTYPE.Circle;

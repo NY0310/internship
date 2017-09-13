@@ -13,7 +13,7 @@ public class HpBar : MonoBehaviour
 
     }
 
-    HPState HpState;
+  //  HPState HpState;
 
     float Hp  = 1;
     public float _Hp
@@ -46,11 +46,17 @@ public class HpBar : MonoBehaviour
     }
 
 
+    int NowTime = 0;
+    public int _NowTime
+    {
+        get { return NowTime; }
+        set { NowTime = value; }
+    }
     void Start()
     {
         // スライダーを取得する
-        Slider = GameObject.Find("Slider").GetComponent<Slider>();
-        HpState = HPWait.GetInstance();
+        Slider = this.gameObject.GetComponentInChildren<Slider>();
+       // HpState = HPWait.GetInstance();
         Hp = 1;
         OldHp = Hp;
     }
@@ -59,67 +65,24 @@ public class HpBar : MonoBehaviour
     void Update()
     {
  
-        HpState.Execute(this);
- 
-    }
+       // HpState.Execute(this);
 
-
-
-    //現在の状態を変更する
-    public void ChangeState(HPState hpstate)
-    {
-        HpState = hpstate;
-    }
-
-    //void SetPosition(Vector3 position)
-    //{
-        
-    //}
-
-
-}
-
-
-
-public abstract class HPState
-{
-
-    //純粋仮想関数を宣言
-    public abstract void Execute(HpBar hpbar);
-
-    //
-    // public ~ButtleState();
-
-}
-
-
-public class Animation : HPState
-{
-    static HPState buttleState;
-    int NowTime = 0;
-
-    //Standクラスのインスタンスを取得する
-    public static HPState GetInstance(HpBar hpbar)
-    {
-        if (buttleState == null)
+        if (OldHp != Hp)
         {
-            buttleState = new Animation();
-        }
-        return buttleState;
-    }
-
-    public override void Execute(HpBar hpbar)
-    {
-        NowTime++;
-        float time = NowTime / 60.0f;
-        hpbar._Slider.value =  Larp(hpbar._OldHp, hpbar._Hp, time);
-        //線形補間完了
-        if (time >= 1)
-        {
-            hpbar._OldHp = hpbar._Hp;
-            hpbar.ChangeState(HPWait.GetInstance());
+            NowTime++;
+            float time = NowTime / 60.0f;
+            Slider = gameObject.GetComponentInChildren<Slider>();
+            Slider.value = Larp(OldHp, Hp, time);
+            //線形補間完了
+            if (time >= 1)
+            {
+                NowTime = 0;
+                OldHp = Hp;
+                //ChangeState(HPWait.GetInstance());
+            }
         }
     }
+
 
     float Larp(float start, float goral, float time)
     {
@@ -127,30 +90,94 @@ public class Animation : HPState
 
     }
 
-}
 
+    ////現在の状態を変更する
+    //public void ChangeState(HPState hpstate)
+    //{
+    //    HpState = hpstate;
+    //}
 
+    //void SetPosition(Vector3 position)
+    //{
 
-public class HPWait : HPState
-{
-    static HPState buttleState;
-
-    //Standクラスのインスタンスを取得する
-    public static HPState GetInstance()
-    {
-        if (buttleState == null)
-        {
-            buttleState = new HPWait();
-        }
-
-        return buttleState;
-    }
-
-    public override void Execute(HpBar hpbar)
-    {
-        if (hpbar._OldHp != hpbar._Hp)
-            hpbar.ChangeState( Animation.GetInstance(hpbar));
-    }
+    //}
 
 
 }
+
+
+
+//public abstract class HPState
+//{
+
+//    //純粋仮想関数を宣言
+//    public abstract void Execute(HpBar hpbar);
+
+//    //
+//    // public ~ButtleState();
+
+//}
+
+
+//public class Animation : HPState
+//{
+//    static HPState buttleState;
+
+//    //Standクラスのインスタンスを取得する
+//    public static HPState GetInstance(HpBar hpbar)
+//    {
+//        if (buttleState == null)
+//        {
+//            buttleState = new Animation();
+//        }
+//        return buttleState;
+//    }
+
+//    public override void Execute(HpBar hpbar)
+//    {
+//        hpbar._NowTime++;
+//        float time = hpbar._NowTime / 60.0f;
+//        hpbar._Slider = hpbar.gameObject.GetComponentInChildren<Slider>();
+//        hpbar._Slider.value =  Larp(hpbar._OldHp, hpbar._Hp, time);
+//        //線形補間完了
+//        if (time >= 1)
+//        {
+//            hpbar._NowTime = 0;
+//            hpbar._OldHp = hpbar._Hp;
+//            hpbar.ChangeState(HPWait.GetInstance());
+//        }
+//    }
+
+//    float Larp(float start, float goral, float time)
+//    {
+//        return (1 - time) * start + goral * time;
+
+//    }
+
+//}
+
+
+
+//public class HPWait : HPState
+//{
+//    static HPState buttleState;
+
+//    //Standクラスのインスタンスを取得する
+//    public static HPState GetInstance()
+//    {
+//        if (buttleState == null)
+//        {
+//            buttleState = new HPWait();
+//        }
+
+//        return buttleState;
+//    }
+
+//    public override void Execute(HpBar hpbar)
+//    {
+//        if (hpbar._OldHp != hpbar._Hp)
+//            hpbar.ChangeState( Animation.GetInstance(hpbar));
+//    }
+
+
+//}

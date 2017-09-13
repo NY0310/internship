@@ -34,9 +34,8 @@ public class EnemyManager : MonoBehaviour {
         GameObject EnemyPrefab;
         //敵生成
         EnemyPrefab = Instantiate(gameObject);
-        Enemy a = EnemyPrefab.GetComponent<Enemy>();
         //リストに追加
-        EnemyList.Add(a);
+        EnemyList.Add(EnemyPrefab.GetComponent<Enemy>());
 
 
  ///       int asd =  EnemyList.Count;
@@ -46,10 +45,25 @@ public class EnemyManager : MonoBehaviour {
     // Update is called once per frame
     void Update () {
         EnemyDelete();
-        if (EnemyList.Count == 0)
-        {
-            float a = 0.0f;
-        }
+
+        //if (EnemyList.Count == 0)
+        //{
+        //    int dag = 0;
+        //}
+        //else if (EnemyList.Count == 1)
+        //{
+        //    int ad = 0;
+        //}
+        //else
+        //{
+        //    int adgaga = 0;
+        //}
+        //List<Player.AttackData> data = new List<Player.AttackData>();
+        //Player.AttackData a;
+        //a.ToatalAttack = 10;
+        //a.droptype = Drop.DROPTYPE.Circle;
+        //data.Add(a);
+        //HitDamage(data);
     }
 
   
@@ -78,13 +92,12 @@ public class EnemyManager : MonoBehaviour {
     /// <param name="droptype"></param>
     public void HitDamage(List<Player.AttackData> AttackDataList)
     {
-        GetAttack();
         foreach (var list in AttackDataList)
         {
-            foreach (var item in EnemyList)
+            if (EnemyList.Count != 0)
             {
-                item.HitDamage(list.ToatalAttack, list.droptype);
-                if (item._HP == 0)
+                EnemyList[0].HitDamage(list.ToatalAttack, list.droptype);
+                if (EnemyList[0]._HP == 0)
                 {
                     Destroy(EnemyList[0]);
                     EnemyList.RemoveAt(0);

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_PixelRect:
     serializedVersion: 2
     x: 8
-    y: 69
+    y: 51
     width: 1264
     height: 621
   m_ShowMode: 4
@@ -45,7 +45,7 @@ MonoBehaviour:
   m_MinSize: {x: 583, y: 342}
   m_MaxSize: {x: 12008, y: 8042}
   vertical: 1
-  controlID: 10
+  controlID: 22
 --- !u!114 &3
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -64,8 +64,8 @@ MonoBehaviour:
     y: 298
     width: 1264
     height: 273
-  m_MinSize: {x: 100, y: 100}
-  m_MaxSize: {x: 4000, y: 4000}
+  m_MinSize: {x: 100, y: 121}
+  m_MaxSize: {x: 4000, y: 4021}
   m_ActualView: {fileID: 18}
   m_Panes:
   - {fileID: 13}
@@ -166,7 +166,7 @@ MonoBehaviour:
   m_MinSize: {x: 583, y: 221}
   m_MaxSize: {x: 12008, y: 4021}
   vertical: 0
-  controlID: 11
+  controlID: 23
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -378,19 +378,19 @@ MonoBehaviour:
     m_ShowAllHits: 0
     m_SearchArea: 0
     m_Folders:
-    - Assets/Resources
+    - Assets/GameScene/Script
   m_ViewMode: 1
   m_StartGridSize: 16
   m_LastFolders:
-  - Assets/Resources
+  - Assets/GameScene/Script
   m_LastFoldersGridSize: 16
   m_LastProjectPath: C:\Users\s162133\Documents\internship\Ateam
   m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 5c250000
-    m_LastClickedID: 9564
-    m_ExpandedIDs: 00000000e0240000722500007e2500001e260000ffffff7f
+    m_SelectedIDs: 70250000
+    m_LastClickedID: 9584
+    m_ExpandedIDs: 00000000dc240000702500007c250000d6260000ffffff7f
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -418,7 +418,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000e0240000722500007e2500001e260000
+    m_ExpandedIDs: 00000000dc240000702500007c250000d6260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -443,8 +443,8 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
   m_ListAreaState:
-    m_SelectedInstanceIDs: c0250000
-    m_LastClickedInstanceID: 9664
+    m_SelectedInstanceIDs: 46250000
+    m_LastClickedInstanceID: 9542
     m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: f01d0000e81d0000e61d00005a1d00007cea0000b4320000aa3200002a2a0000b4220000501d0000324500003cadfbff08250000ba380000a42500006063000036b8fcffc666fdff3c470000502e00000000000066d7f8ff225af8ff9c5bf8ffbc4cf8ff1a250000
     m_RenameOverlay:
@@ -470,7 +470,7 @@ MonoBehaviour:
       m_Icon: {fileID: 0}
       m_ResourceFile: 
     m_NewAssetIndexInList: -1
-    m_ScrollPosition: {x: 0, y: 100.5}
+    m_ScrollPosition: {x: 0, y: 81}
     m_GridSize: 16
   m_DirectoriesAreaWidth: 275
 --- !u!114 &14
@@ -568,7 +568,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 366
-    y: 118
+    y: 100
     width: 444
     height: 277
   m_MaximizeOnPlay: 0
@@ -736,7 +736,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 8
-    y: 416
+    y: 398
     width: 1264
     height: 252
 --- !u!114 &19
@@ -762,28 +762,28 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 8
-    y: 118
+    y: 100
     width: 354
     height: 277
   m_TreeViewState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: a4250000
-    m_LastClickedID: 9636
+    m_SelectedIDs: e4250000
+    m_LastClickedID: 9700
     m_ExpandedIDs: e0fbffff00000000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: ButtleManager
-      m_OriginalName: ButtleManager
+      m_Name: 
+      m_OriginalName: 
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 9664
+      m_UserData: 0
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 0
+      m_OriginalEventType: 11
       m_IsRenamingFilename: 0
       m_ClientGUIView: {fileID: 4}
     m_SearchString: 
@@ -815,7 +815,7 @@ MonoBehaviour:
   m_Pos:
     serializedVersion: 2
     x: 814
-    y: 118
+    y: 100
     width: 458
     height: 277
   m_ScrollPosition: {x: 0, y: 0}

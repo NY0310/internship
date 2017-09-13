@@ -21,7 +21,7 @@ public class PlayerManager : MonoBehaviour {
     //キャラクタの初期合計体力
     int MaxToatalHP;
     //キャラクタの合計体力
-    int ToatalHP  = 500;
+    int ToatalHP;
     //キャラクタの合計体力プロパティ
     public int _ToatalHP
     {
@@ -68,9 +68,12 @@ public class PlayerManager : MonoBehaviour {
 
 
     void HPCalculation()
-    {                                       
+    {
+       
+
         foreach (var list in PlayerList)
         {
+            Player ads = list.GetComponent<Player>();
             ToatalHP += list.GetComponent<Player>()._HP;
         }
         MaxToatalHP = ToatalHP;
@@ -104,16 +107,16 @@ public class PlayerManager : MonoBehaviour {
         {
             Player player = list.GetComponent<Player>();
 
-            if (BottanManager.GetComponent<BottonManager>()._PushBotton != Drop.DROPTYPE.MAX)
-            {
-                int a = 0;
-            }
+            //if (BottanManager.GetComponent<BottonManager>()._PushBotton != Drop.DROPTYPE.MAX)
+            //{
+            //    int a = 0;
+            //}
 
-            if (player._attackData.droptype == Drop.DROPTYPE.MAX)  
-            {
-                int a = 0;
+            //if (player._attackData.droptype == Drop.DROPTYPE.MAX)  
+            //{
+            //    int a = 0;
 
-            }
+            //}
 
             if (player._attackData.droptype == BottanManager.GetComponent<BottonManager>()._PushBotton)
             {
@@ -141,14 +144,9 @@ public class PlayerManager : MonoBehaviour {
                 {
                     List.GetComponent<Player>().DamageAdd(Player.AttackLevel.LevelTree);
                     //揃ったドロップ種と同じキャラの回復値回復する
-                    if(ToatalHP + player._Recovery >= MaxToatalHP)
-                    {
-                        Recovery(MaxToatalHP);
-                    }
-                    else
-                    {
-                        Recovery(player._Recovery);
-                    }
+                    Recovery(player._Recovery);
+                    //スキルポイントをためる
+                    player._SkillPoint++;
                     SetHpBar();
                 }
             }
@@ -194,16 +192,20 @@ public class PlayerManager : MonoBehaviour {
         {
             ToatalHP -= item;
         }
-      //  ToatalHP -= damage;
-        SetHpBar();
 
 
     }
 
     public void Recovery(int recovery)
     {
-        ToatalHP += recovery;
-        SetHpBar();
+        if (ToatalHP + recovery >= MaxToatalHP)
+        {
+            ToatalHP = MaxToatalHP;
+        }
+        else
+        {
+            ToatalHP += recovery;
+        }
     }
 
     /// <summary>
@@ -211,16 +213,16 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     void SetHpBar()
     {
-        //if (ToatalHP > 0)
-        //{
-        //    HpPrefab.GetComponent<HpBar>()._Hp = (float)ToatalHP / (float)MaxToatalHP;
+        if (ToatalHP > 0)
+        {
+            HpPrefab.GetComponent<HpBar>()._Hp = (float)ToatalHP / (float)MaxToatalHP;
 
-        //}
-        //else
-        //{
-        //    HpPrefab.GetComponent<HpBar>()._Hp = 0.0f;
+        }
+        else
+        {
+            HpPrefab.GetComponent<HpBar>()._Hp = 0.0f;
 
-        //}
+        }
     }
 
 }

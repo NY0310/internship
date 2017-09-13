@@ -24,7 +24,7 @@ public abstract class Player : MonoBehaviour
 
     [SerializeField]
     //体力
-    public int HP;
+    protected int HP;
     //HPのプロパティ
     public int _HP
     {
@@ -93,11 +93,16 @@ public abstract class Player : MonoBehaviour
     protected int MaxSkillPoint;
     //スキルポイント
     protected int SkillPoint;
+    public int _SkillPoint
+    {
+        get { return SkillPoint; }
+        set { SkillPoint = value; }
+    }
 
 
 
     // Use this for initialization
-    public abstract void Start();
+    public abstract void Awake();
 
     /// <summary>
     /// 初期化処理
@@ -151,15 +156,15 @@ public abstract class Player : MonoBehaviour
     /// <param name="level">攻撃レベル</param>
     public void DamageAdd(AttackLevel level)
     {
-        //if (level < AttackLevel.LevelTree + 1)
-        //{
-        //    attackData.ToatalAttack += (int)level * Attack;
-        //}
-        //else
-        //{
-        //    attackData.ToatalAttack += 5 * Attack;
+        if (level < AttackLevel.LevelTree + 1)
+        {
+            attackData.ToatalAttack += (int)level * Attack;
+        }
+        else
+        {
+            attackData.ToatalAttack += 5 * Attack;
 
-        //}
+        }
     }
 
 

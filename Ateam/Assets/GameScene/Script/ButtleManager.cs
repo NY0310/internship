@@ -57,7 +57,7 @@ public class ButtleManager : MonoBehaviour {
     }
 
     //敵マネージャー
-    [SerializeField]
+   // [SerializeField]
     GameObject EnemyManager;
     public GameObject _EnemyManager
     {
@@ -290,6 +290,7 @@ public class PlayerAttack : AttackState
 
     public override void Execute(Attack attack, ButtleManager buttlemanager)
     {
+        buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
         //プレイヤの攻撃データを取得
         var AttackData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().GetAttackList();
         //敵へ攻撃
@@ -358,6 +359,8 @@ public class EnemyAttack : AttackState
 
     public override void Execute(Attack attack, ButtleManager buttlemanager)
     {
+        buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
+
         //敵からプレイヤへ攻撃
         buttlemanager._PlayerManager.GetComponent<PlayerManager>().HitDamage(buttlemanager._EnemyManager.GetComponent<EnemyManager>().GetAttack());
         //プレイヤの攻撃に移行

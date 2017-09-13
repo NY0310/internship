@@ -5,7 +5,7 @@ using UnityEngine;
 public class Hameln : Player {
 
     // Use this for initialization
-    public override void Start()
+    public override void Awake()
     {
         HP = 900;
         Attack = 500;
