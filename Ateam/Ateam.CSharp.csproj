@@ -108,6 +108,7 @@
     <Compile Include="Assets\GameScene\Script\PlayerManager.cs" />
     <Compile Include="Assets\GameScene\Script\Stage.cs" />
     <Compile Include="Assets\GameScene\Script\Unown.cs" />
+    <Compile Include="Assets\Scenes\Footer\FooterSceneChange.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

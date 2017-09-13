@@ -7,11 +7,18 @@ using UnityEngine.UI;
 public class ButtleManager : MonoBehaviour {
     //バトルの状態
     ButtleState ButtleState;
-
+    [SerializeField]
+    //ボタンマネージャ
+    GameObject BottanManager;
+    public GameObject _BottanManager
+    {
+        get { return BottanManager; }
+        set { BottanManager = value; }
+    }
 
     [SerializeField]
     //制限時間
-    public int TimeLimit;
+    int TimeLimit;
     //現在の時間のプロパティ
     public int _TimeLimit
     {
@@ -29,7 +36,6 @@ public class ButtleManager : MonoBehaviour {
     }
     //タッチできるか
     public bool IsTouch = true;
-    [SerializeField]
     //動作のリスト
     List<GameObject> MoveList = new List<GameObject>();
     //動作のリストプロパティ
@@ -50,7 +56,6 @@ public class ButtleManager : MonoBehaviour {
 
     }
 
-<<<<<<< HEAD:Ateam/Assets/GameScene/Script/ButtleManager.cs
     //敵マネージャー
    // [SerializeField]
     GameObject EnemyManager;
@@ -62,16 +67,13 @@ public class ButtleManager : MonoBehaviour {
 
 
     //  public GameObject Enemy;
-=======
-   public GameObject Enemy;
->>>>>>> 79b1bdedd5ba0dc0f494bc86da2f06dd612cface:Ateam/Assets/GameScene/Drop/ButtleManager.cs
     //敵
-    public GameObject _Enemy
-    {
-        get { return Enemy; }
-        set { Enemy = value; }
+    //public GameObject _Enemy
+    //{
+    //    get { return Enemy; }
+    //    set { Enemy = value; }
 
-    }
+    //}
 
     public bool _IsTouch
     {
@@ -83,8 +85,10 @@ public class ButtleManager : MonoBehaviour {
     void Start () {
         PlayerManager =  GameObject.Find("PlayerManager");
         //Enemy = GameObject.Find("Enemy");
-        Enemy = Instantiate(Enemy);
+       // Enemy = Instantiate(Enemy);
         ButtleState = Wait.GetInstance();
+
+      //  BottanManager = GameObject.Find("BottonManager");
     }
 
     // Update is called once per frame
@@ -92,7 +96,7 @@ public class ButtleManager : MonoBehaviour {
      
 
         //状態に応じて実行
-       ButtleState.Execute(this);
+        ButtleState.Execute(this);
         //タッチ可能か調べる
         CanTouch(ref IsTouch);
     }
@@ -161,10 +165,18 @@ public class Wait : ButtleState
 
     public override void Execute(ButtleManager buttlemanager)
     {
+         GameObject bottan = GameObject.Find("BottonManager");
+
+        Drop.DROPTYPE a = bottan.GetComponent<BottonManager>()._PushBotton;
+
+        //プレイヤの更新処理呼び出し
+        buttlemanager._PlayerManager.GetComponent<PlayerManager>().IsUpdate();
 
         ////プレイヤが押されたとき状態をドロップ操作へ
-        if (buttlemanager._PlayerManager.GetComponent<PlayerManager>().IsUpdate())
+        if (a != Drop.DROPTYPE.MAX)
+        {
             buttlemanager.ChangeState(DropOperation.GetInstance());
+        }
     }
 
 
@@ -234,14 +246,15 @@ public class Attack : ButtleState
         return buttleState;
     }
 
+    int cnt = 0;
     public override void Execute(ButtleManager buttlemanager)
     {
-
         AttackState.Execute(this,buttlemanager);
-
-        buttlemanager.ChangeState(Wait.GetInstance());
-
-
+        cnt++;
+        if (cnt == 2)
+        {
+            buttlemanager.ChangeState(Wait.GetInstance());
+        }
     }
 
  
@@ -277,18 +290,13 @@ public class PlayerAttack : AttackState
 
     public override void Execute(Attack attack, ButtleManager buttlemanager)
     {
-<<<<<<< HEAD:Ateam/Assets/GameScene/Script/ButtleManager.cs
         buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
         //プレイヤの攻撃データを取得
         var AttackData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().GetAttackList();
-=======
-          //プレイヤの攻撃データを取得
-        PlayerManager.ToatalData ToatalData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().ToatalAttack();
->>>>>>> 79b1bdedd5ba0dc0f494bc86da2f06dd612cface:Ateam/Assets/GameScene/Drop/ButtleManager.cs
         //敵へ攻撃
-        buttlemanager._Enemy.GetComponent<Enemy>().HitDamage(ToatalData.Attack);
+        buttlemanager._EnemyManager.GetComponent<EnemyManager>().HitDamage(AttackData);
         //回復状態に移行
-        attack._AttackState = Recovery.GetInstance();
+       // attack._AttackState = EnemyAttack.GetInstance();
 
     }
 
@@ -298,35 +306,35 @@ public class PlayerAttack : AttackState
 /// <summary>
 /// 回復
 /// </summary>
-public class Recovery : AttackState
-{
-    static AttackState buttleState;
+//public class Recovery : AttackState
+//{
+//    static AttackState buttleState;
 
-    //クラスのインスタンスを取得する
-    public static AttackState GetInstance()
-    {
-        if (buttleState == null)
-        {
-            buttleState = new Recovery();
-        }
+//    //クラスのインスタンスを取得する
+//    public static AttackState GetInstance()
+//    {
+//        if (buttleState == null)
+//        {
+//            buttleState = new Recovery();
+//        }
 
 
-        return buttleState;
-    }
+//        return buttleState;
+//    }
 
-    public override void Execute(Attack attack, ButtleManager buttlemanager)
-    {
-        //プレイヤの攻撃データを取得
-        PlayerManager.ToatalData ToatalData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().ToatalAttack();
-        //プレイヤの回復
-      //  buttlemanager._PlayerManager.GetComponent<PlayerManager>().Recovery(ToatalData.Recovery);
+//    public override void Execute(Attack attack, ButtleManager buttlemanager)
+//    {
+//        //プレイヤの攻撃データを取得
+//       // PlayerManager.ToatalData ToatalData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().ToatalAttack();
+//        //プレイヤの回復
+//      //  buttlemanager._PlayerManager.GetComponent<PlayerManager>().Recovery(ToatalData.Recovery);
 
-        //敵の攻撃状態に移行
-        attack._AttackState = EnemyAttack.GetInstance();
+//        //敵の攻撃状態に移行
+//        attack._AttackState = EnemyAttack.GetInstance();
 
-    }
+//    }
 
-}
+//}
 
 
 
@@ -354,8 +362,7 @@ public class EnemyAttack : AttackState
         buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
 
         //敵からプレイヤへ攻撃
-        buttlemanager._PlayerManager.GetComponent<PlayerManager>().
-        HitDamage(buttlemanager._Enemy.GetComponent<Enemy>()._Attack);
+        buttlemanager._PlayerManager.GetComponent<PlayerManager>().HitDamage(buttlemanager._EnemyManager.GetComponent<EnemyManager>().GetAttack());
         //プレイヤの攻撃に移行
         attack._AttackState = PlayerAttack.GetInstance();
 

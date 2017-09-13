@@ -109,7 +109,19 @@ public class DropRane : MonoBehaviour{
         }
     }
 
-
+    /// <summary>
+    /// ターゲットドロップの種類が一致しているか調べる
+    /// </summary>
+    /// <param name="droptype">一致しているか調べる種類</param>
+    /// <returns>一致しているかどうか</returns>
+    public bool TargetDropSearch(Drop.DROPTYPE droptype)
+    {
+       if( DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType == droptype)
+        {
+            return true;
+        }
+        return false;
+   }
 
 
     /// <summary>
@@ -121,7 +133,10 @@ public class DropRane : MonoBehaviour{
     {
         GameObject inst;
         inst = DropCreate(droptype);
-        inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
+        //Vector3 position = inst.transform.position;
+        Vector3 position =  new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
+        //position *= 25;
+        inst.transform.position = position;
         DropList.Add(inst);
         return inst;
     }
@@ -181,8 +196,6 @@ public class DropRane : MonoBehaviour{
     
         foreach (GameObject dropdata in DropList)
         {
-
-
                 if (dropdata.GetComponent<Drop>()._MoveGameObject == null && !MoveFlag)
                 {
                     dropdata.GetComponent<Drop>()._MoveGameObject = Instantiate(MovePregab);
@@ -193,8 +206,6 @@ public class DropRane : MonoBehaviour{
                 {
                     MoveFlag = true;
                 }
-          
-
         }
     }
 

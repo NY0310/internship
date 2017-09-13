@@ -81,13 +81,33 @@ public class DropManager : MonoBehaviour {
          }
      }
 
+    /// <summary>
+    /// 全てのレーンはターゲットドロップが引数と同じ種類なら削除
+    /// </summary>
+    /// <param name="droptype"></param>
+    /// <returns>成功した回数</returns>
+    public int TargetSearch(Drop.DROPTYPE droptype)
+    {
+        //成功した回数
+        int success = 0;
+        foreach (var list in DropRaneList)
+        {
+            if (list.GetComponent<DropRane>().TargetDropSearch(droptype))
+                success++;
+        }
+        
 
-     /// <summary>
-     /// 全てのレーンはターゲットドロップが引数と同じ種類なら削除
-     /// </summary>
-     /// <param name="droptype"></param>
-     /// <returns>成功した回数</returns>
-     public int TargetDelete(Drop.DROPTYPE droptype)
+        return success;
+
+    }
+
+
+    /// <summary>
+    /// 全てのレーンはターゲットドロップが引数と同じ種類なら削除
+    /// </summary>
+    /// <param name="droptype"></param>
+    /// <returns>成功した回数</returns>
+    public int TargetDelete(Drop.DROPTYPE droptype)
      {
          //成功した回数
          int successTimes = 0;
@@ -97,8 +117,8 @@ public class DropManager : MonoBehaviour {
              IsSuccess = DropRaneList[i].GetComponent<DropRane>().TargetDelete(droptype);
 
          if (IsSuccess)
-                 successTimes++;
-         IsSuccess = false;
+           successTimes++;
+           IsSuccess = false;
          }
 
          return successTimes;
