@@ -103,12 +103,12 @@
     <Compile Include="Assets\GameScene\Script\HpBar.cs" />
     <Compile Include="Assets\GameScene\Script\KaguyaPrincess.cs" />
     <Compile Include="Assets\GameScene\Script\Move.cs" />
+    <Compile Include="Assets\GameScene\Script\NewBehaviourScript.cs" />
     <Compile Include="Assets\GameScene\Script\PlaySceneManager.cs" />
     <Compile Include="Assets\GameScene\Script\Player.cs" />
     <Compile Include="Assets\GameScene\Script\PlayerManager.cs" />
     <Compile Include="Assets\GameScene\Script\Stage.cs" />
     <Compile Include="Assets\GameScene\Script\Unown.cs" />
-    <Compile Include="Assets\Scenes\Footer\FooterSceneChange.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\SyntaxTree\UnityVS\2015\UnityVS.CSharp.targets" />
 </Project>

@@ -63,7 +63,7 @@ public class PlayerManager : MonoBehaviour {
         //DropPrefab.GetComponent<Player>()._DropType = Drop.DROPTYPE.Tryangle;
         PlayerList.Add(DropPrefab);
         HPCalculation();
-
+		Setposition ();
     }
 
 
@@ -78,6 +78,16 @@ public class PlayerManager : MonoBehaviour {
         }
         MaxToatalHP = ToatalHP;
     }
+
+	void Setposition()
+	{
+		float Size = 2;
+		int loopCnt = 0;
+		foreach (var list in PlayerList) {
+			list.GetComponent<Player> ().transform.position = new Vector3 (0 + (Size *loopCnt), -4, 0);
+		}
+	}
+
 
     // Update is called once per frame
     public bool IsUpdate()
