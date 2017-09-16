@@ -32,9 +32,9 @@ public class PlayerManager : MonoBehaviour {
    
     //ドロップマネージャー
     GameObject DropManager;
-  //  GameObject ButtlegameObject;
+    //  GameObject ButtlegameObject;
 
-
+   
     // Use this for initialization
     void Start()
     {
@@ -51,12 +51,10 @@ public class PlayerManager : MonoBehaviour {
         ToatalHP = 0;
         GameObject DropPrefab;
         DropPrefab = Instantiate(CirclePlayerPrefab);
-       // DropPrefab.GetComponent<Player>()._DropType = Drop.DROPTYPE.Circle;
         PlayerList.Add(DropPrefab);
 
         DropPrefab = Instantiate(CrossPlayerPrefab);
-    //    DropPrefab.GetComponent<Player>()._DropType = Drop.DROPTYPE.Cross;
-        PlayerList.Add(DropPrefab);
+　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　        PlayerList.Add(DropPrefab);
 
 
         DropPrefab = Instantiate(TryanglePlayerPrefab);
@@ -66,26 +64,47 @@ public class PlayerManager : MonoBehaviour {
 		Setposition ();
     }
 
+    /// <summary>
+    /// リセット
+    /// </summary>
+    public void Reset()
+    {
+        foreach (var item in PlayerList)
+        {
+            item.GetComponent<Player>()._ToatalAttack = 0;
+            
+        }
+    }
 
+
+
+    /// <summary>
+    /// 合計体力算出
+    /// </summary>
     void HPCalculation()
     {
        
 
         foreach (var list in PlayerList)
         {
-            Player ads = list.GetComponent<Player>();
+            //Player ads = list.GetComponent<Player>();
             ToatalHP += list.GetComponent<Player>()._HP;
         }
         MaxToatalHP = ToatalHP;
     }
 
+    /// <summary>
+    /// 座標設定
+    /// </summary>
 	void Setposition()
 	{
 		float Size = 2;
 		int loopCnt = 0;
 		foreach (var list in PlayerList) {
-			list.GetComponent<Player> ().transform.position = new Vector3 (0 + (Size *loopCnt), -4, 0);
-		}
+			list.GetComponent<Player> ().transform.position = new Vector3 (-4 + (Size *loopCnt), -4, 0);
+            loopCnt++;
+
+        }
 	}
 
 
@@ -196,14 +215,22 @@ public class PlayerManager : MonoBehaviour {
     /// HPからダメージをうける
     /// </summary>
     /// <param name="damage"></param>
-    public void HitDamage(List<int> damage)
+    public List<float> HitDamage(List<int> damage)
     {
+        List<float> NewHpDate = new List<float>();
         foreach (var item in damage)
         {
+            
             ToatalHP -= item;
+            float Hp = SetHpBar();
+            if (Hp != HpPrefab.GetComponent<HpBar>()._OldHp)
+            {
+                NewHpDate.Add(Hp);
+            }
         }
-        SetHpBar();
 
+        return NewHpDate;
+        
     }
 
     public void Recovery(int recovery)
@@ -221,7 +248,7 @@ public class PlayerManager : MonoBehaviour {
     /// <summary>
     /// HPbarの値設定
     /// </summary>
-    void SetHpBar()
+    float SetHpBar()
     {
         if (ToatalHP > 0)
         {
@@ -233,6 +260,7 @@ public class PlayerManager : MonoBehaviour {
             HpPrefab.GetComponent<HpBar>()._Hp = 0.0f;
 
         }
+        return HpPrefab.GetComponent<HpBar>()._Hp;
     }
 
     /// <summary>

@@ -13,11 +13,13 @@
     <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <TargetFrameworkProfile>Unity Subset v3.5</TargetFrameworkProfile>
-    <CompilerResponseFile></CompilerResponseFile>
+    <CompilerResponseFile>
+    </CompilerResponseFile>
     <UnityProjectType>Game:1</UnityProjectType>
     <UnityBuildTarget>StandaloneWindows:5</UnityBuildTarget>
     <UnityVersion>5.6.2f1</UnityVersion>
-    <RootNamespace></RootNamespace>
+    <RootNamespace>
+    </RootNamespace>
     <LangVersion Condition=" '$(VisualStudioVersion)' != '10.0' ">4</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -87,12 +89,14 @@
     <Compile Include="Assets\GameScene\Script\AliceSkins.cs" />
     <Compile Include="Assets\GameScene\Script\Botton.cs" />
     <Compile Include="Assets\GameScene\Script\BottonManager.cs" />
+    <Compile Include="Assets\GameScene\Script\ButtleAnimation.cs" />
     <Compile Include="Assets\GameScene\Script\ButtleManager.cs" />
     <Compile Include="Assets\GameScene\Script\Cinderella.cs" />
     <Compile Include="Assets\GameScene\Script\Collision.cs" />
     <Compile Include="Assets\GameScene\Script\Drop.cs" />
     <Compile Include="Assets\GameScene\Script\DropManager.cs" />
     <Compile Include="Assets\GameScene\Script\DropRane.cs" />
+    <Compile Include="Assets\GameScene\Script\EffectAnimation.cs" />
     <Compile Include="Assets\GameScene\Script\Enemy.cs" />
     <Compile Include="Assets\GameScene\Script\EnemyA.cs" />
     <Compile Include="Assets\GameScene\Script\EnemyB.cs" />
@@ -100,10 +104,10 @@
     <Compile Include="Assets\GameScene\Script\EnemyManager.cs" />
     <Compile Include="Assets\GameScene\Script\GameManager.cs" />
     <Compile Include="Assets\GameScene\Script\Hameln.cs" />
+    <Compile Include="Assets\GameScene\Script\HpAnimation.cs" />
     <Compile Include="Assets\GameScene\Script\HpBar.cs" />
     <Compile Include="Assets\GameScene\Script\KaguyaPrincess.cs" />
     <Compile Include="Assets\GameScene\Script\Move.cs" />
-    <Compile Include="Assets\GameScene\Script\NewBehaviourScript.cs" />
     <Compile Include="Assets\GameScene\Script\PlaySceneManager.cs" />
     <Compile Include="Assets\GameScene\Script\Player.cs" />
     <Compile Include="Assets\GameScene\Script\PlayerManager.cs" />

@@ -1,10 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI; 
+using UnityEngine.UI;
 
 
 public class ButtleManager : MonoBehaviour {
+    [SerializeField]
+    GameObject Stage;
+    public GameObject _Stage
+    {
+        get { return Stage; }
+    }
     //バトルの状態
     ButtleState ButtleState;
     [SerializeField]
@@ -15,7 +21,15 @@ public class ButtleManager : MonoBehaviour {
         get { return BottanManager; }
         set { BottanManager = value; }
     }
-
+    [SerializeField]
+    //バトルアニメーション
+    GameObject ButtleAnimation;
+    List<ButtleAnimation> ButtleAnimationList = new List<ButtleAnimation>();
+    public List<ButtleAnimation> _ButtleAnimationList
+    {
+        get { return ButtleAnimationList; }
+        set { ButtleAnimationList = value; }
+    }
     [SerializeField]
     //制限時間
     int TimeLimit;
@@ -57,7 +71,7 @@ public class ButtleManager : MonoBehaviour {
     }
 
     //敵マネージャー
-   // [SerializeField]
+   [SerializeField]
     GameObject EnemyManager;
     public GameObject _EnemyManager
     {
@@ -86,9 +100,11 @@ public class ButtleManager : MonoBehaviour {
         PlayerManager =  GameObject.Find("PlayerManager");
         //Enemy = GameObject.Find("Enemy");
        // Enemy = Instantiate(Enemy);
-        ButtleState = Wait.GetInstance();
-
-      //  BottanManager = GameObject.Find("BottonManager");
+        ButtleState = EnemyCreate.GetInstance();
+        //ステージ生成
+        Stage = Instantiate(Stage);
+        EnemyManager = Instantiate(EnemyManager);
+        //  BottanManager = GameObject.Find("BottonManager");
     }
 
     // Update is called once per frame
@@ -119,7 +135,7 @@ public class ButtleManager : MonoBehaviour {
             touch = false;
             return false;
         }
-
+        
 
     }
 
@@ -127,8 +143,47 @@ public class ButtleManager : MonoBehaviour {
     public void ChangeState(ButtleState buttlestate)
     {
         ButtleState = buttlestate;
+        
     }
 
+    /// <summary>
+    /// バトル用アニメーションクラス破棄(破棄フラグが立っているなら)
+    /// </summary>
+    public void ButtleAnimationDestroy()
+    {
+        foreach (var item in ButtleAnimationList)
+        {
+            if(item == null)
+                break;
+            if (item._IsDestroy)
+            {
+                Destroy(item.gameObject);
+                ButtleAnimationList.RemoveAt(0);
+                break;
+            }
+        }
+
+    }
+
+
+
+      
+
+
+    /// <summary>
+    /// バトル用アニメーションクラス作成、初期化
+    /// </summary>
+    /// <param name="Hp">アニメーションするHP</param>
+    /// <param name="NewHp">アニメーション後HP</param>
+    /// <param name="StartPosition">エフェクトの初期座標</param>
+    /// <param name="GorlPosition">エフェクト後座標</param>
+    public void ButtleAnimationCreate(HpBar Hp, float NewHp, Vector2 StartPosition, Vector2 GorlPosition)
+    {
+        ButtleAnimation buttleAnimation = Instantiate(ButtleAnimation).GetComponent<ButtleAnimation>();
+        ButtleAnimationList.Add(buttleAnimation);
+        buttleAnimation.Inisialize(Hp, NewHp, StartPosition, GorlPosition);
+       
+    }
 }
 
 /// <summary>
@@ -143,6 +198,61 @@ public abstract class ButtleState
     //
    // public ~ButtleState();
 
+}
+
+public class EnemyCreate : ButtleState
+{
+    static ButtleState buttleState;
+
+    //Standクラスのインスタンスを取得する
+    public static ButtleState GetInstance()
+    {
+        if (buttleState == null)
+        {
+            buttleState = new EnemyCreate();
+        }
+
+        return buttleState;
+    }
+
+    int CreateCnt;
+
+    public override void Execute(ButtleManager buttlemanager)
+    {
+        if (buttlemanager._Stage.GetComponent<Stage>()._ValueListList.Count >= CreateCnt + 1)
+        {
+            //敵を作成
+            buttlemanager._EnemyManager.GetComponent<EnemyManager>().EnemyCreate
+                (buttlemanager._Stage.GetComponent<Stage>()._ValueListList[CreateCnt].List);
+            CreateCnt++;
+            buttlemanager.ChangeState(Initialize.GetInstance());
+        }
+      
+    }
+}
+
+
+public class Initialize : ButtleState
+{
+    static ButtleState buttleState;
+
+    //Standクラスのインスタンスを取得する
+    public static ButtleState GetInstance()
+    {
+        if (buttleState == null)
+        {
+            buttleState = new Initialize();
+        }
+
+        return buttleState;
+    }
+
+    public override void Execute(ButtleManager buttlemanager)
+    {
+        buttlemanager._PlayerManager.GetComponent<PlayerManager>().Reset();
+        buttlemanager.ChangeState(Wait.GetInstance());
+
+    }
 }
 
 /// <summary>
@@ -167,16 +277,17 @@ public class Wait : ButtleState
     {
          GameObject bottan = GameObject.Find("BottonManager");
 
-        Drop.DROPTYPE a = bottan.GetComponent<BottonManager>()._PushBotton;
+        Drop.DROPTYPE type = bottan.GetComponent<BottonManager>()._PushBotton;
 
         //プレイヤの更新処理呼び出し
         buttlemanager._PlayerManager.GetComponent<PlayerManager>().IsUpdate();
 
         ////プレイヤが押されたとき状態をドロップ操作へ
-        if (a != Drop.DROPTYPE.MAX)
+        if (type != Drop.DROPTYPE.MAX)
         {
             buttlemanager.ChangeState(DropOperation.GetInstance());
         }
+        
     }
 
 
@@ -227,7 +338,7 @@ public class DropOperation : ButtleState
 public class Attack : ButtleState
 {
     static ButtleState buttleState;
-    AttackState AttackState = EnemyAttack.GetInstance();
+    AttackState AttackState = PlayerAttack.GetInstance();
     public AttackState _AttackState
     {
         get { return AttackState; }
@@ -246,15 +357,12 @@ public class Attack : ButtleState
         return buttleState;
     }
 
-    int cnt = 0;
     public override void Execute(ButtleManager buttlemanager)
     {
+
         AttackState.Execute(this,buttlemanager);
-        cnt++;
-        if (cnt == 2)
-        {
-           buttlemanager.ChangeState(Wait.GetInstance());
-        }
+
+ 
     }
 
  
@@ -264,7 +372,8 @@ public abstract class AttackState
 {
     //純粋仮想関数を宣言
     public abstract void Execute(Attack attack, ButtleManager buttlemanager);
-
+    //次に待機状態か敵生成状態か
+    protected static bool IsEnemyCreate;
 }
 
 
@@ -275,7 +384,7 @@ public abstract class AttackState
 public class PlayerAttack : AttackState
 {
     static AttackState buttleState;
-
+    static bool IsFirst;
     //クラスのインスタンスを取得する
     public static AttackState GetInstance()
     {
@@ -284,57 +393,56 @@ public class PlayerAttack : AttackState
             buttleState = new PlayerAttack();
         }
 
-
+        IsFirst = true;
         return buttleState;
     }
 
     public override void Execute(Attack attack, ButtleManager buttlemanager)
     {
-        buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
-        //プレイヤの攻撃データを取得
-        var AttackData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().GetAttackList();
-        //敵へ攻撃
-        buttlemanager._EnemyManager.GetComponent<EnemyManager>().HitDamage(AttackData);
-        //回復状態に移行
-       // attack._AttackState = EnemyAttack.GetInstance();
 
+        if (IsFirst)
+        {
+           // buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
+            //プレイヤの攻撃データを取得
+            var AttackData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().GetAttackList();
+            //敵へ攻撃
+            List<EnemyManager.HpAnimationData> date = buttlemanager._EnemyManager.GetComponent<EnemyManager>().HitDamage(AttackData);
+
+            foreach (var item in date)
+            {
+            
+                    buttlemanager.ButtleAnimationCreate(item.Hp, item.NewHp, new Vector3(0, 0, 0), new Vector3(0, 0, 0));
+     
+            }
+            IsFirst = false;
+        }
+        buttlemanager.ButtleAnimationDestroy();
+
+        //アニメーションが全て終わったら
+        if (buttlemanager._ButtleAnimationList.Count == 0)
+        {
+            foreach (var item in buttlemanager._EnemyManager.GetComponent<EnemyManager>()._EnemyList)
+            {
+                IsEnemyCreate = true;
+
+                if (item._HP != 0)
+                {
+                    IsEnemyCreate = false;
+                    break;
+                }
+            }
+          
+          
+            //敵の攻撃に移行
+           attack._AttackState = EnemyAttack.GetInstance();
+        }
+
+       
     }
 
 }
 
 
-/// <summary>
-/// 回復
-/// </summary>
-//public class Recovery : AttackState
-//{
-//    static AttackState buttleState;
-
-//    //クラスのインスタンスを取得する
-//    public static AttackState GetInstance()
-//    {
-//        if (buttleState == null)
-//        {
-//            buttleState = new Recovery();
-//        }
-
-
-//        return buttleState;
-//    }
-
-//    public override void Execute(Attack attack, ButtleManager buttlemanager)
-//    {
-//        //プレイヤの攻撃データを取得
-//       // PlayerManager.ToatalData ToatalData = buttlemanager._PlayerManager.GetComponent<PlayerManager>().ToatalAttack();
-//        //プレイヤの回復
-//      //  buttlemanager._PlayerManager.GetComponent<PlayerManager>().Recovery(ToatalData.Recovery);
-
-//        //敵の攻撃状態に移行
-//        attack._AttackState = EnemyAttack.GetInstance();
-
-//    }
-
-//}
 
 
 
@@ -344,6 +452,7 @@ public class PlayerAttack : AttackState
 public class EnemyAttack : AttackState
 {
     static AttackState buttleState;
+    static bool IsFirst;
 
     //クラスのインスタンスを取得する
     public static AttackState GetInstance()
@@ -353,19 +462,44 @@ public class EnemyAttack : AttackState
             buttleState = new EnemyAttack();
         }
 
-
+        IsFirst = true;
         return buttleState;
     }
 
     public override void Execute(Attack attack, ButtleManager buttlemanager)
     {
-        buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
+        //  buttlemanager._EnemyManager = GameObject.Find("EnemyManager");
 
-        //敵からプレイヤへ攻撃
-        buttlemanager._PlayerManager.GetComponent<PlayerManager>().HitDamage(buttlemanager._EnemyManager.GetComponent<EnemyManager>().GetAttack());
-        //プレイヤの攻撃に移行
-        attack._AttackState = PlayerAttack.GetInstance();
+        if (IsFirst)
+        {
+            //敵からプレイヤへ攻撃
+            List<float> NewHpDate = buttlemanager._PlayerManager.GetComponent<PlayerManager>().HitDamage(buttlemanager._EnemyManager.GetComponent<EnemyManager>().GetAttack());
+            foreach (var item in NewHpDate)
+            {
+                buttlemanager.ButtleAnimationCreate(buttlemanager._PlayerManager.GetComponent<PlayerManager>().HpPrefab.GetComponent<HpBar>(), item, new Vector3(0, 0, 0), new Vector3(0, 0, 0));
 
+            }
+            IsFirst = false;
+
+
+        }
+        buttlemanager.ButtleAnimationDestroy();
+
+        if (buttlemanager._ButtleAnimationList.Count == 0)
+        {
+            if (IsEnemyCreate)
+            {
+                buttlemanager.ChangeState(EnemyCreate.GetInstance());
+            }
+            else
+            {
+                buttlemanager.ChangeState(Wait.GetInstance());
+
+            }
+            //プレイヤの攻撃に移行
+            attack._AttackState = PlayerAttack.GetInstance();
+
+        }
     }
 
 }

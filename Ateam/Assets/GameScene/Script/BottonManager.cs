@@ -15,6 +15,7 @@ public class BottonManager : MonoBehaviour {
     List<GameObject> BottonList = new List<GameObject>();
 
 
+
     //押しているボタン(MAXは何も触っていないものとする)
     Drop.DROPTYPE PushBotton = Drop.DROPTYPE.MAX;
     public Drop.DROPTYPE _PushBotton

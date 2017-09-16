@@ -12,6 +12,12 @@ public abstract class Enemy : MonoBehaviour
     //public GameObject enemy;
     [SerializeField]
     GameObject HpPrefab;
+    public  GameObject _HpPrefab
+    {
+        get { return HpPrefab; }
+        set { HpPrefab = value; }
+
+    }
     //HPゲージとの縦間隔
     [SerializeField]
     public float INTERVAL_POS;
@@ -65,7 +71,7 @@ public abstract class Enemy : MonoBehaviour
     /// HPからダメージをうける
     /// </summary>
     /// <param name="damage"></param>
-    public abstract void HitDamage(int damage, Drop.DROPTYPE droptype);
+    public abstract float HitDamage(int damage, Drop.DROPTYPE droptype);
 
 
     /// <summary>
@@ -88,7 +94,7 @@ public abstract class Enemy : MonoBehaviour
         HpPrefab.GetComponent<HpBar>()._Enemy = this.gameObject;
     }
 
-    protected void SetHp()
+    protected float SetHp()
     {
         if (HP > 0)
         {
@@ -100,6 +106,7 @@ public abstract class Enemy : MonoBehaviour
             HpPrefab.GetComponent<HpBar>()._Hp = 0.0f;
 
         }
+        return HpPrefab.GetComponent<HpBar>()._Hp;
     }
 
 
@@ -115,7 +122,7 @@ public abstract class CircleEnemy : Enemy
     // Use this for initialization
     public abstract void Start();
 
-    public override void HitDamage(int attack, Drop.DROPTYPE droptype)
+    public override float HitDamage(int attack, Drop.DROPTYPE droptype)
     {
         if (droptype == Drop.DROPTYPE.Circle)
         {
@@ -133,8 +140,8 @@ public abstract class CircleEnemy : Enemy
         if (_HP < 0)
         {
             _HP = 0;
-        }   
-        SetHp();
+        }
+        return SetHp();
     }
 
 }
@@ -145,7 +152,7 @@ public abstract class CrossEnemy : Enemy
     public abstract void Start();
 
 
-    public override void HitDamage(int attack, Drop.DROPTYPE droptype)
+    public override float HitDamage(int attack, Drop.DROPTYPE droptype)
     {
         if (droptype == Drop.DROPTYPE.Cross)
         {
@@ -165,6 +172,7 @@ public abstract class CrossEnemy : Enemy
             _HP = 0;
         }
         SetHp();
+        return _HP;
 
     }
 
@@ -176,7 +184,7 @@ public abstract class TryangleEnemy: Enemy
     // Use this for initialization
     public abstract void Start();
 
-    public override void HitDamage(int attack, Drop.DROPTYPE droptype)
+    public override float HitDamage(int attack, Drop.DROPTYPE droptype)
     {
         if (droptype == Drop.DROPTYPE.Tryangle)
         {
@@ -196,6 +204,7 @@ public abstract class TryangleEnemy: Enemy
             _HP = 0;
         }
         SetHp();
+        return _HP;
 
     }
 

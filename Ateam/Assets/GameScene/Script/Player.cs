@@ -92,6 +92,14 @@ public abstract class Player : MonoBehaviour
         set { attackData = value; }
     }
 
+    public int _ToatalAttack
+    {
+        get { return attackData.ToatalAttack; }
+        set { attackData.ToatalAttack = value; }
+
+    }
+
+
 
 
     //スキル発動に必要なポイント

@@ -12,7 +12,7 @@ public class Hameln : Player {
         Attack = 500;
         MaxSkillPoint = 4;
         Recovery = 300;
-        attackData.droptype = Drop.DROPTYPE.Tryangle;
+        attackData.droptype = Drop.DROPTYPE.Cross;
         PlayerManager = GameObject.Find("PlayerManager");
     }
 

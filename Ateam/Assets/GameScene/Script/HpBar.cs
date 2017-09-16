@@ -31,12 +31,12 @@ public class HpBar : MonoBehaviour
         set { OldHp = value; }
     }
 
-    //float StartTime;
-    //public float _StartTime
-    //{
-    //    get { return StartTime; }
-    //    set { StartTime = value; }
-    //}
+    float StartTime;
+    public float _StartTime
+    {
+        get { return StartTime; }
+        set { StartTime = value; }
+    }
 
 
     const int AnimationTime = 2;
@@ -51,6 +51,14 @@ public class HpBar : MonoBehaviour
     {
         get { return NowTime; }
         set { NowTime = value; }
+    }
+
+    //移動しているかどうか
+    bool IsNowStop;
+    public bool _IsNowStop
+    {
+        get { return IsNowStop; }
+        set { IsNowStop = value; }
     }
 
     //敵
@@ -68,45 +76,27 @@ public class HpBar : MonoBehaviour
         OldHp = Hp;
     }
 
-
     void Update()
     {
- 
        // HpState.Execute(this);
+        IsNowStop = false;
 
-        if (OldHp != Hp)
-        {
-            NowTime++;
-            float time = NowTime / 60.0f;
-            Slider = gameObject.GetComponentInChildren<Slider>();
-            Slider.value = Larp(OldHp, Hp, time);
-            //線形補間完了
-            if (time >= 1)
-            {
-                NowTime = 0;
-                OldHp = Hp;
-                //ChangeState(HPWait.GetInstance());
-            }
-        }
+
 
         //hp0二なったら削除
         if (OldHp == 0)
         {
+
             if (Enemy != null)
             {
                 Enemy.GetComponent<Enemy>()._IsDestory = true;
                 Destroy(this.gameObject);
             }
-            
+
         }
     }
 
 
-    float Larp(float start, float goral, float time)
-    {
-        return (1 - time) * start + goral * time;
-
-    }
 
 
 
