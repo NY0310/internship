@@ -149,18 +149,26 @@ public class DropManager : MonoBehaviour {
     public IfNeededData IfNeeded()
      {
         IfNeededData IfNeededData;
-         Drop.DROPTYPE droptype = DropRaneList[(int)DropRane.LANEKIND.LANE1].GetComponent<DropRane>()._TargetDrop;
+
+
+        Drop.DROPTYPE droptype = Drop.DROPTYPE.MAX;
+        foreach (var list in DropRaneList)
+        {
+            droptype = list.GetComponent<DropRane>()._TargetDrop;
+            if (droptype != Drop.DROPTYPE.Rainbow)
+            {
+                break;
+            }
+        }
+
+      //   Drop.DROPTYPE droptype = DropRaneList[(int)DropRane.LANEKIND.LANE1].GetComponent<DropRane>()._TargetDrop;
         Drop.DROPTYPE _droptype;
          for (int i = 0; i < MAX_RANE; i++)
          {
              _droptype = DropRaneList[i].GetComponent<DropRane>()._TargetDrop;
 
-
-             if ((droptype != _droptype) || (droptype == Drop.DROPTYPE.Rainbow))
-             {
-                 break;
-             }
-            else
+           
+             if ((droptype == _droptype) || (_droptype == Drop.DROPTYPE.Rainbow))
             {
                  //全て同じドロップなら
                  if (i == MAX_RANE - 1)
@@ -176,8 +184,11 @@ public class DropManager : MonoBehaviour {
                  }
 
             }
-             droptype = _droptype;
-
+             else
+            {
+                break;
+            }
+           
          }
         IfNeededData.MooveFlag = false;
         IfNeededData.Droptype = Drop.DROPTYPE.MAX;
@@ -189,16 +200,16 @@ public class DropManager : MonoBehaviour {
     /// </summary>
     public void UglyMagic()
     {
-        int loopCnt = 0;
+        int loopCnt =(int)Drop.DROPTYPE.MAX;
         foreach (var list in DropRaneList)
         {
-            List<GameObject> droplist = list.GetComponent<DropRane>()._DropList;
-            Vector3 Position =  droplist[(int)DropRane.DropNumber.FOURTH - loopCnt].GetComponent<Drop>().transform.position;
-            Destroy(droplist[(int)DropRane.DropNumber.FOURTH - loopCnt]);
-            droplist.RemoveAt((int)DropRane.DropNumber.FOURTH - loopCnt);
+            //List<GameObject> droplist = list.GetComponent<DropRane>()._DropList;
+            ////Vector3 Position =  droplist[(int)DropRane.DropNumber.FOURTH - loopCnt].GetComponent<Drop>().transform.position;
+            //Destroy(droplist[(int)DropRane.DropNumber.FOURTH - loopCnt]);
+            //droplist.RemoveAt((int)DropRane.DropNumber.FOURTH - loopCnt);
             GameObject drop = list.GetComponent<DropRane>().Create(Drop.DROPTYPE.Rainbow , loopCnt);
-            drop.transform.position = Position;
-            loopCnt++;
+            //drop.transform.position = Position;
+            loopCnt--;
         }
     }
 

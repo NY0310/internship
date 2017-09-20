@@ -181,11 +181,14 @@ public class DropRane : MonoBehaviour{
     public GameObject Create(Drop.DROPTYPE droptype, int ListNumber)
     {
         GameObject inst;
+
+        Vector3 position = DropList[ListNumber].GetComponent<Drop>().transform.position;
+        Destroy(DropList[ListNumber].gameObject);
+        // DropList.Remove(DropList[ListNumber]);
         inst = DropCreate(droptype);
-        //Vector3 position = inst.transform.position;
-        Vector3 position = new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
+        //Vector3 position = new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - ListNumber - 1), transform.position.z);
         //position *= 25;
-        inst.transform.position = position;
+        inst.GetComponent<Drop>().transform.position = position;
         DropList[ListNumber] = inst;
         return inst;
     }
@@ -277,9 +280,9 @@ public class DropRane : MonoBehaviour{
                 if (item.GetComponent<Drop>()._DropType != DropType)
                 {
                     Vector3 Position = item.transform.position;
-                    Destroy(item);
-                    GameObject NewDrop = Create(DropType, loopCnt);
-                    NewDrop.transform.position = Position;
+                    //Destroy(item);
+                    Create(DropType, loopCnt);
+                  //  NewDrop.transform.position = Position;
                 }
  
             }
