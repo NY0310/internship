@@ -16,7 +16,7 @@ public abstract class Player : MonoBehaviour
     protected DropManager DropManager;
 
 
-   // public List<float> AttackLevelMagnification;
+   public List<float> AttackLevelMagnification;
     ////合計攻撃力
     //int ToatalAttack;
     //[SerializeField]
@@ -41,6 +41,7 @@ public abstract class Player : MonoBehaviour
         set { HP = value; }
     }
 
+    List<float> LevelMagnification = new List<float>();
     ////ドロップ属性
     //protected Drop.DROPTYPE DropType;
     ////ドロップ属性のプロパティ
@@ -71,8 +72,8 @@ public abstract class Player : MonoBehaviour
     //    get { return attackType; }
     //    set { attackType = value; }
     //}
-    [SerializeField]
-    LevelMagnification levelMagnification;
+  //  [SerializeField]
+    // levelMagnification;
 
     //攻撃レベル
     public enum AttackLevel
@@ -179,13 +180,13 @@ public abstract class Player : MonoBehaviour
         switch (level)
         {
             case AttackLevel.LevelOne:
-                attackData.ToatalAttack += (int)(levelMagnification.Magnification[0] * Attack);
+                attackData.ToatalAttack += (int)(AttackLevelMagnification[0] * Attack);
                 break;
             case AttackLevel.LevelTwo:
-                attackData.ToatalAttack += (int)(levelMagnification.Magnification[1] * Attack);
+                attackData.ToatalAttack += (int)(AttackLevelMagnification[1] * Attack);
                 break;
             case AttackLevel.LevelTree:
-                attackData.ToatalAttack += (int)(levelMagnification.Magnification[2] * Attack);
+                attackData.ToatalAttack += (int)(AttackLevelMagnification[2] * Attack);
                 break;
             default:
                 break;
