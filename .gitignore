@@ -1,0 +1,5 @@
+*/metadata/
+*.csproj
+*.sln
+*/ScriptAssemblies/
+*/UnityAssemblies/
