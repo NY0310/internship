@@ -16,7 +16,7 @@ public abstract class Player : MonoBehaviour
     protected DropManager DropManager;
 
 
-    public List<float> AttackLevelMagnification;
+   // public List<float> AttackLevelMagnification;
     ////合計攻撃力
     //int ToatalAttack;
     //[SerializeField]
@@ -177,13 +177,13 @@ public abstract class Player : MonoBehaviour
         switch (level)
         {
             case AttackLevel.LevelOne:
-                attackData.ToatalAttack += (int)(AttackLevelMagnification[(int)AttackLevel.LevelOne] * Attack);
+                attackData.ToatalAttack += (int)(1 * Attack);
                 break;
             case AttackLevel.LevelTwo:
-                attackData.ToatalAttack += (int)(AttackLevelMagnification[(int)AttackLevel.LevelTwo] * Attack);
+                attackData.ToatalAttack += (int)(2 * Attack);
                 break;
             case AttackLevel.LevelTree:
-                attackData.ToatalAttack += (int)(AttackLevelMagnification[(int)AttackLevel.LevelTree] * Attack);
+                attackData.ToatalAttack += (int)(5 * Attack);
                 break;
             default:
                 break;

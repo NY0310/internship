@@ -31,8 +31,8 @@ public class DropRane : MonoBehaviour{
     GameObject TryangleDropPrefab;
     [SerializeField]
     GameObject RainbowDrop;
-    [SerializeField]
-    GameObject Darkness;
+    //[SerializeField]
+    //GameObject Darkness;
     //[SerializeField]
     //GameObject 
 
