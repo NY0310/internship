@@ -136,12 +136,19 @@ public class DropManager : MonoBehaviour {
     //    }
     //}
 
+
+    public struct IfNeededData
+    {
+        public  bool MooveFlag;
+        public  Drop.DROPTYPE Droptype;
+    }
     /// <summary>
     /// 全てのレーンのターゲットドロップが同じ種類なら全削除する
     /// </summary>
     /// <returns>全削除したドロップ種類</returns>
-    public Drop.DROPTYPE IfNeeded()
+    public IfNeededData IfNeeded()
      {
+        IfNeededData IfNeededData;
          Drop.DROPTYPE droptype = DropRaneList[(int)DropRane.LANEKIND.LANE1].GetComponent<DropRane>()._TargetDrop;
         Drop.DROPTYPE _droptype;
          for (int i = 0; i < MAX_RANE; i++)
@@ -149,7 +156,7 @@ public class DropManager : MonoBehaviour {
              _droptype = DropRaneList[i].GetComponent<DropRane>()._TargetDrop;
 
 
-             if ((droptype != _droptype) && (droptype != Drop.DROPTYPE.Rainbow))
+             if ((droptype != _droptype) || (droptype == Drop.DROPTYPE.Rainbow))
              {
                  break;
              }
@@ -163,15 +170,18 @@ public class DropManager : MonoBehaviour {
                      {
                         DropRaneList[j].GetComponent<DropRane>().TargetDelete();
                      }
-                     return droptype;
+                     IfNeededData.MooveFlag = DropRaneList[(int)DropRane.DropNumber.FIRST].GetComponent<DropRane>()._MoveFlag;
+                     IfNeededData.Droptype = droptype;
+                     return IfNeededData;
                  }
 
             }
              droptype = _droptype;
 
          }
-
-         return Drop.DROPTYPE.MAX;
+        IfNeededData.MooveFlag = false;
+        IfNeededData.Droptype = Drop.DROPTYPE.MAX;
+         return IfNeededData;
      }
 
     /// <summary>
@@ -179,11 +189,28 @@ public class DropManager : MonoBehaviour {
     /// </summary>
     public void UglyMagic()
     {
-        List<GameObject> dropRane = DropRaneList[(int)DropRane.LANEKIND.LANE2].GetComponent<DropRane>()._DropList;
-        Destroy(dropRane[(int)DropRane.DropNumber.FOURTH]);
-        dropRane.RemoveAt((int)DropRane.DropNumber.FOURTH);
-        DropRaneList[(int)DropRane.LANEKIND.LANE2].GetComponent<DropRane>().Create(Drop.DROPTYPE.Rainbow);
+        int loopCnt = 0;
+        foreach (var list in DropRaneList)
+        {
+            List<GameObject> droplist = list.GetComponent<DropRane>()._DropList;
+            Vector3 Position =  droplist[(int)DropRane.DropNumber.FOURTH - loopCnt].GetComponent<Drop>().transform.position;
+            Destroy(droplist[(int)DropRane.DropNumber.FOURTH - loopCnt]);
+            droplist.RemoveAt((int)DropRane.DropNumber.FOURTH - loopCnt);
+            GameObject drop = list.GetComponent<DropRane>().Create(Drop.DROPTYPE.Rainbow , loopCnt);
+            drop.transform.position = Position;
+            loopCnt++;
+        }
     }
+
+
+    /// <summary>
+    /// 月夜の竹取(かぐや姫)
+    /// </summary>
+    public void MoonlightBambooTaking()
+    {
+        DropRaneList[(int)DropRane.LANEKIND.LANE2].GetComponent<DropRane>().MoonlightBambooTaking();
+    }
+
 
 
 }

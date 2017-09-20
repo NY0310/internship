@@ -8,9 +8,12 @@ public class EnemyManager : MonoBehaviour {
     //public GameObject Enemy1;
     //[SerializeField]
     //public GameObject Enemy2;
-    //[SerializeField]
-    //public GameObject Enemy3;
-
+    //敵同士の間隔
+    [SerializeField]
+    float EnemyPositionIntervalX;
+    //敵のY座標
+    [SerializeField]
+    float PositionY;
 
     //敵のリスト
     List<Enemy> EnemyList = new List<Enemy>();
@@ -56,8 +59,41 @@ public class EnemyManager : MonoBehaviour {
             EnemyList.Add(Enemy.GetComponent<Enemy>());
         }
 
-
+        SetPosition();
     }
+
+    /// <summary>
+    /// 敵の座標設定
+    /// </summary>
+    void SetPosition()
+    {
+        //敵の数に応じて一体目のX座標を決める
+        float FirstEnemyPositionX = 0.0f;
+          switch (EnemyList.Count)
+          {
+              case 1:
+                FirstEnemyPositionX = 0.0f;
+                break;
+              case 2:
+                FirstEnemyPositionX = -1.0f;
+                break;
+              case 3:
+                FirstEnemyPositionX = -2.0f;
+                break;
+          
+           };
+
+        //敵の座標を設定
+        int loopCnt = 0;
+        foreach (var item in EnemyList)
+        {
+            item.transform.position = new Vector3(FirstEnemyPositionX + loopCnt * EnemyPositionIntervalX, PositionY, 0);
+            loopCnt++;
+        }
+    }
+
+
+    
 
     // Update is called once per frame
     void Update () {

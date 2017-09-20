@@ -7,7 +7,7 @@ public class EnemyC : TryangleEnemy
     public override void Start()
     {
         //初期化
-        HP = 500;
+        HP = 1000;
         MAXHP = HP;
         DropType = Drop.DROPTYPE.Tryangle;
         Attack = 30;

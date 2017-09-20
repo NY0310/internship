@@ -10,17 +10,21 @@ public class Cinderella : Player {
         HP = 1300;
         Attack = 300;
         Recovery = 500;
-        MaxSkillPoint = 5;
+       // MaxSkillPoint = 5;
+        InitRecovery = Recovery;
+        InitAttack = attackData.ToatalAttack;
         attackData.droptype = Drop.DROPTYPE.Cross;
+        DropManager = GameObject.Find("DropManager").GetComponent<DropManager>();
+
     }
-	
-	//// Update is called once per frame
-	//void Update () {
-		
-	//}
+
+    //// Update is called once per frame
+    //void Update () {
+
+    //}
 
     public override void Skil()
     {
-        _DropManager.GetComponent<DropManager>().UglyMagic();
+        DropManager.GetComponent<DropManager>().UglyMagic();
     }
 }

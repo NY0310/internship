@@ -5,19 +5,23 @@ using UnityEngine;
 public abstract class Player : MonoBehaviour
 {
     //ドロップマネージャ
-    GameObject DropManager;
-    public GameObject _DropManager
-    {
-        get { return DropManager; }
-        set { DropManager = value; }
-    }
+    //GameObject DropManager;
+    //public GameObject _DropManager
+    //{
+    //    get { return DropManager; }
+    //    set { DropManager = value; }
+    //}
 
     //   [SerializeField]
+    protected DropManager DropManager;
 
 
+    public List<float> AttackLevelMagnification;
     ////合計攻撃力
     //int ToatalAttack;
     //[SerializeField]
+    //初期攻撃力
+    protected float InitAttack;
     //攻撃力
     public float Attack;
     ////攻撃力のプロパティ
@@ -45,9 +49,9 @@ public abstract class Player : MonoBehaviour
     //    get { return DropType; }
     //    set { DropType = value; }
     //}
-
-    protected int Recovery;
-    public int _Recovery
+    protected float InitRecovery;
+    protected float Recovery;
+    public float _Recovery
     {
         get { return Recovery; }
         set { Recovery = value; }
@@ -103,14 +107,14 @@ public abstract class Player : MonoBehaviour
 
 
     //スキル発動に必要なポイント
-    protected int MaxSkillPoint;
+    public int MaxSkillPoint;
     //スキルポイント
     protected int SkillPoint;
-    public int _SkillPoint
-    {
-        get { return SkillPoint; }
-        set { SkillPoint = value; }
-    }
+    //public int _SkillPoint
+    //{
+    //    get { return SkillPoint; }
+    //    set { SkillPoint = value; }
+    //}
 
 
 
@@ -122,8 +126,9 @@ public abstract class Player : MonoBehaviour
     /// </summary>
     public void Initialize()
     {
-       this.DropManager = GameObject.Find("DropManager");
         attackData.ToatalAttack = 0;
+        Attack = InitAttack;
+        Recovery = InitRecovery;
     }
 
     // Update is called once per frame
@@ -169,14 +174,19 @@ public abstract class Player : MonoBehaviour
     /// <param name="level">攻撃レベル</param>
     public void DamageAdd(AttackLevel level)
     {
-        if (level < AttackLevel.LevelTree + 1)
+        switch (level)
         {
-            attackData.ToatalAttack += (int)((float)level * Attack);
-        }
-        else
-        {
-            attackData.ToatalAttack += (int)(5.0f * Attack);
-
+            case AttackLevel.LevelOne:
+                attackData.ToatalAttack += (int)(AttackLevelMagnification[(int)AttackLevel.LevelOne] * Attack);
+                break;
+            case AttackLevel.LevelTwo:
+                attackData.ToatalAttack += (int)(AttackLevelMagnification[(int)AttackLevel.LevelTwo] * Attack);
+                break;
+            case AttackLevel.LevelTree:
+                attackData.ToatalAttack += (int)(AttackLevelMagnification[(int)AttackLevel.LevelTree] * Attack);
+                break;
+            default:
+                break;
         }
     }
 
@@ -222,7 +232,7 @@ public abstract class Player : MonoBehaviour
         }
         return false;
     }
-    void SkillChage()
+       public void SkillChage()
     {
         SkillPoint++;
     }

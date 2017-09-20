@@ -10,25 +10,31 @@ public class DropRane : MonoBehaviour{
 
     //ターゲットドロップの座標
     [SerializeField]
-    public Vector3 TargetPosition;
+    Vector3 TargetPosition;
     //ドロップの縦間隔
     [SerializeField]
-    public Vector3 INTERVAL_SIZE;
+    Vector3 INTERVAL_SIZE;
     //列に入るドロップの最大値
     [SerializeField]
-    public int MAX_DROP = 4;
+    int MAX_DROP = 4;
 
     //移動プレハブ
     [SerializeField]
-    public GameObject MovePregab;
+    GameObject MovePregab;
 
     //各種ドロップのプレハブ
     [SerializeField]
-    public GameObject CircleDropPrefab;
+    GameObject CircleDropPrefab;
     [SerializeField]
-    public GameObject CrossDropPrefab;
+    GameObject CrossDropPrefab;
     [SerializeField]
-    public GameObject TryangleDropPrefab;
+    GameObject TryangleDropPrefab;
+    [SerializeField]
+    GameObject RainbowDrop;
+    [SerializeField]
+    GameObject Darkness;
+    //[SerializeField]
+    //GameObject 
 
     //レーンに入ってるドロップリスト
     List<GameObject> DropList = new List<GameObject>();
@@ -111,6 +117,10 @@ public class DropRane : MonoBehaviour{
                 DropPrefab = Instantiate(TryangleDropPrefab);
                 DropPrefab.GetComponent<Drop>()._DropType = droptype;
                 return DropPrefab;
+            case Drop.DROPTYPE.Rainbow:
+                DropPrefab = Instantiate(RainbowDrop);
+                DropPrefab.GetComponent<Drop>()._DropType = droptype;
+                return DropPrefab;
             default:
                 return null;
         }
@@ -150,7 +160,7 @@ public class DropRane : MonoBehaviour{
 
 
     /// <summary>
-    /// ランダムで指定したドロップを生成するメゾットを呼びだしリストに格納
+    /// ランダムで指定したドロップを生成するメゾットを呼びだし末尾リストに格納
     /// </summary>
     /// <returns>ドロップのGameObject</returns>
     public GameObject Create()
@@ -161,6 +171,25 @@ public class DropRane : MonoBehaviour{
         DropList.Add(inst);
         return inst;
     }
+
+
+    /// <summary>
+    /// 指定したドロップを生成するメゾットを呼びだしリストの指定した要素に格納
+    /// </summary>
+    /// <param name="droptype">ドロップの種類</param>
+    /// <returns>ドロップのGameObject</returns>
+    public GameObject Create(Drop.DROPTYPE droptype, int ListNumber)
+    {
+        GameObject inst;
+        inst = DropCreate(droptype);
+        //Vector3 position = inst.transform.position;
+        Vector3 position = new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
+        //position *= 25;
+        inst.transform.position = position;
+        DropList[ListNumber] = inst;
+        return inst;
+    }
+
 
     /// <summary>
     /// ターゲットドロップの確定削除
@@ -185,22 +214,33 @@ public class DropRane : MonoBehaviour{
     public bool TargetDelete(Drop.DROPTYPE droptype)
     {
         Drop.DROPTYPE DropType = DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType;
-        if ((DropType == droptype)||(DropType == Drop.DROPTYPE.Rainbow))
+        if (DropType == droptype)
         {
             TargetDelete();
             return true;
         }
-        return false;
+        if ((DropType == Drop.DROPTYPE.Rainbow)&&(droptype != Drop.DROPTYPE.MAX))
+        {
+            TargetDelete();
+            return true;
+        }
+            return false;
     }
 
+    bool MoveFlag;
+    public bool _MoveFlag
+    {
+        get { return MoveFlag; }
+        set { MoveFlag = value; }
 
+    }
     /// <summary>
     /// 全てのドロップを一段落とす
     /// </summary>
     public void AllDropDown()
     {
         // int loopcnt = 0;
-        bool MoveFlag = false;
+        MoveFlag = false;
     
         foreach (GameObject dropdata in DropList)
         {
@@ -217,7 +257,38 @@ public class DropRane : MonoBehaviour{
         }
     }
 
-   
+    /// <summary>
+    /// 月夜の竹取(かぐや姫)
+    /// </summary>
+    public void MoonlightBambooTaking()
+    {
+        bool loopFirst = true;
+        int loopCnt = 0;
+        Drop.DROPTYPE DropType = Drop.DROPTYPE.MAX;
+        foreach (var item in DropList)
+        {
+            if (loopFirst)
+            {
+                DropType = item.GetComponent<Drop>()._DropType;
+                loopFirst = false;
+            }
+            else
+            {
+                if (item.GetComponent<Drop>()._DropType != DropType)
+                {
+                    Vector3 Position = item.transform.position;
+                    Destroy(item);
+                    GameObject NewDrop = Create(DropType, loopCnt);
+                    NewDrop.transform.position = Position;
+                }
+ 
+            }
+            loopCnt++;
+        }
+    }
+
+
+
 
     /// <summary>
     /// ターゲットドロップの種類プロパティ

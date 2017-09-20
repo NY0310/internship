@@ -11,9 +11,11 @@ public class AliceSkins : Player {
 	public override void Awake() {
         Attack = 500;
         _HP = 900;
-        MaxSkillPoint = 8;
+       // MaxSkillPoint = 8;
         Recovery = 300;
         attackData.droptype = Drop.DROPTYPE.Circle;
+        InitAttack = attackData.ToatalAttack;
+        InitRecovery = Recovery;
         Initialize();
 
     }
@@ -22,7 +24,7 @@ public class AliceSkins : Player {
     public override void Skil()
     {
         buttleManager =  GameObject.Find("ButtleManager");
-        buttleManager.GetComponent<ButtleManager>()._NowTime += 2;
+        buttleManager.GetComponent<ButtleManager>()._NowTime = 5;
 
     }
 

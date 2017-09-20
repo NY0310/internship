@@ -6,11 +6,16 @@ using UnityEngine.UI;
 public class PlayerManager : MonoBehaviour {
 
     [SerializeField]
-    public GameObject CirclePlayerPrefab;
+    GameObject AliceSkins;
     [SerializeField]
-    public GameObject CrossPlayerPrefab;
+    GameObject Hameln;
     [SerializeField]
-    public GameObject TryanglePlayerPrefab;
+    GameObject KaguyaPrincess;
+    [SerializeField]
+    GameObject Cinderella;
+    [SerializeField]
+    GameObject Unown;
+
     //ボタンマネージャ
     GameObject BottanManager;
     //キャラクタのリスト
@@ -19,11 +24,11 @@ public class PlayerManager : MonoBehaviour {
     public GameObject HpPrefab;
 
     //キャラクタの初期合計体力
-    int MaxToatalHP;
+    float MaxToatalHP;
     //キャラクタの合計体力
-    int ToatalHP;
+    float ToatalHP;
     //キャラクタの合計体力プロパティ
-    public int _ToatalHP
+    public float _ToatalHP
     {
         get { return ToatalHP; }
         set { ToatalHP = value; }
@@ -50,16 +55,28 @@ public class PlayerManager : MonoBehaviour {
         //HPの合計値を計算
         ToatalHP = 0;
         GameObject DropPrefab;
-        DropPrefab = Instantiate(CirclePlayerPrefab);
+
+
+        DropPrefab = Instantiate(AliceSkins);
         PlayerList.Add(DropPrefab);
 
-        DropPrefab = Instantiate(CrossPlayerPrefab);
-　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　        PlayerList.Add(DropPrefab);
-
-
-        DropPrefab = Instantiate(TryanglePlayerPrefab);
-        //DropPrefab.GetComponent<Player>()._DropType = Drop.DROPTYPE.Tryangle;
+        DropPrefab = Instantiate(Hameln);
         PlayerList.Add(DropPrefab);
+
+
+
+        DropPrefab = Instantiate(KaguyaPrincess);
+        PlayerList.Add(DropPrefab);
+
+
+        DropPrefab = Instantiate(Cinderella);
+        PlayerList.Add(DropPrefab);
+
+
+        DropPrefab = Instantiate(Unown);
+        PlayerList.Add(DropPrefab);
+
+
         HPCalculation();
 		Setposition ();
     }
@@ -71,7 +88,7 @@ public class PlayerManager : MonoBehaviour {
     {
         foreach (var item in PlayerList)
         {
-            item.GetComponent<Player>()._ToatalAttack = 0;
+            item.GetComponent<Player>().Initialize();
             
         }
     }
@@ -101,7 +118,7 @@ public class PlayerManager : MonoBehaviour {
 		float Size = 2;
 		int loopCnt = 0;
 		foreach (var list in PlayerList) {
-			list.GetComponent<Player> ().transform.position = new Vector3 (-4 + (Size *loopCnt), -4, 0);
+			list.GetComponent<Player> ().transform.position = new Vector3 (-4 + (Size *loopCnt), -3, 0);
             loopCnt++;
 
         }
@@ -163,20 +180,24 @@ public class PlayerManager : MonoBehaviour {
     /// </summary>
     void Ifneded()
     {
-        Drop.DROPTYPE droptype = DropManager.GetComponent<DropManager>().IfNeeded();
-        if (droptype != Drop.DROPTYPE.MAX)
+        DropManager.IfNeededData IfNeededData = DropManager.GetComponent<DropManager>().IfNeeded();
+        if (IfNeededData.Droptype != Drop.DROPTYPE.MAX)
         {
             foreach (GameObject List in PlayerList)
             {
                 Player player = List.GetComponent<Player>();
-                if (player._attackData.droptype == droptype)
+                if (player._attackData.droptype == IfNeededData.Droptype)
                 {
-                    List.GetComponent<Player>().DamageAdd(Player.AttackLevel.LevelTree);
-                    //揃ったドロップ種と同じキャラの回復値回復する
-                    Recovery(player._Recovery);
-                    //スキルポイントをためる
-                    player._SkillPoint++;
-                    SetHpBar();
+                    if (!IfNeededData.MooveFlag)
+                    {
+                        List.GetComponent<Player>().DamageAdd(Player.AttackLevel.LevelTree);
+                        //揃ったドロップ種と同じキャラの回復値回復する
+                        Recovery(player._Recovery);
+                        //スキルポイントをためる
+                        player.SkillChage();
+                        SetHpBar();
+
+                    }
                 }
             }
         }
@@ -233,7 +254,7 @@ public class PlayerManager : MonoBehaviour {
         
     }
 
-    public void Recovery(int recovery)
+    public void Recovery(float recovery)
     {
         if (ToatalHP + recovery >= MaxToatalHP)
         {
@@ -270,7 +291,18 @@ public class PlayerManager : MonoBehaviour {
     {
         foreach (var list in PlayerList)
         {
-            list.GetComponent<Player>()._Attack *= 1.2f;
+            list.GetComponent<Player>()._Attack *= 1.5f;
+        }
+    }
+    /// <summary>
+    /// ヘンデルグレーテルのスキル全プレイヤ回復力x1.5
+    /// </summary>
+    public void adfadf()
+    {
+        foreach (var list in PlayerList)
+        {
+            list.GetComponent<Player>()._Recovery *= 1.5f;
+
         }
     }
 

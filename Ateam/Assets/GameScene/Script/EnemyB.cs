@@ -12,7 +12,7 @@ public class EnemyB : CrossEnemy
         //Vector3 pos = transform.position;
         //HpPrefab.GetComponent<HpBar>().transform.position = new Vector3(pos.x, pos.y + INTERVAL_POS, pos.z);
         //初期化
-        HP = 1000;
+        HP = 10000;
         MAXHP = HP;
         DropType = Drop.DROPTYPE.Cross;
         Attack = 70;

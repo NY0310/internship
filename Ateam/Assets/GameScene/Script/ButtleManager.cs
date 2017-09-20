@@ -272,6 +272,7 @@ public class Wait : ButtleState
 
         return buttleState;
     }
+    bool IsFirst = true;
 
     public override void Execute(ButtleManager buttlemanager)
     {
@@ -279,6 +280,12 @@ public class Wait : ButtleState
 
         Drop.DROPTYPE type = bottan.GetComponent<BottonManager>()._PushBotton;
 
+        if (IsFirst)
+        {
+            //プレイヤ情報を一部リセット
+            buttlemanager._PlayerManager.GetComponent<PlayerManager>().Reset();
+            IsFirst = false;
+        }
         //プレイヤの更新処理呼び出し
         buttlemanager._PlayerManager.GetComponent<PlayerManager>().IsUpdate();
 
@@ -286,8 +293,10 @@ public class Wait : ButtleState
         if (type != Drop.DROPTYPE.MAX)
         {
             buttlemanager.ChangeState(DropOperation.GetInstance());
+            IsFirst = true;
+
         }
-        
+
     }
 
 

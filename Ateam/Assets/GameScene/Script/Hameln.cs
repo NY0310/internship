@@ -10,9 +10,11 @@ public class Hameln : Player {
     {
         HP = 900;
         Attack = 500;
-        MaxSkillPoint = 4;
+       // MaxSkillPoint = 4;
         Recovery = 300;
         attackData.droptype = Drop.DROPTYPE.Cross;
+        InitAttack = attackData.ToatalAttack;
+        InitRecovery = Recovery;
         PlayerManager = GameObject.Find("PlayerManager");
     }
 

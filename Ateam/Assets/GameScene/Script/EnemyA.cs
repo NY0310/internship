@@ -8,7 +8,7 @@ public class EnemyA : CircleEnemy
     {
 
         //初期化
-        HP = 1000;
+        HP = 10000;
         MAXHP = HP;
         DropType = Drop.DROPTYPE.Circle;
         Attack = 100;
