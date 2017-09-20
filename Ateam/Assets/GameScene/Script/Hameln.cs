@@ -8,8 +8,8 @@ public class Hameln : Player {
     // Use this for initialization
     public override void Awake()
     {
-        HP = 900;
-        Attack = 500;
+       // HP = 900;
+        //Attack = 500;
        // MaxSkillPoint = 4;
         Recovery = 300;
         attackData.droptype = Drop.DROPTYPE.Cross;

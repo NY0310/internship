@@ -71,6 +71,8 @@ public abstract class Player : MonoBehaviour
     //    get { return attackType; }
     //    set { attackType = value; }
     //}
+    [SerializeField]
+    LevelMagnification levelMagnification;
 
     //攻撃レベル
     public enum AttackLevel
@@ -177,13 +179,13 @@ public abstract class Player : MonoBehaviour
         switch (level)
         {
             case AttackLevel.LevelOne:
-                attackData.ToatalAttack += (int)(1 * Attack);
+                attackData.ToatalAttack += (int)(levelMagnification.Magnification[0] * Attack);
                 break;
             case AttackLevel.LevelTwo:
-                attackData.ToatalAttack += (int)(2 * Attack);
+                attackData.ToatalAttack += (int)(levelMagnification.Magnification[1] * Attack);
                 break;
             case AttackLevel.LevelTree:
-                attackData.ToatalAttack += (int)(5 * Attack);
+                attackData.ToatalAttack += (int)(levelMagnification.Magnification[2] * Attack);
                 break;
             default:
                 break;

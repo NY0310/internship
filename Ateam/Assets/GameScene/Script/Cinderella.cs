@@ -7,8 +7,8 @@ public class Cinderella : Player {
 
 	// Use this for initialization
 	public override void Awake() {
-        HP = 1300;
-        Attack = 300;
+        //HP = 1300;
+        //Attack = 300;
         Recovery = 500;
        // MaxSkillPoint = 5;
         InitRecovery = Recovery;

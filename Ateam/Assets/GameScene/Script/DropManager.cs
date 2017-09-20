@@ -188,7 +188,6 @@ public class DropManager : MonoBehaviour {
             {
                 break;
             }
-           
          }
         IfNeededData.MooveFlag = false;
         IfNeededData.Droptype = Drop.DROPTYPE.MAX;

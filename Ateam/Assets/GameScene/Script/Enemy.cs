@@ -31,6 +31,7 @@ public abstract class Enemy : MonoBehaviour
         set { DropType = value; }
     }
     //体力
+    [SerializeField]
     protected int HP;
     public int _HP
     {
@@ -40,6 +41,7 @@ public abstract class Enemy : MonoBehaviour
     //最大体力
     protected int MAXHP;
     //攻撃
+    [SerializeField]
     protected int Attack;
     public int _Attack
     {

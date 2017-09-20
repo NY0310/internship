@@ -9,8 +9,8 @@ public class AliceSkins : Player {
     GameObject buttleManager;
 	// Use this for initialization
 	public override void Awake() {
-        Attack = 500;
-        _HP = 900;
+       // Attack = 500;
+        //_HP = 900;
        // MaxSkillPoint = 8;
         Recovery = 300;
         attackData.droptype = Drop.DROPTYPE.Circle;

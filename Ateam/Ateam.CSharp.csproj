@@ -105,6 +105,7 @@
     <Compile Include="Assets\GameScene\Script\HpAnimation.cs" />
     <Compile Include="Assets\GameScene\Script\HpBar.cs" />
     <Compile Include="Assets\GameScene\Script\KaguyaPrincess.cs" />
+    <Compile Include="Assets\GameScene\Script\LevelMagnification.cs" />
     <Compile Include="Assets\GameScene\Script\Move.cs" />
     <Compile Include="Assets\GameScene\Script\PlaySceneManager.cs" />
     <Compile Include="Assets\GameScene\Script\Player.cs" />
