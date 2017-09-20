@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class FooterSceneChange : MonoBehaviour {
+public class FooterSceneChange2 : MonoBehaviour {
 
     public string SceneName;
     static string currentSceneName = "";
