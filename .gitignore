@@ -1,0 +1,8 @@
+metadata/
+*.csproj
+*.sln
+ScriptAssemblies/
+UnityAssemblies/
+Library/
+Temp/
+.vs/
