@@ -24,7 +24,14 @@ public class BottonManager : MonoBehaviour {
         set { PushBotton = value; }
     }
 
+    //タッチされた回数
+    int TouchCnt;
+    public int _TouchCnt
+    {
+        get { return TouchCnt; }
+        set { TouchCnt = value; }
 
+    }
     // Use this for initialization
     void Start () {
         //各ボタンの生成
@@ -50,15 +57,20 @@ public class BottonManager : MonoBehaviour {
                 if (cnt == Drop.DROPTYPE.Circle)
                 {
                     PushBotton = Drop.DROPTYPE.Circle;
+                    TouchCnt++;
 
                 }
                 else if (cnt == Drop.DROPTYPE.Cross)
                 {
                     PushBotton = Drop.DROPTYPE.Cross;
+                    TouchCnt++;
+
                 }
                 else if(cnt == Drop.DROPTYPE.Tryangle)
                 {
                     PushBotton = Drop.DROPTYPE.Tryangle;
+                    TouchCnt++;
+
                 }
             }
           

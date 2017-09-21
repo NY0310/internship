@@ -284,6 +284,8 @@ public class Wait : ButtleState
         {
             //プレイヤ情報を一部リセット
             buttlemanager._PlayerManager.GetComponent<PlayerManager>().Reset();
+            //タッチされた回数をリセット
+            buttlemanager._BottanManager.GetComponent<BottonManager>()._TouchCnt = 0;
             IsFirst = false;
         }
         //プレイヤの更新処理呼び出し

@@ -66,7 +66,7 @@ public class DropManager : MonoBehaviour {
      {
          for (int i = 0; i < MAX_RANE; i++)
          {
-         DropRaneList[i].GetComponent<DropRane>().Create();
+         DropRaneList[i].GetComponent<DropRane>().Create(Drop.Abnormality.Normal);
          }
      }
 
@@ -206,7 +206,7 @@ public class DropManager : MonoBehaviour {
             ////Vector3 Position =  droplist[(int)DropRane.DropNumber.FOURTH - loopCnt].GetComponent<Drop>().transform.position;
             //Destroy(droplist[(int)DropRane.DropNumber.FOURTH - loopCnt]);
             //droplist.RemoveAt((int)DropRane.DropNumber.FOURTH - loopCnt);
-            GameObject drop = list.GetComponent<DropRane>().Create(Drop.DROPTYPE.Rainbow , loopCnt);
+            GameObject drop = list.GetComponent<DropRane>().Create(Drop.DROPTYPE.Rainbow , Drop.Abnormality.Normal);
             //drop.transform.position = Position;
             loopCnt--;
         }

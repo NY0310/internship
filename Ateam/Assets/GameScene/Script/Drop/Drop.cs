@@ -23,7 +23,7 @@ public  class Drop : MonoBehaviour {
     public enum Abnormality
     {
         Normal,
-        Grudge,
+        Restraint,
         Darkness,
         Rebellion
     }
@@ -37,6 +37,12 @@ public  class Drop : MonoBehaviour {
         set { DropType = value; }
     }
 
+    Abnormality abnormality;
+    public Abnormality _Abnormality
+    {
+        get { return abnormality; }
+        set { abnormality = value; }
+    }
 
     GameObject MoveGameObject;
 

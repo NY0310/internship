@@ -5,8 +5,11 @@ using UnityEngine;
 /// <summary>
 /// ドロップをレーンごとに管理するクラス
 /// </summary>
-public class DropRane : MonoBehaviour{
+public class DropRane : MonoBehaviour
+{
 
+    [SerializeField]
+    BottonManager buttanManager;
 
     //ターゲットドロップの座標
     [SerializeField]
@@ -31,10 +34,21 @@ public class DropRane : MonoBehaviour{
     GameObject TryangleDropPrefab;
     [SerializeField]
     GameObject RainbowDrop;
-    //[SerializeField]
-    //GameObject Darkness;
-    //[SerializeField]
-    //GameObject 
+    [SerializeField]
+    GameObject CircleRestraintDrop;
+    [SerializeField]
+    GameObject CrossRestraintDrop;
+    [SerializeField]
+    GameObject TryangleRestraintDrop;
+    [SerializeField]
+    GameObject DarknessDrop;
+    [SerializeField]
+    GameObject CircleRebellionDrop;
+    [SerializeField]
+    GameObject CrossRebellionDrop;
+    [SerializeField]
+    GameObject TryangleRebellionDrop;
+
 
     //レーンに入ってるドロップリスト
     List<GameObject> DropList = new List<GameObject>();
@@ -55,12 +69,13 @@ public class DropRane : MonoBehaviour{
     {
         if (DropList[(int)DropNumber.FIRST].transform.position.y == TargetPosition.y - INTERVAL_SIZE.y / 2)
         {
-            Create();
+            Create(Drop.Abnormality.Normal);
 
             Destroy(DropList[(int)DropNumber.FIRST]);
             DropList.RemoveAt((int)DropNumber.FIRST);
 
         }
+        IsRestraintRelease();
     }
 
     /// <summary>
@@ -70,23 +85,23 @@ public class DropRane : MonoBehaviour{
     /// <param name="droptype">ドロップの種類</param>
     public void Init(LANEKIND lanekind, Drop.DROPTYPE droptype)
     {
-        ButtlegameObject= GameObject.Find("ButtleManager");
+        ButtlegameObject = GameObject.Find("ButtleManager");
 
         //レーンを保存
         LaneKind = lanekind;
 
         Vector2 Pos = TargetPosition;
-         Pos.x += (float)lanekind * INTERVAL_SIZE.x;
+        Pos.x += (float)lanekind * INTERVAL_SIZE.x;
         for (int i = 0; i < MAX_DROP; i++)
         {
             GameObject inst;
             if (i == 0)
             {
-                inst = Create(droptype);
+                inst = Create(droptype, Drop.Abnormality.Normal);
             }
             else
             {
-                inst = Create();
+                inst = Create(Drop.Abnormality.Normal);
             }
             //座標設定
             inst.transform.position = new Vector3(Pos.x, Pos.y, INTERVAL_SIZE.z * i);
@@ -100,21 +115,76 @@ public class DropRane : MonoBehaviour{
     /// </summary>
     /// <param name="droptype">ドロップの種類</param>
     /// <returns>ドロップのGameObject</returns>
-    public GameObject DropCreate(Drop.DROPTYPE droptype)
+    public GameObject DropCreate(Drop.DROPTYPE droptype ,Drop.Abnormality Abnormality)
     {
-        GameObject DropPrefab;
+        GameObject DropPrefab = null;
+
+
+
         switch (droptype)
         {
             case Drop.DROPTYPE.Circle:
-                DropPrefab = Instantiate(CircleDropPrefab);
+                switch (Abnormality)
+                {
+                    case Drop.Abnormality.Normal:
+                        DropPrefab = Instantiate(CircleDropPrefab);
+                        break;
+                    case Drop.Abnormality.Restraint:
+                        DropPrefab = Instantiate(CircleRestraintDrop);
+                        break;
+                    case Drop.Abnormality.Darkness:
+                        DropPrefab = Instantiate(DarknessDrop);
+                        break;
+                    case Drop.Abnormality.Rebellion:
+                        DropPrefab = Instantiate(CircleRebellionDrop);
+                        break;
+                    default:
+                        break;
+                }
+          
+
                 DropPrefab.GetComponent<Drop>()._DropType = droptype;
                 return DropPrefab;
             case Drop.DROPTYPE.Cross:
-                DropPrefab = Instantiate(CrossDropPrefab);
+                switch (Abnormality)
+                {
+                    case Drop.Abnormality.Normal:
+                        DropPrefab = Instantiate(CrossDropPrefab);
+                        break;
+                    case Drop.Abnormality.Restraint:
+                        DropPrefab = Instantiate(CrossRestraintDrop);
+                        break;
+                    case Drop.Abnormality.Darkness:
+                        DropPrefab = Instantiate(DarknessDrop);
+                        break;
+                    case Drop.Abnormality.Rebellion:
+                        DropPrefab = Instantiate(CrossRebellionDrop);
+                        break;
+                    default:
+                        break;
+                }
+    
                 DropPrefab.GetComponent<Drop>()._DropType = droptype;
                 return DropPrefab;
             case Drop.DROPTYPE.Tryangle:
-                DropPrefab = Instantiate(TryangleDropPrefab);
+                switch (Abnormality)
+                {
+                    case Drop.Abnormality.Normal:
+                        DropPrefab = Instantiate(TryangleDropPrefab);
+                        break;
+                    case Drop.Abnormality.Restraint:
+                        DropPrefab = Instantiate(TryangleRestraintDrop);
+                        break;
+                    case Drop.Abnormality.Darkness:
+                        DropPrefab = Instantiate(DarknessDrop);
+                        break;
+                    case Drop.Abnormality.Rebellion:
+                        DropPrefab = Instantiate(TryangleRebellionDrop);
+                        break;
+                    default:
+                        break;
+                }
+     
                 DropPrefab.GetComponent<Drop>()._DropType = droptype;
                 return DropPrefab;
             case Drop.DROPTYPE.Rainbow:
@@ -127,18 +197,46 @@ public class DropRane : MonoBehaviour{
     }
 
     /// <summary>
+    /// 指定されたドロップの種類に応じてプレハブ生成
+    /// </summary>
+    /// <param name="droptype">ドロップの種類</param>
+    /// <returns>ドロップのGameObject</returns>
+    //public GameObject RestraintDropCreate(Drop.DROPTYPE droptype)
+    //{
+    //    GameObject DropPrefab;
+
+    //    switch (droptype)
+    //    {
+    //        case Drop.DROPTYPE.Circle:
+    //            DropPrefab = Instantiate(CircleRestraintDrop);
+    //            DropPrefab.GetComponent<Drop>()._DropType = droptype;
+    //            return DropPrefab;
+    //        case Drop.DROPTYPE.Cross:
+    //            DropPrefab = Instantiate(CrossRestraintDrop);
+    //            DropPrefab.GetComponent<Drop>()._DropType = droptype;
+    //            return DropPrefab;
+    //        case Drop.DROPTYPE.Tryangle:
+    //            DropPrefab = Instantiate(TryangleRestraintDrop);
+    //            DropPrefab.GetComponent<Drop>()._DropType = droptype;
+    //            return DropPrefab;
+    //        default:
+    //            return null;
+    //    }
+    //}
+
+    /// <summary>
     /// ターゲットドロップの種類が一致しているか調べる
     /// </summary>
     /// <param name="droptype">一致しているか調べる種類</param>
     /// <returns>一致しているかどうか</returns>
     public bool TargetDropSearch(Drop.DROPTYPE droptype)
     {
-       if( DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType == droptype)
+        if (DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType == droptype)
         {
             return true;
         }
         return false;
-   }
+    }
 
 
     /// <summary>
@@ -146,12 +244,12 @@ public class DropRane : MonoBehaviour{
     /// </summary>
     /// <param name="droptype">ドロップの種類</param>
     /// <returns>ドロップのGameObject</returns>
-    public GameObject Create(Drop.DROPTYPE droptype)
+    public GameObject Create(Drop.DROPTYPE droptype , Drop.Abnormality Abnormality)
     {
         GameObject inst;
-        inst = DropCreate(droptype);
+        inst = DropCreate(droptype , Abnormality);
         //Vector3 position = inst.transform.position;
-        Vector3 position =  new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
+        Vector3 position = new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
         //position *= 25;
         inst.transform.position = position;
         DropList.Add(inst);
@@ -163,11 +261,11 @@ public class DropRane : MonoBehaviour{
     /// ランダムで指定したドロップを生成するメゾットを呼びだし末尾リストに格納
     /// </summary>
     /// <returns>ドロップのGameObject</returns>
-    public GameObject Create()
+    public GameObject Create(Drop.Abnormality Abnormality)
     {
         GameObject inst;
-        inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1));
-        inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y  * (MAX_DROP - 1), 0);
+        inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1), Abnormality);
+        inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), 0);
         DropList.Add(inst);
         return inst;
     }
@@ -178,16 +276,33 @@ public class DropRane : MonoBehaviour{
     /// </summary>
     /// <param name="droptype">ドロップの種類</param>
     /// <returns>ドロップのGameObject</returns>
-    public GameObject Create(Drop.DROPTYPE droptype, int ListNumber)
+    public GameObject Create(Drop.DROPTYPE droptype, int ListNumber , Drop.Abnormality Abnormality)
     {
         GameObject inst;
 
         Vector3 position = DropList[ListNumber].GetComponent<Drop>().transform.position;
         Destroy(DropList[ListNumber].gameObject);
         // DropList.Remove(DropList[ListNumber]);
-        inst = DropCreate(droptype);
+        inst = DropCreate(droptype, Abnormality);
         //Vector3 position = new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - ListNumber - 1), transform.position.z);
         //position *= 25;
+        inst.GetComponent<Drop>().transform.position = position;
+        DropList[ListNumber] = inst;
+        return inst;
+    }
+
+    /// <summary>
+    /// ランダムなドロップを生成するメゾットを呼びだしリストの指定した要素に格納
+    /// </summary>
+    /// <param name="droptype">ドロップの種類</param>
+    /// <returns>ドロップのGameObject</returns>
+    public GameObject Create(int ListNumber, Drop.Abnormality Abnormality)
+    {
+        GameObject inst;
+
+        Vector3 position = DropList[ListNumber].GetComponent<Drop>().transform.position;
+        Destroy(DropList[ListNumber].gameObject);
+        inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1), Abnormality);
         inst.GetComponent<Drop>().transform.position = position;
         DropList[ListNumber] = inst;
         return inst;
@@ -200,12 +315,12 @@ public class DropRane : MonoBehaviour{
     public void TargetDelete()
     {
 
-            if (ButtlegameObject.GetComponent<ButtleManager>()._IsTouch == true)
-            {
-                //削除さる前にい
-                AllDropDown();
-              
-            }
+        if (ButtlegameObject.GetComponent<ButtleManager>()._IsTouch == true)
+        {
+            //削除さる前にい
+            AllDropDown();
+
+        }
     }
 
 
@@ -217,17 +332,29 @@ public class DropRane : MonoBehaviour{
     public bool TargetDelete(Drop.DROPTYPE droptype)
     {
         Drop.DROPTYPE DropType = DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType;
-        if (DropType == droptype)
+        Drop.Abnormality Abnormality = DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._Abnormality;
+        if ((DropType == droptype)|| (DropType == Drop.DROPTYPE.Rainbow) && (Abnormality != Drop.Abnormality.Rebellion))
         {
             TargetDelete();
             return true;
         }
-        if ((DropType == Drop.DROPTYPE.Rainbow)&&(droptype != Drop.DROPTYPE.MAX))
+        else if ((DropType == droptype) || (DropType == Drop.DROPTYPE.Rainbow))
         {
-            TargetDelete();
-            return true;
+            if (Abnormality == Drop.Abnormality.Rebellion)
+            {
+                if (DropList[(int)DropNumber.FIRST].GetComponent<RebellionDrop>()._DisplayNumber == 0)
+                {
+                    TargetDelete();
+                    return true;
+                }
+                else
+                {
+                    DropList[(int)DropNumber.FIRST].GetComponent<RebellionDrop>()._DisplayNumber--;
+                }
+
+            }
         }
-            return false;
+         return false;
     }
 
     bool MoveFlag;
@@ -244,19 +371,38 @@ public class DropRane : MonoBehaviour{
     {
         // int loopcnt = 0;
         MoveFlag = false;
-    
+
         foreach (GameObject dropdata in DropList)
         {
-                if (dropdata.GetComponent<Drop>()._MoveGameObject == null && !MoveFlag)
-                {
-                    dropdata.GetComponent<Drop>()._MoveGameObject = Instantiate(MovePregab);
-                    dropdata.GetComponent<Drop>()._MoveGameObject.GetComponent<Move>().MoveBy(dropdata, new Vector3(0, -INTERVAL_SIZE.y / 2, 0), 5);
+            if (dropdata.GetComponent<Drop>()._MoveGameObject == null && !MoveFlag)
+            {
+                dropdata.GetComponent<Drop>()._MoveGameObject = Instantiate(MovePregab);
+                dropdata.GetComponent<Drop>()._MoveGameObject.GetComponent<Move>().MoveBy(dropdata, new Vector3(0, -INTERVAL_SIZE.y / 2, 0), 5);
 
-                }
-                else
+            }
+            else
+            {
+                MoveFlag = true;
+            }
+        }
+    }
+
+    /// <summary>
+    /// 束縛終了したら元に戻す
+    /// </summary>
+    void IsRestraintRelease()
+    {
+        int loopcnt = 0;
+        foreach (var item in DropList)
+        {
+            if (item.GetComponent<Drop>()._Abnormality == Drop.Abnormality.Restraint)
+            {
+                if (buttanManager._TouchCnt >  item.GetComponent<RestraintDrop>()._MaxRestraint)
                 {
-                    MoveFlag = true;
+                    Create(item.GetComponent<RestraintDrop>()._DropType, loopcnt, Drop.Abnormality.Normal);
                 }
+            }
+            loopcnt++;
         }
     }
 
@@ -281,10 +427,10 @@ public class DropRane : MonoBehaviour{
                 {
                     Vector3 Position = item.transform.position;
                     //Destroy(item);
-                    Create(DropType, loopCnt);
-                  //  NewDrop.transform.position = Position;
+                    Create(DropType, loopCnt, Drop.Abnormality.Normal);
+                    //  NewDrop.transform.position = Position;
                 }
- 
+
             }
             loopCnt++;
         }
