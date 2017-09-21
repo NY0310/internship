@@ -8,7 +8,7 @@ using UnityEngine;
 /// </summary>
 public class BattleManager : MonoBehaviour {
 
-    public tDropLane dropLane;
+    public tDropLaneBase dropLane;
 
     /// <summary>
     /// なぜTap～という関数を３つも作ったか
@@ -31,5 +31,10 @@ public class BattleManager : MonoBehaviour {
     void UserInput(tDrop.Type type)
     {
         dropLane.DestroyUnderDrop(type);
+    }
+
+    void Update()
+    {
+        dropLane.DestroyIfUnderDropsAreSame();
     }
 }
