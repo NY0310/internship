@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class RebellionUI : MonoBehaviour {
 
     //あと何回で押せるようになるか
-    int DisplayNumber;
+    int DisplayNumber = 3;
     public int _DisplayNumber
     {
         get { return DisplayNumber; }
@@ -16,7 +16,6 @@ public class RebellionUI : MonoBehaviour {
    
 	// Update is called once per frame
 	void Update () {
-        this.GetComponentInChildren<Text>().text = DisplayNumber.ToString();
-
+        this.gameObject.GetComponentInChildren<Text>().text = DisplayNumber.ToString();
     }
 }

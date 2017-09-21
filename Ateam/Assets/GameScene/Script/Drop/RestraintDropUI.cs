@@ -8,7 +8,7 @@ public class RestraintDropUI : MonoBehaviour {
     BottonManager BottonManager;
     //拘束回数
     [SerializeField]
-    int  MaxRestraint;
+    int  MaxRestraint = 3;
     public int _MaxRestraint
     {
         get { return MaxRestraint; }
@@ -32,6 +32,6 @@ public class RestraintDropUI : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         DisplayNumber = MaxRestraint - BottonManager._TouchCnt;
-        this.GetComponentInChildren<Text>().text = DisplayNumber.ToString();
+        this.gameObject.GetComponentInChildren<Text>().text = DisplayNumber.ToString();
     }
 }

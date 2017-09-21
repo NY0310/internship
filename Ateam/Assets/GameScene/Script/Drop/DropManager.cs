@@ -173,7 +173,7 @@ public class DropManager : MonoBehaviour {
                  //全て同じドロップなら
                  if (i == MAX_RANE - 1)
                  {
-                     //全てのターゲットドロップ削除
+                    //全てのターゲットドロップ削除
                      for (int j = 0; j < MAX_RANE; j++)
                      {
                         DropRaneList[j].GetComponent<DropRane>().TargetDelete();

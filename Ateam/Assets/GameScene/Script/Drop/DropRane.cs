@@ -73,7 +73,6 @@ public class DropRane : MonoBehaviour
 
             Destroy(DropList[(int)DropNumber.FIRST]);
             DropList.RemoveAt((int)DropNumber.FIRST);
-
         }
         IsRestraintRelease();
     }
@@ -127,10 +126,12 @@ public class DropRane : MonoBehaviour
                 switch (Abnormality)
                 {
                     case Drop.Abnormality.Normal:
+                        DropPrefab.GetComponent<Drop>()._DropType = droptype;
                         DropPrefab = Instantiate(CircleDropPrefab);
                         break;
                     case Drop.Abnormality.Restraint:
                         DropPrefab = Instantiate(CircleRestraintDrop);
+                        DropPrefab.GetComponent<RestraintDrop>()._DropType = droptype;
                         break;
                     case Drop.Abnormality.Darkness:
                         DropPrefab = Instantiate(DarknessDrop);
@@ -143,16 +144,17 @@ public class DropRane : MonoBehaviour
                 }
           
 
-                DropPrefab.GetComponent<Drop>()._DropType = droptype;
                 return DropPrefab;
             case Drop.DROPTYPE.Cross:
                 switch (Abnormality)
                 {
                     case Drop.Abnormality.Normal:
                         DropPrefab = Instantiate(CrossDropPrefab);
+                        DropPrefab.GetComponent<Drop>()._DropType = droptype;
                         break;
                     case Drop.Abnormality.Restraint:
                         DropPrefab = Instantiate(CrossRestraintDrop);
+                        DropPrefab.GetComponent<RestraintDrop>()._DropType = droptype;
                         break;
                     case Drop.Abnormality.Darkness:
                         DropPrefab = Instantiate(DarknessDrop);
@@ -164,16 +166,18 @@ public class DropRane : MonoBehaviour
                         break;
                 }
     
-                DropPrefab.GetComponent<Drop>()._DropType = droptype;
                 return DropPrefab;
             case Drop.DROPTYPE.Tryangle:
                 switch (Abnormality)
                 {
                     case Drop.Abnormality.Normal:
                         DropPrefab = Instantiate(TryangleDropPrefab);
+                        DropPrefab.GetComponent<Drop>()._DropType = droptype;
                         break;
                     case Drop.Abnormality.Restraint:
                         DropPrefab = Instantiate(TryangleRestraintDrop);
+                        DropPrefab.GetComponent<RestraintDrop>()._DropType = droptype;
+
                         break;
                     case Drop.Abnormality.Darkness:
                         DropPrefab = Instantiate(DarknessDrop);
@@ -185,7 +189,6 @@ public class DropRane : MonoBehaviour
                         break;
                 }
      
-                DropPrefab.GetComponent<Drop>()._DropType = droptype;
                 return DropPrefab;
             case Drop.DROPTYPE.Rainbow:
                 DropPrefab = Instantiate(RainbowDrop);
@@ -247,7 +250,7 @@ public class DropRane : MonoBehaviour
     public GameObject Create(Drop.DROPTYPE droptype , Drop.Abnormality Abnormality)
     {
         GameObject inst;
-        inst = DropCreate(droptype , Abnormality);
+        inst = DropCreate(droptype , Drop.Abnormality.Restraint);
         //Vector3 position = inst.transform.position;
         Vector3 position = new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
         //position *= 25;
@@ -264,7 +267,7 @@ public class DropRane : MonoBehaviour
     public GameObject Create(Drop.Abnormality Abnormality)
     {
         GameObject inst;
-        inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1), Abnormality);
+        inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1), Drop.Abnormality.Restraint);
         inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), 0);
         DropList.Add(inst);
         return inst;
@@ -333,7 +336,7 @@ public class DropRane : MonoBehaviour
     {
         Drop.DROPTYPE DropType = DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._DropType;
         Drop.Abnormality Abnormality = DropList[(int)DropNumber.FIRST].GetComponent<Drop>()._Abnormality;
-        if ((DropType == droptype)|| (DropType == Drop.DROPTYPE.Rainbow) && (Abnormality != Drop.Abnormality.Rebellion))
+        if ((DropType == droptype) || (DropType == Drop.DROPTYPE.Rainbow) && (Abnormality != Drop.Abnormality.Rebellion))
         {
             TargetDelete();
             return true;
@@ -395,7 +398,7 @@ public class DropRane : MonoBehaviour
         int loopcnt = 0;
         foreach (var item in DropList)
         {
-            if (item.GetComponent<Drop>()._Abnormality == Drop.Abnormality.Restraint)
+            if (item.GetComponent<RestraintDrop>() != null)
             {
                 if (buttanManager._TouchCnt >  item.GetComponent<RestraintDrop>()._MaxRestraint)
                 {
