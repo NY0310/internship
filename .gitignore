@@ -3,3 +3,4 @@ metadata/
 *.sln
 ScriptAssemblies/
 UnityAssemblies/
+Library/
