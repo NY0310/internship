@@ -19,15 +19,23 @@ public class tDrop : MonoBehaviour {
     bool moving=false;
     public bool Moving { get { return moving; } }
     
-    float targetZ;
-    const float MOVE_SPEED = 1f;
+    float targetZ;  // 移動目的地
+    const float MOVE_SPEED = 15f;
 
+    /// <summary>
+    /// 外部からこの関数が呼ばれると、自動的に移動を開始する。
+    /// 目的地に到達すると、フラグをオフにする
+    /// </summary>
+    /// <param name="z"></param>
     public void MoveToTargetZ(float z)
     {
         targetZ = z;
         moving = true;
     }
 
+    /// <summary>
+    /// 移動処理と、それに伴うフラグ処理
+    /// </summary>
     void Update()
     {
         if (moving)
