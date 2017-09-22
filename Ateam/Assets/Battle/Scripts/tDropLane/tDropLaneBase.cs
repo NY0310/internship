@@ -100,11 +100,29 @@ public class tDropLaneBase : MonoBehaviour {
         int count = 0;
         for (int L = 0; L < LANE_NUM; L++)
         {
-            if (Drops[L, DROP_NUM_ON_LANE-1].type == type)
+            //縦に連なってるものもまとめて消す仕様にしてみたやつ
+            /*int destroyCount = 0;
+            tDrop.Type underType = Drops[L, DROP_NUM_ON_LANE - 1].type;
+            if ( underType == type )
             {
-                Destroy(Drops[L, DROP_NUM_ON_LANE-1].gameObject);
-                Drops[L, DROP_NUM_ON_LANE-1] = null;
+                for (int D = DROP_NUM_ON_LANE - 1; D >= 0; D--)
+                {
+                    if (underType != Drops[L, D].type) break;
+                    destroyCount++;
+                }
+            }
+            for (int D = DROP_NUM_ON_LANE - 1; D >= DROP_NUM_ON_LANE - destroyCount; D--)
+            {
+                Destroy(Drops[L, D].gameObject);
+                Drops[L, D] = null;
+            }
+            count += destroyCount;*/
+
+            if (Drops[L, DROP_NUM_ON_LANE - 1].type == type)
+            {
                 count++;
+                Destroy(Drops[L, DROP_NUM_ON_LANE - 1].gameObject);
+                Drops[L, DROP_NUM_ON_LANE - 1] = null;
             }
         }
         return count;
@@ -122,7 +140,7 @@ public class tDropLaneBase : MonoBehaviour {
             // 3つとも同じなら
             if (Drops[0, DROP_NUM_ON_LANE - 1].type == Drops[1, DROP_NUM_ON_LANE - 1].type && Drops[1, DROP_NUM_ON_LANE - 1].type == Drops[2, DROP_NUM_ON_LANE - 1].type)
             {
-                if (DestroyUnderDrop(Drops[0, DROP_NUM_ON_LANE - 1].type) == 3)  // 0を使ってるが、どれも同じなので何でもいい。一番下が全部消えたならtrue。消えない場合（まだMoving中など）ならfalse
+                if (DestroyUnderDrop(Drops[0, DROP_NUM_ON_LANE - 1].type) >= 3)  // 0を使ってるが、どれも同じなので何でもいい。一番下が全部消えたならtrue。消えない場合（まだMoving中など）ならfalse
                     return true;
             }
         }

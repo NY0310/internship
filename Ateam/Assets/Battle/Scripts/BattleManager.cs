@@ -57,14 +57,7 @@ public class BattleManager : MonoBehaviour {
         if (state == State.PLAYER_ATTACK)
         {
             int destroyNum = dropLane.DestroyUnderDrop(type);
-            if (destroyNum == 2)
-            {
-                playerAttackRemaining.Recover(0.3f);
-            }
-            else if (destroyNum == 3)
-            {
-                playerAttackRemaining.Recover(2f);
-            }
+            if(destroyNum==3) playerAttackRemaining.Recover(1f);
         }
     }
 
@@ -96,7 +89,7 @@ public class BattleManager : MonoBehaviour {
     {
         if (dropLane.DestroyIfUnderDropsAreSame())  // 3つ同時消しした時の処理
         {
-            playerAttackRemaining.Recover(2f);
+            playerAttackRemaining.Recover(1f);
             PlayerHP.Recovery(40f);
         }
     }
