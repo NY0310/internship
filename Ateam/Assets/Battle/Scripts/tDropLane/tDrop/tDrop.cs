@@ -20,7 +20,7 @@ public class tDrop : MonoBehaviour {
     public bool Moving { get { return moving; } }
     
     float targetZ;  // 移動目的地
-    const float MOVE_SPEED = 15f;
+    const float MOVE_SPEED = 25f;
 
     /// <summary>
     /// 外部からこの関数が呼ばれると、自動的に移動を開始する。
