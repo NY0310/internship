@@ -69,6 +69,7 @@ public class tDropLaneBase : MonoBehaviour {
     /// <param name="L">レーン</param>
     void MakeTopDrop_IfDoesNotExist(int L)
     {
+        // 生成アルゴリズム。現在のレーンに少ないドロップ程出やすくなっていく。
         if (drops[L, 0] == null)
         {
             int[] typeNum = new int[3]{0,0,0}; // 自然生成は３種類のみなので３つ固定

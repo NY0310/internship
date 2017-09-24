@@ -11,14 +11,20 @@ public class BattleManager : MonoBehaviour {
     public tDropLaneBase dropLane;
     public HP PlayerHP;
     public PlayerAttackRemaining playerAttackRemaining;
+    public tEnemyManager enemyManager;
     bool inputed=false;
+
+    public GameObject enemy_1;// 仮
+    float attackPowerBase = 1f; // 仮変数
+    float attackPower=0f; // 仮変数(本番では属性ごとかもしれない)
 
     enum State
     {
         WAITING_USER_INPUT,
         PLAYER_ATTACK,
         WAITING_ALL_PLAYER_ATTACKS_END,
-        ENEMY_ATTACK
+        ENEMY_ATTACK,
+        NEXT_WAVE
     }
     State state;
 
@@ -28,7 +34,10 @@ public class BattleManager : MonoBehaviour {
     ///　/////　　　仮　　　/////////////
     void Start()
     {
-        PlayerHP.Init(500f);    
+        PlayerHP.Init(500f);
+        enemyManager.SpawnEnemy(enemy_1);
+        enemyManager.SpawnEnemy(enemy_1);
+        enemyManager.SpawnEnemy(enemy_1);
     }
 
     /// /////////////////////////////////////////////////////    ユーザー入力処理    /////////////////////////////////////////////
@@ -63,6 +72,7 @@ public class BattleManager : MonoBehaviour {
         {
             int destroyNum = dropLane.DestroyUnderDrop(type);
             if(destroyNum==3) playerAttackRemaining.Recover(1f);
+            attackPower += Mathf.Pow(2.3f,destroyNum)*attackPowerBase;
         }
     }
 
@@ -89,9 +99,11 @@ public class BattleManager : MonoBehaviour {
                 CheckUnderDropsAreAllSame();
                 if (enemyAttackRemainingTime < 0.8f && !enemyAttacked)
                 {
-                    PlayerHP.Damaged(150f);
+                    PlayerHP.Damaged( enemyManager.GetAttackPower() );
                     enemyAttacked = true;
                 }
+                break;
+            case State.NEXT_WAVE:
                 break;
         }
     }
@@ -102,11 +114,13 @@ public class BattleManager : MonoBehaviour {
         {
             playerAttackRemaining.Recover(1f);
             PlayerHP.Recovery(40f);
+            attackPower += Mathf.Pow(2.3f, 3) * attackPowerBase;
         }
     }
 
     float enemyAttackRemainingTime; // 仮
     float playerAttackEffectRemainingTime; // 仮。プレイヤーの攻撃演出が実装されたら消える
+    float nextWaveRemainingTime;
     void UpdateState()
     {
         switch (state)
@@ -116,6 +130,7 @@ public class BattleManager : MonoBehaviour {
             case State.PLAYER_ATTACK:
                 if (playerAttackRemaining.IsFinished())
                 {
+                    enemyManager.Damaged(attackPower);
                     ChangeState(State.WAITING_ALL_PLAYER_ATTACKS_END);
                 }
                 break;
@@ -123,13 +138,34 @@ public class BattleManager : MonoBehaviour {
                 playerAttackEffectRemainingTime -= Time.deltaTime;
                 if (playerAttackEffectRemainingTime <= 0)
                 {
-                    ChangeState(State.ENEMY_ATTACK);
+                    if (enemyManager.AllDie)
+                    {
+                        // ここで、次の敵データが無い時クリアになるように
+                        ChangeState(State.NEXT_WAVE);
+                    }
+                    else
+                    {
+                        ChangeState(State.ENEMY_ATTACK);
+                    }
                 }
                 break;
             case State.ENEMY_ATTACK:
                 enemyAttackRemainingTime -= Time.deltaTime;
                 if (enemyAttackRemainingTime <= 0)
                 {
+                    ChangeState(State.WAITING_USER_INPUT);
+                }
+                break;
+            case State.NEXT_WAVE:
+                nextWaveRemainingTime -= Time.deltaTime;
+                if ( nextWaveRemainingTime <= 0 )
+                {
+                    // 仮。ここでファイルなどから読み込んできて敵の生成を行う。
+                    int num = Random.Range(1, 3);
+                    for (int i=0;i<num;i++)
+                    {
+                        enemyManager.SpawnEnemy(enemy_1);
+                    }
                     ChangeState(State.WAITING_USER_INPUT);
                 }
                 break;
@@ -145,6 +181,7 @@ public class BattleManager : MonoBehaviour {
                 break;
             case State.PLAYER_ATTACK:
                 playerAttackRemaining.Restart(PLAYER_ATTACK_TIME);
+                attackPower = 0f;
                 this.state = State.PLAYER_ATTACK;
                 break;
             case State.WAITING_ALL_PLAYER_ATTACKS_END:
@@ -155,6 +192,10 @@ public class BattleManager : MonoBehaviour {
                 enemyAttacked = false;
                 enemyAttackRemainingTime = 0.5f;
                 this.state = State.ENEMY_ATTACK;
+                break;
+            case State.NEXT_WAVE:
+                nextWaveRemainingTime = 1f;
+                this.state = State.NEXT_WAVE;
                 break;
         }
     }
