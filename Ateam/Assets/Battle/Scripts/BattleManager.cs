@@ -13,8 +13,9 @@ public class BattleManager : MonoBehaviour {
     public PlayerAttackRemaining playerAttackRemaining;
     enum State
     {
-        WAIT,
+        WAITING_USER_INPUT,
         PLAYER_ATTACK,
+        WAITING_ALL_PLAYER_ATTACKS_END,
         ENEMY_ATTACK
     }
     State state;
@@ -48,9 +49,9 @@ public class BattleManager : MonoBehaviour {
     {
         UserInput(tDrop.Type.Tryangle);
     }
-    void UserInput(tDrop.Type type)
+    public void UserInput(tDrop.Type type)
     {
-        if (state == State.WAIT)
+        if (state == State.WAITING_USER_INPUT)
         {
             ChangeState(State.PLAYER_ATTACK);
         }
@@ -70,12 +71,17 @@ public class BattleManager : MonoBehaviour {
         UpdateState();
         switch (state)
         {
-            case State.WAIT:
+            case State.WAITING_USER_INPUT:
+                CheckUnderDropsAreAllSame();
                 break;
             case State.PLAYER_ATTACK:
-                UpdatePlayerAttack();
+                CheckUnderDropsAreAllSame();
+                break;
+            case State.WAITING_ALL_PLAYER_ATTACKS_END:
+                CheckUnderDropsAreAllSame();
                 break;
             case State.ENEMY_ATTACK:
+                CheckUnderDropsAreAllSame();
                 if (enemyAttackRemainingTime < 0.8f && !enemyAttacked)
                 {
                     PlayerHP.Damaged(150f);
@@ -85,9 +91,9 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
-    void UpdatePlayerAttack()
+    void CheckUnderDropsAreAllSame()
     {
-        if (dropLane.DestroyIfUnderDropsAreSame())  // 3つ同時消しした時の処理
+        if (dropLane.DestroyIfUnderDropsAreAllSame())  // 3つ同時消しした時の処理
         {
             playerAttackRemaining.Recover(1f);
             PlayerHP.Recovery(40f);
@@ -95,14 +101,22 @@ public class BattleManager : MonoBehaviour {
     }
 
     float enemyAttackRemainingTime; // 仮
+    float playerAttackEffectRemainingTime; // 仮。プレイヤーの攻撃演出が実装されたら消える
     void UpdateState()
     {
         switch (state)
         {
-            case State.WAIT:
+            case State.WAITING_USER_INPUT:
                 break;
             case State.PLAYER_ATTACK:
                 if (playerAttackRemaining.IsFinished())
+                {
+                    ChangeState(State.WAITING_ALL_PLAYER_ATTACKS_END);
+                }
+                break;
+            case State.WAITING_ALL_PLAYER_ATTACKS_END:
+                playerAttackEffectRemainingTime -= Time.deltaTime;
+                if (playerAttackEffectRemainingTime <= 0)
                 {
                     ChangeState(State.ENEMY_ATTACK);
                 }
@@ -111,7 +125,7 @@ public class BattleManager : MonoBehaviour {
                 enemyAttackRemainingTime -= Time.deltaTime;
                 if (enemyAttackRemainingTime <= 0)
                 {
-                    ChangeState(State.WAIT);
+                    ChangeState(State.WAITING_USER_INPUT);
                 }
                 break;
         }
@@ -121,16 +135,20 @@ public class BattleManager : MonoBehaviour {
     {
         switch (state)
         {
-            case State.WAIT:
-                this.state = State.WAIT;
+            case State.WAITING_USER_INPUT:
+                this.state = State.WAITING_USER_INPUT;
                 break;
             case State.PLAYER_ATTACK:
                 playerAttackRemaining.Restart(PLAYER_ATTACK_TIME);
                 this.state = State.PLAYER_ATTACK;
                 break;
+            case State.WAITING_ALL_PLAYER_ATTACKS_END:
+                playerAttackEffectRemainingTime = 2.5f;
+                this.state = State.WAITING_ALL_PLAYER_ATTACKS_END;
+                break;
             case State.ENEMY_ATTACK:
                 enemyAttacked = false;
-                enemyAttackRemainingTime = 2.5f;
+                enemyAttackRemainingTime = 0.5f;
                 this.state = State.ENEMY_ATTACK;
                 break;
         }
