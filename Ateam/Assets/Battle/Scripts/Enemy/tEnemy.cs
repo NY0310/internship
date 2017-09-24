@@ -28,6 +28,15 @@ public class tEnemy : MonoBehaviour {
         lockOnEvent(this);
     }
 
+    public float Damaged(float power, tDrop.Type damagedType)
+    {
+        if (damagedType == type || damagedType == tDrop.Type.All)
+        {
+            power *= 2f;
+        }
+        return hp.Damaged(power);
+    }
+
     void Update()
     {
         if (hp.IsDie()){

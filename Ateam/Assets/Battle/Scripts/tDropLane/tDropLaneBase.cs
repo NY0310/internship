@@ -189,21 +189,24 @@ public class tDropLaneBase : MonoBehaviour {
     /// この関数はこのクラスのUpdate内で呼べばかなり処理を簡略化できるが
     /// ３つ消滅時に攻撃処理するBattleManagerへ通知が必要なこと、変なタイミングで発生させないために
     /// 外部呼出しになっている。
+    /// 仮　：　intを返しているのは、３つ消せたかどうかを判定しないといけないから。気持ち悪いので、後で直す
     /// </summary>
     /// <returns>3つ破壊したか</returns>
-    public bool DestroyIfUnderDropsAreAllSame()
+    public int DestroyIfUnderDropsAreAllSame()
     {
+        tDrop.Type type;
         // nullでなければ
         if (drops[0, DROP_NUM_ON_LANE - 1] != null && drops[1, DROP_NUM_ON_LANE - 1] != null && drops[2, DROP_NUM_ON_LANE - 1] != null)
         {
             // 3つとも同じなら
             if (drops[0, DROP_NUM_ON_LANE - 1].type == drops[1, DROP_NUM_ON_LANE - 1].type && drops[1, DROP_NUM_ON_LANE - 1].type == drops[2, DROP_NUM_ON_LANE - 1].type)
             {
-                if (DestroyUnderDrop(drops[0, DROP_NUM_ON_LANE - 1].type) >= 3)  // 0を使ってるが、どれも同じなので何でもいい。一番下が全部消えたならtrue。消えない場合（まだMoving中など）ならfalse
-                    return true;
+                type = drops[0, DROP_NUM_ON_LANE - 1].type;
+                if (DestroyUnderDrop(type) >= 3)  // 0を使ってるが、どれも同じなので何でもいい。一番下が全部消えたならtrue。消えない場合（まだMoving中など）ならfalse
+                    return (int)type;
             }
         }
-        return false;
+        return -1;
     }
 
     /// ///////////////////////////////////////////////////    条件判定    //////////////////////////////////////////////

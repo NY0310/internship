@@ -16,7 +16,7 @@ public class BattleManager : MonoBehaviour {
 
     public GameObject enemy_1;// 仮
     float attackPowerBase = 1f; // 仮変数
-    float attackPower=0f; // 仮変数(本番では属性ごとかもしれない)
+    float[] attackPower= new float[4]; // 仮変数
 
     enum State
     {
@@ -72,7 +72,7 @@ public class BattleManager : MonoBehaviour {
         {
             int destroyNum = dropLane.DestroyUnderDrop(type);
             if(destroyNum==3) playerAttackRemaining.Recover(1f);
-            attackPower += Mathf.Pow(2.3f,destroyNum)*attackPowerBase;
+            attackPower[(int)type] += Mathf.Pow(2.3f,destroyNum)*attackPowerBase;
         }
     }
 
@@ -110,11 +110,12 @@ public class BattleManager : MonoBehaviour {
 
     void CheckUnderDropsAreAllSame()
     {
-        if (dropLane.DestroyIfUnderDropsAreAllSame())  // 3つ同時消しした時の処理
+        int type = dropLane.DestroyIfUnderDropsAreAllSame();
+        if (type!=-1)  // 3つ同時消しした時の処理
         {
             playerAttackRemaining.Recover(1f);
             PlayerHP.Recovery(40f);
-            attackPower += Mathf.Pow(2.3f, 3) * attackPowerBase;
+            attackPower[type] += Mathf.Pow(2.3f, 3) * attackPowerBase;
         }
     }
 
@@ -181,7 +182,9 @@ public class BattleManager : MonoBehaviour {
                 break;
             case State.PLAYER_ATTACK:
                 playerAttackRemaining.Restart(PLAYER_ATTACK_TIME);
-                attackPower = 0f;
+                for(int i = 0; i<attackPower.Length; i++) {
+                    attackPower[i] = 0f;
+                }
                 this.state = State.PLAYER_ATTACK;
                 break;
             case State.WAITING_ALL_PLAYER_ATTACKS_END:
