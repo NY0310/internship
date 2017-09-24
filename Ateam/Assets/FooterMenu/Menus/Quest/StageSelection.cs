@@ -27,6 +27,6 @@ public class StageSelection : MonoBehaviour {
 
     public void ClickedEvent()
     {
-        SceneManager.LoadScene("GameScene");
+        SceneManager.LoadScene("Battle");
     }
 }
