@@ -3,8 +3,15 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class RedTheParty : MonoBehaviour {
+
+    BattleManager battleManager;
+
+    void Start()
+    {
+        battleManager = GameObject.Find("BattleManager").GetComponent<BattleManager>();
+    }
     public void Activate()
     {
-        Debug.Log("RED THE PARTY!!");
+        battleManager.playerAttackRemaining.Restart(5f);
     }
 }

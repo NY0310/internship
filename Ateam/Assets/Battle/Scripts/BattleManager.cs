@@ -30,6 +30,11 @@ public class BattleManager : MonoBehaviour {
         NEXT_WAVE
     }
     State state;
+    public bool IsPlayerTurn()
+    {
+        return ( state == State.PLAYER_ATTACK || state == State.WAITING_USER_INPUT);
+    }
+
 
     const float PLAYER_ATTACK_TIME = 5.0f;
 

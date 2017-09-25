@@ -13,8 +13,11 @@ public class PlayerSkillManager : MonoBehaviour {
 
     public tDrop.Type type; // 仮。本当はプレイヤーのステータス管理クラスから引っ張ってくるが、今回はそういうのが無いので
 
+    BattleManager battleManager;
+
     void Start()
     {
+        battleManager = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         image = GetComponent<Image>();
         switch (type)
         {
@@ -41,12 +44,12 @@ public class PlayerSkillManager : MonoBehaviour {
 
     public void Activate()
     {
+        if (!battleManager.IsPlayerTurn()) return;
         if (ChargedEnergy < NeedEnergy) return;
         ChargedEnergy = 0;
         skill.Invoke();
     }
-
-    // Update is called once per frame
+    
     void Update () {
         Charge(0.1f);
         transform.localScale = new Vector3(transform.localScale.x, 0.92f*ChargedEnergy/NeedEnergy, transform.localScale.z);
