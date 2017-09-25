@@ -126,8 +126,8 @@ public class DropRane : MonoBehaviour
                 switch (Abnormality)
                 {
                     case Drop.Abnormality.Normal:
-                        DropPrefab.GetComponent<Drop>()._DropType = droptype;
                         DropPrefab = Instantiate(CircleDropPrefab);
+                        DropPrefab.GetComponent<Drop>()._DropType = droptype;
                         break;
                     case Drop.Abnormality.Restraint:
                         DropPrefab = Instantiate(CircleRestraintDrop);
@@ -250,7 +250,7 @@ public class DropRane : MonoBehaviour
     public GameObject Create(Drop.DROPTYPE droptype , Drop.Abnormality Abnormality)
     {
         GameObject inst;
-        inst = DropCreate(droptype , Drop.Abnormality.Restraint);
+        inst = DropCreate(droptype , Abnormality);
         //Vector3 position = inst.transform.position;
         Vector3 position = new Vector3(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), transform.position.z);
         //position *= 25;
@@ -267,7 +267,7 @@ public class DropRane : MonoBehaviour
     public GameObject Create(Drop.Abnormality Abnormality)
     {
         GameObject inst;
-        inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1), Drop.Abnormality.Restraint);
+        inst = DropCreate((Drop.DROPTYPE)Random.Range((float)Drop.DROPTYPE.Circle, (float)Drop.DROPTYPE.Tryangle + 1), Abnormality);
         inst.transform.Translate(TargetPosition.x + (float)LaneKind * INTERVAL_SIZE.x, TargetPosition.y + INTERVAL_SIZE.y * (MAX_DROP - 1), 0);
         DropList.Add(inst);
         return inst;
