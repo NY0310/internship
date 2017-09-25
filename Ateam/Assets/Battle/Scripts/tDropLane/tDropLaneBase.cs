@@ -205,6 +205,7 @@ public class tDropLaneBase : MonoBehaviour {
     /// <returns>3つ破壊したか</returns>
     public int DestroyIfUnderDropsAreAllSame()
     {
+        if (IsThereMovingDrop()) return -1;
         tDrop.Type type;
         // 虹色はどう判定する？
         // nullでなければ
