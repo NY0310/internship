@@ -43,7 +43,7 @@ public class HP : MonoBehaviour {
     {
         if (max == 0) return;
         lowerHp += (hp - lowerHp) * 0.05f;
-        upperHp += (hp - upperHp) * 0.05f;
+        upperHp += (hp - upperHp) * 0.035f;
         Bar.transform.localScale = new Vector3(lowerHp/max, 1f, 1f);
         RedBar.transform.localScale = new Vector3(upperHp/max, 1f, 1f);
     }
