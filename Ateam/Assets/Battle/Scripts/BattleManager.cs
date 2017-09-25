@@ -251,6 +251,12 @@ public class BattleManager : MonoBehaviour {
                     if (attackUp[i].turnNum <= 0)
                         attackUp.Remove(attackUp[i]);
                 }
+                for (int i = damagedUp.Count - 1; i >= 0; i--)
+                {
+                    damagedUp[i].turnNum--;
+                    if (damagedUp[i].turnNum <= 0)
+                        damagedUp.Remove(damagedUp[i]);
+                }
                 this.state = State.WAITING_USER_INPUT;
                 break;
             case State.PLAYER_ATTACK:

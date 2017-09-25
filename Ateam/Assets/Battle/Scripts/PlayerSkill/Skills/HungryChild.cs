@@ -12,6 +12,6 @@ public class HungryChild : MonoBehaviour {
     }
     public void Activate()
     {
-        battleManager.AttackUp(1, 0f);
+        battleManager.DamagedUp(1, 0f);
     }
 }
