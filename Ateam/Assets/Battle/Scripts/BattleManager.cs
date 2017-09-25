@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 /// <summary>
 /// ユーザーからの入力処理と
@@ -18,6 +19,8 @@ public class BattleManager : MonoBehaviour {
     float attackPowerBase = 1f; // 仮変数
     float[] attackPower= new float[4]; // 仮変数
 
+    int wave=0;
+
     enum State
     {
         WAITING_USER_INPUT,
@@ -27,6 +30,11 @@ public class BattleManager : MonoBehaviour {
         NEXT_WAVE
     }
     State state;
+    public bool IsPlayerTurn()
+    {
+        return ( state == State.PLAYER_ATTACK || state == State.WAITING_USER_INPUT);
+    }
+
 
     const float PLAYER_ATTACK_TIME = 5.0f;
 
@@ -34,10 +42,14 @@ public class BattleManager : MonoBehaviour {
     ///　/////　　　仮　　　/////////////
     void Start()
     {
+        Camera.main.GetComponent<CameraController>().MoveTo(new Vector3(0f, 9.68f, 1.62f),0.075f);
+        Camera.main.GetComponent<CameraController>().RotateTo(new Vector3(30f,0f,0f), 0.055f);
+
         PlayerHP.Init(500f);
-        enemyManager.SpawnEnemy(enemy_1);
-        enemyManager.SpawnEnemy(enemy_1);
-        enemyManager.SpawnEnemy(enemy_1);
+        foreach (var enemy in CurrentStageData.Data.enemyList[0].List)
+        {
+            enemyManager.SpawnEnemy(enemy);
+        }
     }
 
     /// /////////////////////////////////////////////////////    ユーザー入力処理    /////////////////////////////////////////////
@@ -161,11 +173,18 @@ public class BattleManager : MonoBehaviour {
                 nextWaveRemainingTime -= Time.deltaTime;
                 if ( nextWaveRemainingTime <= 0 )
                 {
-                    // 仮。ここでファイルなどから読み込んできて敵の生成を行う。
-                    int num = Random.Range(1, 3);
-                    for (int i=0;i<num;i++)
+                    wave++;
+                    if (wave < CurrentStageData.Data.enemyList.Count)
                     {
-                        enemyManager.SpawnEnemy(enemy_1);
+                        foreach (var enemy in CurrentStageData.Data.enemyList[wave].List)
+                        {
+                            enemyManager.SpawnEnemy(enemy);
+                        }
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene("ResultSuccess",LoadSceneMode.Additive);
+                        
                     }
                     ChangeState(State.WAITING_USER_INPUT);
                 }

@@ -14,7 +14,10 @@ public class TEST_TitleManager : MonoBehaviour {
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
-            FooterSceneChange.FirstLoad("Home");
+            Queue<string> loadList = new Queue<string>();
+            loadList.Enqueue("Home");
+            loadList.Enqueue("Footer");
+            SceneLoader.ChangeScene(SceneLoader.MakeQueue("Home","Footer"), 2.3f, 1.3f);
         }
 	}
 }

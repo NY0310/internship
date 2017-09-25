@@ -20,7 +20,7 @@ public class Fade : MonoBehaviour {
     /// <summary>
     /// 初期化処理
     /// </summary>
-    void Start()
+    void Awake()
     {
         image = GetComponent<Image>();
     }
@@ -30,8 +30,9 @@ public class Fade : MonoBehaviour {
     /// </summary>
     /// <param name="time">何秒かけてフェードインするか</param>
     /// <param name="finishedEvent">終了時に呼ばれる関数</param>
-    public void In(float time, FinishedEvent finishedEvent)
+    public void In(float time, FinishedEvent finishedEvent=null)
     {
+        image.raycastTarget = false;
         this.finishedEvent = finishedEvent;
         remainingTime = time;
         addAmout = -image.color.a / time;
@@ -43,8 +44,9 @@ public class Fade : MonoBehaviour {
     /// </summary>
     /// <param name="time">何秒かけてフェードアウトするか</param>
     /// <param name="finishedEvent">終了時に呼ばれる関数</param>
-    public void Out(float time, FinishedEvent finishedEvent)
+    public void Out(float time, FinishedEvent finishedEvent=null)
     {
+        image.raycastTarget = true;
         this.finishedEvent = finishedEvent;
         remainingTime = time;
         addAmout = (1.0f - image.color.a) / time;
@@ -81,7 +83,8 @@ public class Fade : MonoBehaviour {
         remainingTime -= Time.deltaTime;
         if (remainingTime < 0.0f)
         {
-            finishedEvent();
+            if(finishedEvent != null)
+                finishedEvent();
             doing = false;
         }
     }
