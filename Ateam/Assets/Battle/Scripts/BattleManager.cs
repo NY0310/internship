@@ -83,7 +83,7 @@ public class BattleManager : MonoBehaviour {
         if (state == State.PLAYER_ATTACK)
         {
             int destroyNum = dropLane.DestroyUnderDrop(type);
-            if(destroyNum==3) playerAttackRemaining.Recover(1f);
+            // if(destroyNum==3) playerAttackRemaining.Recover(1f);
             attackPower[(int)type] += Mathf.Pow(2.3f,destroyNum)*attackPowerBase;
         }
     }
@@ -125,8 +125,8 @@ public class BattleManager : MonoBehaviour {
         int type = dropLane.DestroyIfUnderDropsAreAllSame();
         if (type!=-1)  // 3つ同時消しした時の処理
         {
-            playerAttackRemaining.Recover(1f);
-            PlayerHP.Recovery(40f);
+            playerAttackRemaining.Recover(0.4f);
+            PlayerHP.Recovery(10f);
             attackPower[type] += Mathf.Pow(2.3f, 3) * attackPowerBase;
         }
     }
@@ -153,7 +153,6 @@ public class BattleManager : MonoBehaviour {
                 {
                     if (enemyManager.AllDie)
                     {
-                        // ここで、次の敵データが無い時クリアになるように
                         ChangeState(State.NEXT_WAVE);
                     }
                     else

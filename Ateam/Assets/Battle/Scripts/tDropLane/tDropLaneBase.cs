@@ -11,6 +11,7 @@ public class tDropLaneBase : MonoBehaviour {
     public GameObject DropCross;
     public GameObject DropCirce;
     public GameObject DropTryangle;
+    public GameObject DropAll;
 
     public GameObject[] Lanes = new GameObject[3];
     
@@ -19,6 +20,7 @@ public class tDropLaneBase : MonoBehaviour {
 
     public const int LANE_NUM = 3;
     public const int DROP_NUM_ON_LANE = 4;
+    public const int UNDER_DROP = DROP_NUM_ON_LANE - 1;
 
     tDrop[,] drops = new tDrop[LANE_NUM, DROP_NUM_ON_LANE];
     public tDrop[,] Drops { get{ return drops;  } }
@@ -59,8 +61,13 @@ public class tDropLaneBase : MonoBehaviour {
     {
         if (drops[L, D] == null) return;
         drops[L, D + 1] = drops[L, D];  // 下の要素に移す
-        drops[L, D + 1].MoveToTargetZ(DROP_START_Z + SPACE_BETWEEN_DROPS * (D + 1));    // 実際に座標も移動させる
+        drops[L, D + 1].MoveToTargetZ(GetTargetZ(D+1));    // 実際に座標も移動させる
         drops[L, D] = null; // 元の場所は空白にしておく
+    }
+
+    float GetTargetZ(int D)
+    {
+        return DROP_START_Z + SPACE_BETWEEN_DROPS * D;
     }
 
     /// <summary>
@@ -129,7 +136,7 @@ public class tDropLaneBase : MonoBehaviour {
     /// <summary>
     /// 元のドロップを置き換えてドロップを生成する
     /// </summary>
-    void MakeDrop(tDrop.Type type, int L, int D)
+    public void MakeDrop(tDrop.Type type, int L, int D)
     {
         DestroyDrop(L,D);
         GameObject dropObj;
@@ -144,12 +151,15 @@ public class tDropLaneBase : MonoBehaviour {
             case tDrop.Type.Tryangle:
                 dropObj = Instantiate(DropTryangle, Lanes[L].transform);
                 break;
+            case tDrop.Type.All:
+                dropObj = Instantiate(DropAll, Lanes[L].transform);
+                break;
             default:
                 Debug.Log(type.ToString() + "のタイプの生成処理が書かれていません");
                 dropObj = Instantiate(DropCirce, Lanes[L].transform);
                 break;
         }
-        dropObj.transform.localPosition = new Vector3(0f, 0f, DROP_START_Z);
+        dropObj.transform.localPosition = new Vector3(0f, 0f, GetTargetZ(D));
         drops[L, D] = dropObj.GetComponent<tDrop>();
     }
 
@@ -175,10 +185,11 @@ public class tDropLaneBase : MonoBehaviour {
         int count = 0;
         for (int L = 0; L < LANE_NUM; L++)
         {
-            if (drops[L, DROP_NUM_ON_LANE - 1].type == type)
+            // ここの虹色消したとき、他の色どう判定するか決める。intは何を返す？
+            if (drops[L, UNDER_DROP].type == type)
             {
                 count++;
-                DestroyDrop(L,DROP_NUM_ON_LANE-1);
+                DestroyDrop(L, UNDER_DROP);
             }
         }
         return count;
@@ -195,18 +206,33 @@ public class tDropLaneBase : MonoBehaviour {
     public int DestroyIfUnderDropsAreAllSame()
     {
         tDrop.Type type;
+        // 虹色はどう判定する？
         // nullでなければ
-        if (drops[0, DROP_NUM_ON_LANE - 1] != null && drops[1, DROP_NUM_ON_LANE - 1] != null && drops[2, DROP_NUM_ON_LANE - 1] != null)
+        if (drops[0, UNDER_DROP] != null && drops[1, UNDER_DROP] != null && drops[2, UNDER_DROP] != null)
         {
             // 3つとも同じなら
-            if (drops[0, DROP_NUM_ON_LANE - 1].type == drops[1, DROP_NUM_ON_LANE - 1].type && drops[1, DROP_NUM_ON_LANE - 1].type == drops[2, DROP_NUM_ON_LANE - 1].type)
+            if (IsSame(0, UNDER_DROP, 1, UNDER_DROP) && IsSame(1, UNDER_DROP, 2, UNDER_DROP))
             {
-                type = drops[0, DROP_NUM_ON_LANE - 1].type;
-                if (DestroyUnderDrop(type) >= 3)  // 0を使ってるが、どれも同じなので何でもいい。一番下が全部消えたならtrue。消えない場合（まだMoving中など）ならfalse
-                    return (int)type;
+                type = drops[0, tDropLaneBase.UNDER_DROP].type;
+                DestroyDrop(0, UNDER_DROP);
+                DestroyDrop(1, UNDER_DROP);
+                DestroyDrop(2, UNDER_DROP);
+                return (int)type;
+            }
+            else if (drops[0, UNDER_DROP].type == tDrop.Type.All || drops[1, UNDER_DROP].type == tDrop.Type.All || drops[2, UNDER_DROP].type == tDrop.Type.All)
+            {
+                DestroyDrop(0, UNDER_DROP);
+                DestroyDrop(1, UNDER_DROP);
+                DestroyDrop(2, UNDER_DROP);
+                return (int)tDrop.Type.All;
             }
         }
         return -1;
+    }
+
+    bool IsSame(int L1, int D1, int L2, int D2)
+    {
+        return (drops[L1, D1].type == drops[L2, D2].type);
     }
 
     /// ///////////////////////////////////////////////////    条件判定    //////////////////////////////////////////////
