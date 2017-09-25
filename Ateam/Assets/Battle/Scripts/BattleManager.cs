@@ -7,6 +7,18 @@ using UnityEngine.SceneManagement;
 /// ユーザーからの入力処理と
 /// それに伴うゲーム全体の進行を行う
 /// </summary>
+
+public class UpParm
+{
+    public UpParm() { }
+    public UpParm(int turnNum, float rate)
+    {
+        this.turnNum = turnNum;
+        this.rate = rate;
+    }
+    public int turnNum;
+    public float rate;
+}
 public class BattleManager : MonoBehaviour {
 
     public tDropLaneBase dropLane;
@@ -15,11 +27,16 @@ public class BattleManager : MonoBehaviour {
     public tEnemyManager enemyManager;
     bool inputed=false;
 
+    public GameObject Players;
+    List<PlayerSkillManager> playerSkill;
+
     public GameObject enemy_1;// 仮
     float attackPowerBase = 1f; // 仮変数
     float[] attackPower= new float[4]; // 仮変数
 
     int wave=0;
+
+    List<UpParm> attackUp = new List<UpParm>();
 
     enum State
     {
@@ -44,6 +61,12 @@ public class BattleManager : MonoBehaviour {
     {
         Camera.main.GetComponent<CameraController>().MoveTo(new Vector3(0f, 9.68f, 1.62f),0.075f);
         Camera.main.GetComponent<CameraController>().RotateTo(new Vector3(30f,0f,0f), 0.055f);
+
+        playerSkill = new List<PlayerSkillManager>();
+        foreach (var skill in Players.GetComponentsInChildren<PlayerSkillManager>())
+        {
+            playerSkill.Add(skill);
+        }
 
         PlayerHP.Init(500f);
         foreach (var enemy in CurrentStageData.Data.enemyList[0].List)
@@ -83,11 +106,15 @@ public class BattleManager : MonoBehaviour {
         if (state == State.PLAYER_ATTACK)
         {
             int destroyNum = dropLane.DestroyUnderDrop(type);
-            // if(destroyNum==3) playerAttackRemaining.Recover(1f);
             attackPower[(int)type] += Mathf.Pow(2.3f,destroyNum)*attackPowerBase;
         }
     }
 
+
+    public void AttackUp(int turnNum, float rate)
+    {
+        attackUp.Add(new UpParm(turnNum, rate));
+    }
 
     /// ///////////////////////////////////////////////////    更新処理    //////////////////////////////////////////////////////
 
@@ -128,6 +155,13 @@ public class BattleManager : MonoBehaviour {
             playerAttackRemaining.Recover(0.4f);
             PlayerHP.Recovery(10f);
             attackPower[type] += Mathf.Pow(2.3f, 3) * attackPowerBase;
+            foreach (var skill in playerSkill)
+            {
+                if ((int)skill.type == type || type == (int)tDrop.Type.All)
+                {
+                    skill.Charge(1f);
+                }
+            }
         }
     }
 
@@ -143,7 +177,12 @@ public class BattleManager : MonoBehaviour {
             case State.PLAYER_ATTACK:
                 if (playerAttackRemaining.IsFinished())
                 {
-                    enemyManager.Damaged(attackPower);
+                    float rate = 1f;
+                    foreach (var attack in attackUp )
+                    {
+                        rate *= attack.rate;
+                    }
+                    enemyManager.Damaged(attackPower,rate);
                     ChangeState(State.WAITING_ALL_PLAYER_ATTACKS_END);
                 }
                 break;
@@ -196,6 +235,12 @@ public class BattleManager : MonoBehaviour {
         switch (state)
         {
             case State.WAITING_USER_INPUT:
+                for (int i=attackUp.Count-1;i>=0;i--)
+                {
+                    attackUp[i].turnNum--;
+                    if (attackUp[i].turnNum <= 0)
+                        attackUp.Remove(attackUp[i]);
+                }
                 this.state = State.WAITING_USER_INPUT;
                 break;
             case State.PLAYER_ATTACK:

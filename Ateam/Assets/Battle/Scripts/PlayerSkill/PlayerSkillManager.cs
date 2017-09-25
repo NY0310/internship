@@ -22,13 +22,13 @@ public class PlayerSkillManager : MonoBehaviour {
         switch (type)
         {
             case tDrop.Type.Circle:
-                image.color = new Color(0.8f,0.2f,0.2f,1f);
+                image.color = new Color(0.8f,0.2f,0.2f,0.6f);
                 break;
             case tDrop.Type.Cross:
-                image.color = new Color(0.0f, 0.2f, 0.8f, 1f);
+                image.color = new Color(0.0f, 0.2f, 0.8f, 0.6f);
                 break;
             case tDrop.Type.Tryangle:
-                image.color = new Color(0.6f, 0.6f, 0.1f, 1f);
+                image.color = new Color(0.6f, 0.6f, 0.1f, 0.6f);
                 break;
         }
     }
@@ -51,7 +51,6 @@ public class PlayerSkillManager : MonoBehaviour {
     }
     
     void Update () {
-        Charge(0.1f);
         transform.localScale = new Vector3(transform.localScale.x, 0.92f*ChargedEnergy/NeedEnergy, transform.localScale.z);
 	}
 }

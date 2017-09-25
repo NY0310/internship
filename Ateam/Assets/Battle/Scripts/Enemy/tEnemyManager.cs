@@ -33,13 +33,13 @@ public class tEnemyManager : MonoBehaviour {
         return sum;
     }
 
-    public void Damaged(float[] power)
+    public void Damaged(float[] power, float rate)
     {
         for (int i=0; i<power.Length; i++) {
             int num = enemyList.Count;
             if (targeted != null)
             {
-                power[i] = targeted.Damaged(power[i], (tDrop.Type)i);
+                power[i] = targeted.Damaged(power[i]*rate, (tDrop.Type)i);
                 if (targeted.hp.IsDie()) num--;
             }
 
@@ -48,7 +48,7 @@ public class tEnemyManager : MonoBehaviour {
                 foreach (var enemy in enemyList)
                 {
                     if (targeted == enemy) continue;
-                    enemy.Damaged(power[i] / num, (tDrop.Type)i);
+                    enemy.Damaged(power[i] / num * rate, (tDrop.Type)i);
                 }
             }
         }

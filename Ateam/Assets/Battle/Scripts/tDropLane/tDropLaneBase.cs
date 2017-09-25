@@ -110,8 +110,6 @@ public class tDropLaneBase : MonoBehaviour {
                 }
             }
 
-
-
             tDrop.Type type;
             switch (pickUp)
             {

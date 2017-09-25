@@ -48,6 +48,7 @@ public class LoadManager : MonoBehaviour {
 
     public Fade fade;
 
+    bool doing = false;
     bool loading = false;
     Queue<string> loadList = new Queue<string>();
     List<string> ignorList = new List<string>();
@@ -74,7 +75,7 @@ public class LoadManager : MonoBehaviour {
     /// <returns></returns>
     public bool ChangeScene( Queue<string> loadList, float fadeOutTime, float fadeInTime, List<string> ignorList = null )
     {
-        if (loading) return false;
+        if (doing) return false;
         if (ignorList == null) ignorList = new List<string>();
         Init();
         this.loadList = loadList;
@@ -86,6 +87,7 @@ public class LoadManager : MonoBehaviour {
         if (fadeOutTime != 0 || fadeInTime != 0)
             fade.Out(fadeOutTime, StartLoad);
         else StartLoad();
+        doing = true;
         return true;
     }
 
@@ -167,6 +169,7 @@ public class LoadManager : MonoBehaviour {
             if( allDone )
             {
                 loading = false;
+                doing = false;
                 if (fadeOutTime != 0 || fadeInTime != 0)
                     fade.In(fadeInTime);
             }
