@@ -37,6 +37,7 @@ public class BattleManager : MonoBehaviour {
     int wave=0;
 
     List<UpParm> attackUp = new List<UpParm>();
+    List<UpParm> damagedUp = new List<UpParm>();
 
     enum State
     {
@@ -115,6 +116,10 @@ public class BattleManager : MonoBehaviour {
     {
         attackUp.Add(new UpParm(turnNum, rate));
     }
+    public void DamagedUp(int turnNum, float rate)
+    {
+        damagedUp.Add(new UpParm(turnNum, rate));
+    }
 
     /// ///////////////////////////////////////////////////    更新処理    //////////////////////////////////////////////////////
 
@@ -138,7 +143,12 @@ public class BattleManager : MonoBehaviour {
                 CheckUnderDropsAreAllSame();
                 if (enemyAttackRemainingTime < 0.8f && !enemyAttacked)
                 {
-                    PlayerHP.Damaged( enemyManager.GetAttackPower() );
+                    float rate = 1f;
+                    foreach (var damaged in damagedUp)
+                    {
+                        rate *= damaged.rate;
+                    }
+                    PlayerHP.Damaged( enemyManager.GetAttackPower()*rate );
                     enemyAttacked = true;
                 }
                 break;

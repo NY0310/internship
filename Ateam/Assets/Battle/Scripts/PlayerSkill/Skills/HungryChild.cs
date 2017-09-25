@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class RedTheParty : MonoBehaviour {
+public class HungryChild : MonoBehaviour {
 
     BattleManager battleManager;
 
@@ -12,6 +12,6 @@ public class RedTheParty : MonoBehaviour {
     }
     public void Activate()
     {
-        battleManager.playerAttackRemaining.Restart(5f);
+        battleManager.AttackUp(1, 0f);
     }
 }

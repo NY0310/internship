@@ -14,7 +14,7 @@ public class tEnemy : MonoBehaviour {
     public float attackPower;
     public Image image;
 
-    void Start()
+    void Awake()
     {
         hp.Init(MaxHP);    
     }
