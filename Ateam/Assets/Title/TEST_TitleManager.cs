@@ -5,6 +5,8 @@ using UnityEngine.SceneManagement;
 
 public class TEST_TitleManager : MonoBehaviour {
 
+    public SinA sinA;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -14,6 +16,7 @@ public class TEST_TitleManager : MonoBehaviour {
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
+            sinA.Tapped();
             Queue<string> loadList = new Queue<string>();
             loadList.Enqueue("Home");
             loadList.Enqueue("Footer");
