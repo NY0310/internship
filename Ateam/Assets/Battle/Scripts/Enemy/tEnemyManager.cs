@@ -33,24 +33,22 @@ public class tEnemyManager : MonoBehaviour {
         return sum;
     }
 
-    public void Damaged(float[] power, float rate)
+    public void Damaged(float power, tDrop.Type type)
     {
         SEPlayer.Play( SE.Name.DAMAGED, 0.42f);
-        for (int i=0; i<power.Length; i++) {
-            int num = enemyList.Count;
-            if (targeted != null)
-            {
-                power[i] = targeted.Damaged(power[i]*rate, (tDrop.Type)i);
-                if (targeted.hp.IsDie()) num--;
-            }
+        int num = enemyList.Count;
+        if (targeted != null)
+        {
+            power = targeted.Damaged(power, type);
+            if (targeted.hp.IsDie()) num--;
+        }
 
-            if (num > 0 && power[i] > 0)
+        if (num > 0 && power > 0)
+        {
+            foreach (var enemy in enemyList)
             {
-                foreach (var enemy in enemyList)
-                {
-                    if (targeted == enemy) continue;
-                    enemy.Damaged(power[i] / num * rate, (tDrop.Type)i);
-                }
+                if (targeted == enemy) continue;
+                enemy.Damaged(power / num, type);
             }
         }
     }

@@ -29,14 +29,16 @@ public class BattleManager : MonoBehaviour {
     public AttackButtonEffect TryangleEffect;
     public AttackButtonEffect CircleEffect;
     public AttackButtonEffect CrossEffect;
-
+    public AttackEffect TryangleAttackEffect;
+    public AttackEffect CircleAttackEffect;
+    public AttackEffect CrossAttackEffect;
     bool inputed=false;
 
     public GameObject Players;
     List<PlayerSkillManager> playerSkill;
 
     public GameObject enemy_1;// 仮
-    float attackPowerBase = 1f; // 仮変数
+    float attackPowerBase = 12f; // 仮変数
     float[] attackPower= new float[4]; // 仮変数
 
     int wave=0;
@@ -49,6 +51,7 @@ public class BattleManager : MonoBehaviour {
         WAITING_USER_INPUT,
         PLAYER_ATTACK,
         WAITING_ALL_PLAYER_ATTACKS_END,
+        ENEMY_DAMAGING,
         ENEMY_ATTACK,
         NEXT_WAVE,
         CLEAR,
@@ -83,18 +86,21 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
-    void ButtonEffect(tDrop.Type type, int level)
+    void ButtonEffect(tDrop.Type type, int level, float power)
     {
         switch (type)
         {
             case tDrop.Type.Tryangle:
                 TryangleEffect.Effect(level);
+                TryangleEffect.AddPower(power);
                 break;
             case tDrop.Type.Cross:
                 CrossEffect.Effect(level);
+                CrossEffect.AddPower(power);
                 break;
             case tDrop.Type.Circle:
                 CircleEffect.Effect(level);
+                CircleEffect.AddPower(power);
                 break;
             case tDrop.Type.All:
                 TryangleEffect.Effect(level);
@@ -135,8 +141,9 @@ public class BattleManager : MonoBehaviour {
         if (state == State.PLAYER_ATTACK)
         {
             int destroyNum = dropLane.DestroyUnderDrop(type);
-            attackPower[(int)type] += Mathf.Pow(2.3f,destroyNum)*attackPowerBase;
-            ButtonEffect(type,destroyNum);
+            float addPower = Mathf.Pow(2.3f, destroyNum) * attackPowerBase;
+            attackPower[(int)type] += addPower;
+            ButtonEffect(type,destroyNum,addPower);
             
         }
     }
@@ -169,6 +176,8 @@ public class BattleManager : MonoBehaviour {
             case State.WAITING_ALL_PLAYER_ATTACKS_END:
                 CheckUnderDropsAreAllSame();
                 break;
+            case State.ENEMY_DAMAGING:
+                break;
             case State.ENEMY_ATTACK:
                 CheckUnderDropsAreAllSame();
                 if (enemyAttackRemainingTime < 0.8f && !enemyAttacked)
@@ -199,7 +208,8 @@ public class BattleManager : MonoBehaviour {
         {
             playerAttackRemaining.Recover(0.4f);
             PlayerHP.Recovery(10f);
-            attackPower[type] += Mathf.Pow(2.3f, 3) * attackPowerBase;
+            float addPower = Mathf.Pow(2.3f, 3) * attackPowerBase;
+            attackPower[type] += addPower;
             foreach (var skill in playerSkill)
             {
                 if ((int)skill.type == type || type == (int)tDrop.Type.All)
@@ -207,13 +217,35 @@ public class BattleManager : MonoBehaviour {
                     skill.Charge(1f);
                 }
             }
-            ButtonEffect((tDrop.Type)type,3);
+            ButtonEffect((tDrop.Type)type,3,addPower);
         }
     }
 
     float enemyAttackRemainingTime; // 仮
     float playerAttackEffectRemainingTime; // 仮。プレイヤーの攻撃演出が実装されたら消える
     float nextWaveRemainingTime;
+    float enemyDamagingRemainingTime;
+
+    float tryangleAttackTiming;
+    float circleAttackTiming;
+    float crossAttackTiming;
+    bool tryangleAttackStartEffected = false;
+    bool circleAttackStartEffected = false;
+    bool crossAttackStartEffected = false;
+    bool enemyDamagedTryangle = false;
+    bool enemyDamagedCircle = false;
+    bool enemyDamagedCross = false;
+
+    float GetPower(int i)
+    {
+        float rate = 1f;
+        foreach (var attack in attackUp)
+        {
+            rate *= attack.rate;
+        }
+        return attackPower[i] * rate;
+    }
+
     void UpdateState()
     {
         switch (state)
@@ -231,12 +263,52 @@ public class BattleManager : MonoBehaviour {
                     playerAttackEffectRemainingTime -= Time.deltaTime;
                 if (playerAttackEffectRemainingTime <= 0)
                 {
-                    float rate = 1f;
-                    foreach (var attack in attackUp)
-                    {
-                        rate *= attack.rate;
-                    }
-                    enemyManager.Damaged(attackPower, rate);
+                    ChangeState(State.ENEMY_DAMAGING);
+                }
+                break;
+            case State.ENEMY_DAMAGING:
+                enemyDamagingRemainingTime -= Time.deltaTime;
+
+                if (enemyDamagingRemainingTime <= tryangleAttackTiming && !tryangleAttackStartEffected)
+                {
+                    SEPlayer.Play( SE.Name.ATTACK, 0.65f);
+                    tryangleAttackStartEffected = true;
+                    TryangleEffect.Effect(4);
+                }
+                if (enemyDamagingRemainingTime <= circleAttackTiming && !circleAttackStartEffected)
+                {
+                    SEPlayer.Play(SE.Name.ATTACK, 0.65f);
+                    circleAttackStartEffected = true;
+                    CircleEffect.Effect(4);
+                }
+                if (enemyDamagingRemainingTime <= crossAttackTiming && !crossAttackStartEffected)
+                {
+                    SEPlayer.Play(SE.Name.ATTACK, 0.65f);
+                    crossAttackStartEffected = true;
+                    CrossEffect.Effect(4);
+                }
+
+                if (enemyDamagingRemainingTime <= tryangleAttackTiming -1f && !enemyDamagedTryangle)
+                {
+                    enemyDamagedTryangle = true;
+                    TryangleAttackEffect.EffectIn(4);
+                    enemyManager.Damaged(GetPower(2),tDrop.Type.Tryangle);
+                }
+                if (enemyDamagingRemainingTime <= circleAttackTiming -1f && !enemyDamagedCircle)
+                {
+                    enemyDamagedCircle = true;
+                    CircleAttackEffect.EffectIn(4);
+                    enemyManager.Damaged(GetPower(1), tDrop.Type.Circle);
+                }
+                if (enemyDamagingRemainingTime <= crossAttackTiming -1f && !enemyDamagedCross)
+                {
+                    enemyDamagedCross = true;
+                    CrossAttackEffect.EffectIn(4);
+                    enemyManager.Damaged(GetPower(0), tDrop.Type.Cross);
+                }
+
+                if (enemyDamagingRemainingTime <= 0)
+                {
                     if (enemyManager.CheckAllDie())
                     {
                         ChangeState(State.NEXT_WAVE);
@@ -314,6 +386,55 @@ public class BattleManager : MonoBehaviour {
             case State.WAITING_ALL_PLAYER_ATTACKS_END:
                 playerAttackEffectRemainingTime = 1f;
                 this.state = State.WAITING_ALL_PLAYER_ATTACKS_END;
+                break;
+            case State.ENEMY_DAMAGING:
+                enemyDamagingRemainingTime = 3f;
+                float one = 0.15f;
+                float space = 0.05f;
+                int select = Random.Range(0, 6);
+                if (select == 0)
+                {
+                    tryangleAttackTiming = enemyDamagingRemainingTime - Random.Range(0f, one);
+                    circleAttackTiming = enemyDamagingRemainingTime - Random.Range(one+space, one*2+space);
+                    crossAttackTiming = enemyDamagingRemainingTime - Random.Range(one*2+space*2, one*3+space*2);
+                }
+                if (select == 1)
+                {
+                    tryangleAttackTiming = enemyDamagingRemainingTime - Random.Range(0f, one);
+                    crossAttackTiming = enemyDamagingRemainingTime - Random.Range(one + space, one * 2 + space);
+                    circleAttackTiming = enemyDamagingRemainingTime - Random.Range(one * 2 + space * 2, one * 3 + space * 2);
+                }
+                if (select == 2)
+                {
+                    crossAttackTiming = enemyDamagingRemainingTime - Random.Range(0f, one);
+                    tryangleAttackTiming = enemyDamagingRemainingTime - Random.Range(one + space, one * 2 + space);
+                    circleAttackTiming = enemyDamagingRemainingTime - Random.Range(one * 2 + space * 2, one * 3 + space * 2);
+                }
+                if (select == 3)
+                {
+                    crossAttackTiming = enemyDamagingRemainingTime - Random.Range(0f, one);
+                    circleAttackTiming = enemyDamagingRemainingTime - Random.Range(one + space, one * 2 + space);
+                    tryangleAttackTiming = enemyDamagingRemainingTime - Random.Range(one * 2 + space * 2, one * 3 + space * 2);
+                }
+                if (select == 4)
+                {
+                    circleAttackTiming = enemyDamagingRemainingTime - Random.Range(0f, one);
+                    tryangleAttackTiming = enemyDamagingRemainingTime - Random.Range(one + space, one * 2 + space);
+                    crossAttackTiming = enemyDamagingRemainingTime - Random.Range(one * 2 + space * 2, one * 3 + space * 2);
+                }
+                if (select == 5)
+                {
+                    circleAttackTiming = enemyDamagingRemainingTime - Random.Range(0f, one);
+                    crossAttackTiming = enemyDamagingRemainingTime - Random.Range(one + space, one * 2 + space);
+                    tryangleAttackTiming = enemyDamagingRemainingTime - Random.Range(one * 2 + space * 2, one * 3 + space * 2);
+                }
+                tryangleAttackStartEffected = false;
+                circleAttackStartEffected = false;
+                crossAttackStartEffected = false;
+                enemyDamagedTryangle = false;
+                enemyDamagedCircle = false;
+                enemyDamagedCross = false;
+                this.state = State.ENEMY_DAMAGING;
                 break;
             case State.ENEMY_ATTACK:
                 enemyAttacked = false;
