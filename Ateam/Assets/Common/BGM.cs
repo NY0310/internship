@@ -70,7 +70,7 @@ public class BGM : MonoBehaviour {
                 source.clip = Battle;
                 break;
             case Name.BOSS:
-                volume = 1f;
+                volume = 0.7f;
                 source.clip = Boss;
                 break;
             case Name.GAME_OVER:

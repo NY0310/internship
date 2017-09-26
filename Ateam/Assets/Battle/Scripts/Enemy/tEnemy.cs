@@ -18,6 +18,11 @@ public class tEnemy : MonoBehaviour {
     public EnemyAttackEffect CrossEffect;
     public EnemyAttackEffect TryangleEffect;
 
+    public bool IsDie()
+    {
+        return hp.IsDie();
+    }
+
     void Awake()
     {
         hp.Init(MaxHP);
@@ -48,6 +53,7 @@ public class tEnemy : MonoBehaviour {
 
     public float Damaged(float power, tDrop.Type damagedType)
     {
+        SEPlayer.Play(SE.Name.ENEMY_DAMAGED, 1.0f);
         float scale = 1f;
         if (damagedType == type || damagedType == tDrop.Type.All)
         {
@@ -66,7 +72,7 @@ public class tEnemy : MonoBehaviour {
             attackDelay -= Time.deltaTime;
             if (attackDelay <= 0)
             {
-                SEPlayer.Play(SE.Name.ENEMY_ATTACK, 0.7f);
+                SEPlayer.Play(SE.Name.ENEMY_ATTACK, 1.3f);
                 switch (type)
                 {
                     case tDrop.Type.Circle:
