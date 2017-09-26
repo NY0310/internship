@@ -25,11 +25,19 @@ public class Light : MonoBehaviour {
         count = Random.Range(0f, 100f);
     }
 
+    float speed = 1f;
+
 	// Update is called once per frame
 	void Update () {
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            speed = 3.5f;
+        }
+
         count += Time.deltaTime;
         scale -= Time.deltaTime / 10f;
-        transform.position = new Vector3(transform.position.x + Mathf.Sin(count)*scale*2f, transform.position.y + scale*2f, transform.position.z);
+        transform.position = new Vector3(transform.position.x + Mathf.Sin(count)*scale*2f, transform.position.y + scale*2f*speed, transform.position.z);
         image.color = new Color(image.color.r, image.color.g, image.color.b, scale + Random.Range(0f, 0.7f));
         transform.localScale = new Vector3(scale + Random.Range(0f, 0.25f), scale+Random.Range(0f, 0.25f), 1f);
         if (scale <= 0)

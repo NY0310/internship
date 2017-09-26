@@ -26,9 +26,9 @@ public class AttackEffect : MonoBehaviour {
     }
 
 
-    public void EffectIn(int level)
+    public void EffectIn(int level, float targetX)
     {
-        transform.localPosition = new Vector3(Random.Range(-300f,300f), transform.localPosition.y, transform.localPosition.z);
+        transform.position = new Vector3( targetX, transform.position.y, transform.position.z);
         transform.localScale = new Vector3(level*level, level*level, 1f);
         image.color = new Color(1f, 1f, 1f, 0f);
         isOut = false;

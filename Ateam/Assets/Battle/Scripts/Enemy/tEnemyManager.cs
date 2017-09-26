@@ -74,6 +74,24 @@ public class tEnemyManager : MonoBehaviour {
         return allDie;
     }
 
+    public float TargetX()
+    {
+        if (targeted == null)
+        {
+            return Screen.width/2f;
+        }
+        return targeted.transform.position.x;
+    }
+
+    public float TargetRange()
+    {
+        if (targeted != null || enemyList.Count == 1)
+        {
+            return 50f;
+        }
+        return 200f;
+    }
+
 	void Update () {
         allDie = true;
         for(int i=enemyList.Count-1; i>=0; i--)
