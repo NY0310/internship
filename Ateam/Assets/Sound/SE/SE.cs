@@ -23,7 +23,8 @@ public class SE : MonoBehaviour {
         DROP_BREAK3,
         BUTTON,
         DAMAGED,
-        ATTACK
+        ATTACK,
+        ENEMY_ATTACK
     }
 
     public AudioClip TitleStart;
@@ -34,6 +35,7 @@ public class SE : MonoBehaviour {
     public AudioClip ButtonPush;
     public AudioClip Damaged;
     public AudioClip Attack;
+    public AudioClip EnemyAttack;
 
     AudioSource source;
 
@@ -70,6 +72,9 @@ public class SE : MonoBehaviour {
                 break;
             case Name.ATTACK:
                 source.PlayOneShot(Attack, volume);
+                break;
+            case Name.ENEMY_ATTACK:
+                source.PlayOneShot(EnemyAttack, volume);
                 break;
         }
     }

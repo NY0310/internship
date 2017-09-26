@@ -23,6 +23,14 @@ public class tEnemyManager : MonoBehaviour {
         allDie = false;
     }
 
+    public void AttackEffect()
+    {
+        foreach (var enemy in enemyList)
+        {
+            enemy.Attack();
+        }
+    }
+
     public float GetAttackPower()
     {
         float sum=0;

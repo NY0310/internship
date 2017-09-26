@@ -62,9 +62,13 @@ public class BattleManager : MonoBehaviour {
     {
         return ( state == State.PLAYER_ATTACK || state == State.WAITING_USER_INPUT);
     }
+    public bool IsEnemyTurn()
+    {
+        return (state == State.ENEMY_ATTACK);
+    }
 
 
-    const float PLAYER_ATTACK_TIME = 5.0f;
+    const float PLAYER_ATTACK_TIME = 7.0f;
 
 
     ///　/////　　　仮　　　/////////////
@@ -160,6 +164,18 @@ public class BattleManager : MonoBehaviour {
 
     /// ///////////////////////////////////////////////////    更新処理    //////////////////////////////////////////////////////
 
+    public void PlayerDamaged(float power, tDrop.Type type)
+    {
+        float rate = 1f;
+        foreach (var damaged in damagedUp)
+        {
+            rate *= damaged.rate;
+        }
+        SEPlayer.Play(SE.Name.DAMAGED, 0.42f);
+        Vector3 pos = PlayerHP.transform.position;
+        PlayerHP.Damaged(power * rate, type, new Vector3(pos.x + Random.Range(200f,500f), pos.y, pos.z), 3f);
+    }
+
     bool enemyAttacked = false; // 仮
     void Update()
     {
@@ -179,19 +195,6 @@ public class BattleManager : MonoBehaviour {
             case State.ENEMY_DAMAGING:
                 break;
             case State.ENEMY_ATTACK:
-                CheckUnderDropsAreAllSame();
-                if (enemyAttackRemainingTime < 0.8f && !enemyAttacked)
-                {
-                    float rate = 1f;
-                    foreach (var damaged in damagedUp)
-                    {
-                        rate *= damaged.rate;
-                    }
-                    SEPlayer.Play(SE.Name.DAMAGED, 0.42f);
-                    Vector3 pos = PlayerHP.transform.position;
-                    PlayerHP.Damaged( enemyManager.GetAttackPower()*rate, tDrop.Type.All, new Vector3(pos.x + 500f,pos.y,pos.z) , 2f);
-                    enemyAttacked = true;
-                }
                 break;
             case State.NEXT_WAVE:
                 break;
@@ -350,23 +353,14 @@ public class BattleManager : MonoBehaviour {
                 break;
             case State.NEXT_WAVE:
                 nextWaveRemainingTime -= Time.deltaTime;
+                if (nextWaveRemainingTime <= 1.0f)
+                {
+                    enemyManager.transform.localPosition = new Vector3(0f, enemyManager.transform.localPosition.y + ( 600f - enemyManager.transform.localPosition.y)*0.2f, 0f);
+                }
                 if ( nextWaveRemainingTime <= 0 )
                 {
-                    wave++;
-                    if (wave < CurrentStageData.Data.enemyList.Count)
-                    {
-                        foreach (var enemy in CurrentStageData.Data.enemyList[wave].List)
-                        {
-                            enemyManager.SpawnEnemy(enemy);
-                        }
-                        if (wave == CurrentStageData.Data.enemyList.Count - 1)
-                            BGMPlayer.Play(BGM.Name.BOSS);
-                        ChangeState(State.WAITING_USER_INPUT);
-                    }
-                    else
-                    {
-                        ChangeState(State.CLEAR);
-                    }
+                    enemyManager.transform.localPosition = new Vector3(0f, 600f, 0f);
+                    ChangeState(State.WAITING_USER_INPUT);
                 }
                 break;
         }
@@ -454,11 +448,29 @@ public class BattleManager : MonoBehaviour {
             case State.ENEMY_ATTACK:
                 enemyAttacked = false;
                 enemyAttackRemainingTime = 3.5f;
+                enemyManager.AttackEffect();
                 this.state = State.ENEMY_ATTACK;
                 break;
             case State.NEXT_WAVE:
-                nextWaveRemainingTime = 1f;
+                nextWaveRemainingTime = 2f;
+                enemyManager.transform.localPosition = new Vector3(0f,1200f,0f);
                 this.state = State.NEXT_WAVE;
+
+                wave++;
+                if (wave < CurrentStageData.Data.enemyList.Count)
+                {
+                    foreach (var enemy in CurrentStageData.Data.enemyList[wave].List)
+                    {
+                        enemyManager.SpawnEnemy(enemy);
+                    }
+                    if (wave == CurrentStageData.Data.enemyList.Count - 1)
+                        BGMPlayer.Play(BGM.Name.BOSS);
+                }
+                else
+                {
+                    ChangeState(State.CLEAR);
+                }
+
                 break;
             case State.CLEAR:
                 BGMPlayer.Play(BGM.Name.CLEAR);

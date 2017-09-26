@@ -7,8 +7,10 @@ public class EggMove : MonoBehaviour {
 
     Image image;
     float defaultY;
+    BattleManager battleManager;
 	// Use this for initialization
 	void Start () {
+        battleManager = GameObject.Find("BattleManager").GetComponent<BattleManager>();
         image = GetComponent<Image>();
         defaultY = image.transform.localPosition.y;
 	}
@@ -17,8 +19,17 @@ public class EggMove : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        count += Time.deltaTime* Random.Range(0.5f,1.5f);
-        image.transform.rotation = Quaternion.Euler( new Vector3( 0f, 0f, Mathf.Max( Mathf.Sin(-0.75f+count*5f)-0.9f, 0f)*70f ));
-        image.transform.localPosition = new Vector3(image.transform.localPosition.x, defaultY + Mathf.Max(Mathf.Sin(count * 5f) - 0.9f, 0f)*235f, image.transform.localPosition.z);
+        if (battleManager.IsEnemyTurn())
+        {
+            count += Time.deltaTime * Random.Range(1f, 2f);
+            image.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Mathf.Max(Mathf.Sin(-0.75f + count * 5f) - 0.9f, 0f) * 20f));
+            image.transform.localPosition = new Vector3(image.transform.localPosition.x, defaultY + Mathf.Max(Mathf.Sin(count * 5f) - 0.7f, 0f) * 305f, image.transform.localPosition.z);
+        }
+        else
+        {
+            count += Time.deltaTime * Random.Range(0.5f, 1.5f);
+            image.transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, Mathf.Max(Mathf.Sin(-0.75f + count * 5f) - 0.9f, 0f) * 70f));
+            image.transform.localPosition = new Vector3(image.transform.localPosition.x, defaultY + Mathf.Max(Mathf.Sin(count * 5f) - 0.9f, 0f) * 235f, image.transform.localPosition.z);
+        }
     }
 }

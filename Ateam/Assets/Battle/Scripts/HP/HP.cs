@@ -55,6 +55,8 @@ public class HP : MonoBehaviour {
                 break;
         }
 
+        Camera.main.GetComponent<CameraShake>().Shake();
+
         return Mathf.Max(power - upperHp, 0f);
     }
     public void Recovery(float power)
