@@ -25,6 +25,11 @@ public class BattleManager : MonoBehaviour {
     public HP PlayerHP;
     public PlayerAttackRemaining playerAttackRemaining;
     public tEnemyManager enemyManager;
+
+    public AttackButtonEffect TryangleEffect;
+    public AttackButtonEffect CircleEffect;
+    public AttackButtonEffect CrossEffect;
+
     bool inputed=false;
 
     public GameObject Players;
@@ -78,6 +83,27 @@ public class BattleManager : MonoBehaviour {
         }
     }
 
+    void ButtonEffect(tDrop.Type type, int level)
+    {
+        switch (type)
+        {
+            case tDrop.Type.Tryangle:
+                TryangleEffect.Effect(level);
+                break;
+            case tDrop.Type.Cross:
+                CrossEffect.Effect(level);
+                break;
+            case tDrop.Type.Circle:
+                CircleEffect.Effect(level);
+                break;
+            case tDrop.Type.All:
+                TryangleEffect.Effect(level);
+                CrossEffect.Effect(level);
+                CircleEffect.Effect(level);
+                break;
+        }
+    }
+
     /// /////////////////////////////////////////////////////    ユーザー入力処理    /////////////////////////////////////////////
 
     /// <summary>
@@ -110,6 +136,8 @@ public class BattleManager : MonoBehaviour {
         {
             int destroyNum = dropLane.DestroyUnderDrop(type);
             attackPower[(int)type] += Mathf.Pow(2.3f,destroyNum)*attackPowerBase;
+            ButtonEffect(type,destroyNum);
+            
         }
     }
 
@@ -179,6 +207,7 @@ public class BattleManager : MonoBehaviour {
                     skill.Charge(1f);
                 }
             }
+            ButtonEffect((tDrop.Type)type,3);
         }
     }
 
