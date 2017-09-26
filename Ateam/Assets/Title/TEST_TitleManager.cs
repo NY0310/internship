@@ -16,11 +16,12 @@ public class TEST_TitleManager : MonoBehaviour {
 	void Update () {
         if (Input.GetMouseButtonDown(0))
         {
+            SEPlayer.Play( SE.Name.START, 0.25f);
             sinA.Tapped();
             Queue<string> loadList = new Queue<string>();
             loadList.Enqueue("Home");
             loadList.Enqueue("Footer");
-            SceneLoader.ChangeScene(SceneLoader.MakeQueue("Home","Footer"), 2.3f, 1.3f);
+            SceneLoader.ChangeScene(SceneLoader.MakeQueue("Home","Footer"), BGM.Name.MENU, 2.3f, 1.3f);
         }
 	}
 }

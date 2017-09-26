@@ -20,11 +20,12 @@ public class FooterSceneChange : MonoBehaviour {
 
         if (find)
         {
-            SceneLoader.ChangeScene(SceneLoader.MakeQueue(SceneName), 0f, 0f, SceneLoader.MakeList("Footer"));
+            SEPlayer.Play( SE.Name.BOOK, 2.8f);
+            SceneLoader.ChangeScene(SceneLoader.MakeQueue(SceneName), BGM.Name.MENU, 0f, 0f, SceneLoader.MakeList("Footer"));
         }
         else
         {
-            SceneLoader.ChangeScene(SceneLoader.MakeQueue("Footer",SceneName), 0f, 0f, SceneLoader.MakeList("Footer"));
+            SceneLoader.ChangeScene(SceneLoader.MakeQueue("Footer",SceneName), BGM.Name.MENU, 1.5f, 1.5f, SceneLoader.MakeList("Footer"));
         }
     }
 }

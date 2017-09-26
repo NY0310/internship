@@ -241,6 +241,8 @@ public class BattleManager : MonoBehaviour {
                         {
                             enemyManager.SpawnEnemy(enemy);
                         }
+                        if (wave == CurrentStageData.Data.enemyList.Count - 1)
+                            BGMPlayer.Play(BGM.Name.BOSS);
                         ChangeState(State.WAITING_USER_INPUT);
                     }
                     else
@@ -292,10 +294,12 @@ public class BattleManager : MonoBehaviour {
                 this.state = State.NEXT_WAVE;
                 break;
             case State.CLEAR:
+                BGMPlayer.Play(BGM.Name.CLEAR);
                 SceneManager.LoadScene("ResultSuccess", LoadSceneMode.Additive);
                 this.state = State.CLEAR;
                 break;
             case State.GAME_OVER:
+                BGMPlayer.Play(BGM.Name.GAME_OVER);
                 SceneManager.LoadScene("ResultFaild", LoadSceneMode.Additive);
                 this.state = State.GAME_OVER;
                 break;

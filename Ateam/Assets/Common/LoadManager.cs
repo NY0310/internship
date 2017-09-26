@@ -36,17 +36,18 @@ public class SceneLoader
         return result;
     }
 
-    public static bool ChangeScene(Queue<string> loadList, float fadeOutTime, float fadeInTime, List<string> ignorList = null)
+    public static bool ChangeScene(Queue<string> loadList, BGM.Name name, float fadeOutTime, float fadeInTime, List<string> ignorList = null)
     {
         var obj = GameObject.Find("Load");
         if (obj == null) return false;
-        return obj.GetComponent<LoadManager>().ChangeScene(loadList, fadeOutTime, fadeInTime, ignorList);
+        return obj.GetComponent<LoadManager>().ChangeScene(loadList, name, fadeOutTime, fadeInTime, ignorList);
     }
 }
 
 public class LoadManager : MonoBehaviour {
 
     public Fade fade;
+    public BGM bgm;
 
     bool doing = false;
     bool loading = false;
@@ -62,7 +63,7 @@ public class LoadManager : MonoBehaviour {
         Init();
         Queue<string> firstLoadList = new Queue<string>();
         firstLoadList.Enqueue("Title");
-        ChangeScene(firstLoadList, 0.05f, 1.5f );
+        ChangeScene(firstLoadList, BGM.Name.TITLE, 0.05f, 1.5f );
     }
 
     /// <summary>
@@ -73,7 +74,7 @@ public class LoadManager : MonoBehaviour {
     /// <param name="fadeInTime"></param>
     /// <param name="ignorList"></param>
     /// <returns></returns>
-    public bool ChangeScene( Queue<string> loadList, float fadeOutTime, float fadeInTime, List<string> ignorList = null )
+    public bool ChangeScene( Queue<string> loadList, BGM.Name name, float fadeOutTime, float fadeInTime, List<string> ignorList = null )
     {
         if (doing) return false;
         if (ignorList == null) ignorList = new List<string>();
@@ -88,6 +89,7 @@ public class LoadManager : MonoBehaviour {
             fade.Out(fadeOutTime, StartLoad);
         else StartLoad();
         doing = true;
+        bgm.Play(name);
         return true;
     }
 
