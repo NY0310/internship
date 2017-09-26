@@ -262,7 +262,7 @@ public class tDropLaneBase : MonoBehaviour {
     /// 一つでも動いているドロップがあるかどうか
     /// </summary>
     /// <returns></returns>
-    bool IsThereMovingDrop()
+    public bool IsThereMovingDrop()
     {
         for (int L = 0; L < LANE_NUM; L++)
         {

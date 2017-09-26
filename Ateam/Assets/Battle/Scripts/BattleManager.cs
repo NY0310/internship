@@ -62,7 +62,7 @@ public class BattleManager : MonoBehaviour {
     ///　/////　　　仮　　　/////////////
     void Start()
     {
-        Camera.main.GetComponent<CameraController>().MoveTo(new Vector3(0f, 9.68f, 1.62f),0.075f);
+        Camera.main.GetComponent<CameraController>().MoveTo(new Vector3(0f, 9f, 1.62f),0.075f);
         Camera.main.GetComponent<CameraController>().RotateTo(new Vector3(30f,0f,0f), 0.055f);
 
         playerSkill = new List<PlayerSkillManager>();
@@ -198,7 +198,8 @@ public class BattleManager : MonoBehaviour {
                 }
                 break;
             case State.WAITING_ALL_PLAYER_ATTACKS_END:
-                playerAttackEffectRemainingTime -= Time.deltaTime;
+                if( !dropLane.IsThereMovingDrop() )
+                    playerAttackEffectRemainingTime -= Time.deltaTime;
                 if (playerAttackEffectRemainingTime <= 0)
                 {
                     float rate = 1f;
