@@ -188,7 +188,8 @@ public class BattleManager : MonoBehaviour {
                         rate *= damaged.rate;
                     }
                     SEPlayer.Play(SE.Name.DAMAGED, 0.42f);
-                    PlayerHP.Damaged( enemyManager.GetAttackPower()*rate );
+                    Vector3 pos = PlayerHP.transform.position;
+                    PlayerHP.Damaged( enemyManager.GetAttackPower()*rate, tDrop.Type.All, new Vector3(pos.x + 500f,pos.y,pos.z) , 2f);
                     enemyAttacked = true;
                 }
                 break;
@@ -209,7 +210,18 @@ public class BattleManager : MonoBehaviour {
             playerAttackRemaining.Recover(0.4f);
             PlayerHP.Recovery(10f);
             float addPower = Mathf.Pow(2.3f, 2) * attackPowerBase;
-            attackPower[type] += addPower;
+
+            if (type == (int)tDrop.Type.All)
+            {
+                attackPower[0] += addPower;
+                attackPower[1] += addPower;
+                attackPower[2] += addPower;
+            }
+            else
+            {
+                attackPower[type] += addPower;
+            }
+
             foreach (var skill in playerSkill)
             {
                 if ((int)skill.type == type || type == (int)tDrop.Type.All)

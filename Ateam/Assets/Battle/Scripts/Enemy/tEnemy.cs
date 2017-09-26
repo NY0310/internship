@@ -30,11 +30,13 @@ public class tEnemy : MonoBehaviour {
 
     public float Damaged(float power, tDrop.Type damagedType)
     {
+        float scale = 1f;
         if (damagedType == type || damagedType == tDrop.Type.All)
         {
+            scale = 3f;
             power *= 2f;
         }
-        return hp.Damaged(power);
+        return hp.Damaged(power, damagedType, transform.position + new Vector3(Random.Range(-100f,100f),Random.Range(-100f,100f) - 50f,0f), scale);
     }
 
     void Update()
