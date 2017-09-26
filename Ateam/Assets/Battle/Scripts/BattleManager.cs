@@ -45,7 +45,9 @@ public class BattleManager : MonoBehaviour {
         PLAYER_ATTACK,
         WAITING_ALL_PLAYER_ATTACKS_END,
         ENEMY_ATTACK,
-        NEXT_WAVE
+        NEXT_WAVE,
+        CLEAR,
+        GAME_OVER
     }
     State state;
     public bool IsPlayerTurn()
@@ -154,6 +156,10 @@ public class BattleManager : MonoBehaviour {
                 break;
             case State.NEXT_WAVE:
                 break;
+            case State.CLEAR:
+                break;
+            case State.GAME_OVER:
+                break;
         }
     }
 
@@ -214,7 +220,14 @@ public class BattleManager : MonoBehaviour {
                 enemyAttackRemainingTime -= Time.deltaTime;
                 if (enemyAttackRemainingTime <= 0)
                 {
-                    ChangeState(State.WAITING_USER_INPUT);
+                    if (PlayerHP.IsDie())
+                    {
+                        ChangeState(State.GAME_OVER);
+                    }
+                    else
+                    {
+                        ChangeState(State.WAITING_USER_INPUT);
+                    }
                 }
                 break;
             case State.NEXT_WAVE:
@@ -228,13 +241,12 @@ public class BattleManager : MonoBehaviour {
                         {
                             enemyManager.SpawnEnemy(enemy);
                         }
+                        ChangeState(State.WAITING_USER_INPUT);
                     }
                     else
                     {
-                        SceneManager.LoadScene("ResultSuccess",LoadSceneMode.Additive);
-                        
+                        ChangeState(State.CLEAR);
                     }
-                    ChangeState(State.WAITING_USER_INPUT);
                 }
                 break;
         }
@@ -278,6 +290,14 @@ public class BattleManager : MonoBehaviour {
             case State.NEXT_WAVE:
                 nextWaveRemainingTime = 1f;
                 this.state = State.NEXT_WAVE;
+                break;
+            case State.CLEAR:
+                SceneManager.LoadScene("ResultSuccess", LoadSceneMode.Additive);
+                this.state = State.CLEAR;
+                break;
+            case State.GAME_OVER:
+                SceneManager.LoadScene("ResultFaild", LoadSceneMode.Additive);
+                this.state = State.GAME_OVER;
                 break;
         }
     }

@@ -9,6 +9,22 @@ public class FooterSceneChange : MonoBehaviour {
 
     public void ClickedEvent()
     {
-        SceneLoader.ChangeScene(SceneLoader.MakeQueue(SceneName), 0f, 0f, SceneLoader.MakeList("Footer"));
+        bool find = false;
+        for (int i = 0; i < SceneManager.sceneCount; i++)
+        {
+            if (SceneManager.GetSceneAt(i).name == "Footer")
+            {
+                find = true;
+            }
+        }
+
+        if (find)
+        {
+            SceneLoader.ChangeScene(SceneLoader.MakeQueue(SceneName), 0f, 0f, SceneLoader.MakeList("Footer"));
+        }
+        else
+        {
+            SceneLoader.ChangeScene(SceneLoader.MakeQueue("Footer",SceneName), 0f, 0f, SceneLoader.MakeList("Footer"));
+        }
     }
 }
