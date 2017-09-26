@@ -16,6 +16,10 @@ public class FooterSceneChange : MonoBehaviour {
             {
                 find = true;
             }
+            if (SceneManager.GetSceneAt(i).name == SceneName)
+            {
+                return;
+            }
         }
 
         if (find)

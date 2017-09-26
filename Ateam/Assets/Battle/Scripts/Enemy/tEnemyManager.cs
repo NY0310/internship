@@ -35,6 +35,7 @@ public class tEnemyManager : MonoBehaviour {
 
     public void Damaged(float[] power, float rate)
     {
+        SEPlayer.Play( SE.Name.DAMAGED, 0.42f);
         for (int i=0; i<power.Length; i++) {
             int num = enemyList.Count;
             if (targeted != null)
@@ -52,6 +53,27 @@ public class tEnemyManager : MonoBehaviour {
                 }
             }
         }
+    }
+
+    public bool CheckAllDie()
+    {
+        allDie = true;
+        for (int i = enemyList.Count - 1; i >= 0; i--)
+        {
+            if (enemyList[i] == null)
+            {
+                enemyList.Remove(enemyList[i]);
+            }
+            else if (enemyList[i].hp.IsDie())
+            {
+                enemyList.Remove(enemyList[i]);
+            }
+            else
+            {
+                allDie = false;
+            }
+        }
+        return allDie;
     }
 
 	void Update () {

@@ -150,6 +150,7 @@ public class BattleManager : MonoBehaviour {
                     {
                         rate *= damaged.rate;
                     }
+                    SEPlayer.Play(SE.Name.DAMAGED, 0.42f);
                     PlayerHP.Damaged( enemyManager.GetAttackPower()*rate );
                     enemyAttacked = true;
                 }
@@ -193,12 +194,6 @@ public class BattleManager : MonoBehaviour {
             case State.PLAYER_ATTACK:
                 if (playerAttackRemaining.IsFinished())
                 {
-                    float rate = 1f;
-                    foreach (var attack in attackUp )
-                    {
-                        rate *= attack.rate;
-                    }
-                    enemyManager.Damaged(attackPower,rate);
                     ChangeState(State.WAITING_ALL_PLAYER_ATTACKS_END);
                 }
                 break;
@@ -206,7 +201,13 @@ public class BattleManager : MonoBehaviour {
                 playerAttackEffectRemainingTime -= Time.deltaTime;
                 if (playerAttackEffectRemainingTime <= 0)
                 {
-                    if (enemyManager.AllDie)
+                    float rate = 1f;
+                    foreach (var attack in attackUp)
+                    {
+                        rate *= attack.rate;
+                    }
+                    enemyManager.Damaged(attackPower, rate);
+                    if (enemyManager.CheckAllDie())
                     {
                         ChangeState(State.NEXT_WAVE);
                     }
@@ -281,12 +282,12 @@ public class BattleManager : MonoBehaviour {
                 this.state = State.PLAYER_ATTACK;
                 break;
             case State.WAITING_ALL_PLAYER_ATTACKS_END:
-                playerAttackEffectRemainingTime = 2.5f;
+                playerAttackEffectRemainingTime = 1f;
                 this.state = State.WAITING_ALL_PLAYER_ATTACKS_END;
                 break;
             case State.ENEMY_ATTACK:
                 enemyAttacked = false;
-                enemyAttackRemainingTime = 0.5f;
+                enemyAttackRemainingTime = 3.5f;
                 this.state = State.ENEMY_ATTACK;
                 break;
             case State.NEXT_WAVE:

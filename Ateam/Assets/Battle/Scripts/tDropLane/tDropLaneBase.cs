@@ -168,8 +168,8 @@ public class tDropLaneBase : MonoBehaviour {
     {
         if (drops[L, D] == null) return;
         // ここに消滅エフェクトを追加
-        Destroy(drops[L, D].gameObject);
-        drops[L, D] = null;
+        drops[L, D].DoDestroy();
+        // drops[L, D] = null;
     }
 
     /// <summary>
@@ -184,13 +184,33 @@ public class tDropLaneBase : MonoBehaviour {
         for (int L = 0; L < LANE_NUM; L++)
         {
             // ここの虹色消したとき、他の色どう判定するか決める。intは何を返す？
-            if (drops[L, UNDER_DROP].type == type)
+            if (drops[L, UNDER_DROP].type == type && isExist(L,UNDER_DROP))
             {
                 count++;
                 DestroyDrop(L, UNDER_DROP);
             }
         }
+
+        if (count == 0)
+            SEPlayer.Play(SE.Name.DROP_BREAK1, 0f, count / 7f + 0.7f);
+        else if(count == 1)
+            SEPlayer.Play(SE.Name.DROP_BREAK1, 0.25f);
+        else if(count == 2)
+            SEPlayer.Play(SE.Name.DROP_BREAK2, 0.18f);
+
         return count;
+    }
+
+    bool isExist(int L, int D)
+    {
+        if (drops[L, D] != null)
+        {
+            if (!drops[L, D].isDestroying)
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     /// <summary>
@@ -207,7 +227,7 @@ public class tDropLaneBase : MonoBehaviour {
         tDrop.Type type;
         // 虹色はどう判定する？
         // nullでなければ
-        if (drops[0, UNDER_DROP] != null && drops[1, UNDER_DROP] != null && drops[2, UNDER_DROP] != null)
+        if (isExist(0, UNDER_DROP) && isExist(1, UNDER_DROP) && isExist(2, UNDER_DROP))
         {
             // 3つとも同じなら
             if (IsSame(0, UNDER_DROP, 1, UNDER_DROP) && IsSame(1, UNDER_DROP, 2, UNDER_DROP))
@@ -216,6 +236,7 @@ public class tDropLaneBase : MonoBehaviour {
                 DestroyDrop(0, UNDER_DROP);
                 DestroyDrop(1, UNDER_DROP);
                 DestroyDrop(2, UNDER_DROP);
+                SEPlayer.Play(SE.Name.DROP_BREAK3, 0.3f);
                 return (int)type;
             }
             else if (drops[0, UNDER_DROP].type == tDrop.Type.All || drops[1, UNDER_DROP].type == tDrop.Type.All || drops[2, UNDER_DROP].type == tDrop.Type.All)
@@ -223,6 +244,7 @@ public class tDropLaneBase : MonoBehaviour {
                 DestroyDrop(0, UNDER_DROP);
                 DestroyDrop(1, UNDER_DROP);
                 DestroyDrop(2, UNDER_DROP);
+                SEPlayer.Play(SE.Name.DROP_BREAK3, 0.3f);
                 return (int)tDrop.Type.All;
             }
         }

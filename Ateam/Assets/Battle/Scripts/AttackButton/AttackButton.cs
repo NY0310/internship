@@ -25,10 +25,16 @@ public class AttackButton : MonoBehaviour {
         remaining = Mathf.Clamp(remaining, 0f, MaxRemaining);
     }
 
+    void SEPlay()
+    {
+        // SEPlayer.Play(SE.Name.BUTTON, 0.05f);
+    }
+
     public void TapCross()
     {
         if (battleManager.IsPlayerTurn() && remaining >= 1f)
         {
+            SEPlay();
             battleManager.TapCross();
             AddRemaining(-1f);
         }
@@ -37,6 +43,7 @@ public class AttackButton : MonoBehaviour {
     {
         if (battleManager.IsPlayerTurn() && remaining >= 1f)
         {
+            SEPlay();
             battleManager.TapCircle();
             AddRemaining(-1f);
         }
@@ -45,6 +52,7 @@ public class AttackButton : MonoBehaviour {
     {
         if (battleManager.IsPlayerTurn() && remaining >= 1f)
         {
+            SEPlay();
             battleManager.TapTryangle();
             AddRemaining(-1f);
         }

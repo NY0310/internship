@@ -11,11 +11,14 @@ public class TEST_TitleManager : MonoBehaviour {
 	void Start () {
 		
 	}
-	
+
+    bool loading = false;
+
 	// Update is called once per frame
 	void Update () {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && !loading)
         {
+            loading = true;
             SEPlayer.Play( SE.Name.START, 0.25f);
             sinA.Tapped();
             Queue<string> loadList = new Queue<string>();
