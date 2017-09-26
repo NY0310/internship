@@ -29,10 +29,8 @@ public class SinA : MonoBehaviour {
 
     float count = 0f;
     float endCount = 0f;
-    float finishCount = 0f;
     const float START_TIME = 4f;
-    const float END_TIME = 0.5f;
-    const float FINISH_TIME = 0.5f;
+    const float END_TIME = 1.5f;
 
 	void Update () {
         count += Time.deltaTime;
@@ -51,14 +49,13 @@ public class SinA : MonoBehaviour {
         {
             endCount += Time.deltaTime;
             newA2 = Mathf.Max(1f - endCount / END_TIME, 0f);
-            newA = 1f;
+            newA = 1f - endCount / END_TIME;
             image.rectTransform.localScale = new Vector3(1f+endCount*5f, 1f -  Mathf.Sin(endCount/END_TIME), 1f);
         }
         else
         {
-            finishCount += Time.deltaTime;
             newA2 = 0f;
-            newA = 1f - finishCount / FINISH_TIME;
+            newA = 0f;
         }
 
         SetA(newA);

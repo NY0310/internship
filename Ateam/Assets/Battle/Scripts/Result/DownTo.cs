@@ -17,7 +17,7 @@ public class DownTo : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float newY = rect.position.y + (defaultPos.y - rect.position.y) * Time.deltaTime*3;
+        float newY = rect.position.y + (defaultPos.y - rect.position.y) * Time.deltaTime*5;
         rect.position = new Vector3(defaultPos.x, newY , defaultPos.z);
     }
 }

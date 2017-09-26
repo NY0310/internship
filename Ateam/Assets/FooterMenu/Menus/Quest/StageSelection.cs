@@ -28,6 +28,6 @@ public class StageSelection : MonoBehaviour {
     public void ClickedEvent()
     {
         CurrentStageData.Data = GetComponent<StageData>();
-        SceneLoader.ChangeScene(SceneLoader.MakeQueue("Battle") ,1.5f, 1.5f );
+        GetComponent<FooterSceneChange>().ClickedEvent();
     }
 }
