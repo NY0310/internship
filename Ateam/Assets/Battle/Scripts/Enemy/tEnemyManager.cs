@@ -9,7 +9,7 @@ public class tEnemyManager : MonoBehaviour {
     public bool AllDie { get{ return allDie; } }
 
     // 攻撃の仮仕様：　ターゲットが居る場合のみ、そいつ単体攻撃。ない場合は単体攻撃なしで、余った攻撃力を均等に分散する
-    tEnemy targeted = null;
+    public tEnemy targeted = null;
     public void LockOnEvent(tEnemy enemy)
     {
         targeted = enemy;
