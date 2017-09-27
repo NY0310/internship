@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 /// <summary>
 /// ユーザーからの入力処理と
@@ -37,7 +38,7 @@ public class BattleManager : MonoBehaviour {
     public GameObject Players;
     List<PlayerSkillManager> playerSkill;
 
-    public GameObject enemy_1;// 仮
+    // public GameObject enemy_1;// 仮
     float attackPowerBase = 30f; // 仮変数
     float[] attackPower= new float[4]; // 仮変数
 
@@ -176,9 +177,27 @@ public class BattleManager : MonoBehaviour {
         PlayerHP.Damaged(power * rate, type, new Vector3(pos.x + Random.Range(Screen.width/5f,Screen.width/5f*4f), pos.y, pos.z), 3f);
     }
 
+    public Text attackUpText;
+    public Text damagedUpText;
     bool enemyAttacked = false; // 仮
     void Update()
     {
+        if (attackUp.Count > 0)
+        {
+            attackUpText.color = new Color(1, 1, 1, 1);
+        }
+        else
+        {
+            attackUpText.color = new Color(1, 1, 1, 0);
+        }
+        if (damagedUp.Count > 0)
+        {
+            damagedUpText.color = new Color(1, 1, 1, 1);
+        }
+        else
+        {
+            damagedUpText.color = new Color(1, 1, 1, 0);
+        }
         inputed = false;
         UpdateState();
         switch (state)

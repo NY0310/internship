@@ -53,6 +53,11 @@ public class PlayerAttackRemaining : MonoBehaviour {
         else
         {
             stoppingTime -= Time.deltaTime;
+            text.text = remainingTime.ToString("#0.00");
+            if (remainingTime <= 0)
+            {
+                text.text = "";
+            }
         }
     }
 }

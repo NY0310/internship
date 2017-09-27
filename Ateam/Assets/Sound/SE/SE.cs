@@ -26,7 +26,8 @@ public class SE : MonoBehaviour {
         ATTACK,
         ENEMY_ATTACK,
         ENEMY_DIE,
-        ENEMY_DAMAGED
+        ENEMY_DAMAGED,
+        SKILL
     }
 
     public AudioClip TitleStart;
@@ -40,6 +41,7 @@ public class SE : MonoBehaviour {
     public AudioClip EnemyAttack;
     public AudioClip EnemyDie;
     public AudioClip EnemyDamaged;
+    public AudioClip Skill;
 
     AudioSource source;
 
@@ -85,6 +87,9 @@ public class SE : MonoBehaviour {
                 break;
             case Name.ENEMY_DAMAGED:
                 source.PlayOneShot(EnemyDamaged, volume);
+                break;
+            case Name.SKILL:
+                source.PlayOneShot(Skill, volume);
                 break;
         }
     }

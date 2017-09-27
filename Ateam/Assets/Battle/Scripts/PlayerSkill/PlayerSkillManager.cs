@@ -52,6 +52,7 @@ public class PlayerSkillManager : MonoBehaviour {
         ChargedEnergy = 0;
         battleManager.playerAttackRemaining.Stop(SKILL_TIME);
         CutIn();
+        SEPlayer.Play( SE.Name.SKILL, 0.3f);
     }
 
     float SkillRemainingTime;
