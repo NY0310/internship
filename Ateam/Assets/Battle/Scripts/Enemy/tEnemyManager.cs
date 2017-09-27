@@ -97,7 +97,7 @@ public class tEnemyManager : MonoBehaviour {
         {
             return 50f;
         }
-        return 200f;
+        return Screen.width/2.3f;
     }
 
 	void Update () {

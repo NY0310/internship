@@ -10,10 +10,13 @@ public class PlayerSkillManager : MonoBehaviour {
     private UnityEvent skill = new UnityEvent();
 
     Image image;
+    public Sprite CutInImage;
+    public GameObject CutInController;
 
     public tDrop.Type type; // 仮。本当はプレイヤーのステータス管理クラスから引っ張ってくるが、今回はそういうのが無いので
 
     BattleManager battleManager;
+    const float SKILL_TIME = 3f;
 
     void Start()
     {
@@ -47,10 +50,34 @@ public class PlayerSkillManager : MonoBehaviour {
         if (!battleManager.IsPlayerTurn()) return;
         if (ChargedEnergy < NeedEnergy) return;
         ChargedEnergy = 0;
-        skill.Invoke();
+        battleManager.playerAttackRemaining.Stop(SKILL_TIME);
+        CutIn();
     }
-    
+
+    float SkillRemainingTime;
+
+    void CutIn()
+    {
+        SkillRemainingTime = SKILL_TIME;
+        CutInController.GetComponent<CutInManager>().Activate(CutInImage, SkillRemainingTime);
+    }
+
+    bool skillActivated = false;
+
     void Update () {
+        if (SkillRemainingTime > 0)
+        {
+            SkillRemainingTime -= Time.deltaTime;
+            if (SkillRemainingTime <= 1f && !skillActivated)
+            {
+                skillActivated = true;
+                skill.Invoke();
+            }
+            if (SkillRemainingTime <= 0)
+            {
+                skillActivated = false;
+            }
+        }
         transform.localScale = new Vector3(transform.localScale.x, 0.92f*ChargedEnergy/NeedEnergy, transform.localScale.z);
 	}
 }

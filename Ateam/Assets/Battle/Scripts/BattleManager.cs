@@ -173,7 +173,7 @@ public class BattleManager : MonoBehaviour {
         }
         SEPlayer.Play(SE.Name.DAMAGED, 0.42f);
         Vector3 pos = PlayerHP.transform.position;
-        PlayerHP.Damaged(power * rate, type, new Vector3(pos.x + Random.Range(200f,500f), pos.y, pos.z), 3f);
+        PlayerHP.Damaged(power * rate, type, new Vector3(pos.x + Random.Range(Screen.width/5f,Screen.width/5f*4f), pos.y, pos.z), 3f);
     }
 
     bool enemyAttacked = false; // 仮

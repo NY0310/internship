@@ -25,6 +25,12 @@ public class PlayerAttackRemaining : MonoBehaviour {
         remainingTime += amount;
     }
 
+    float stoppingTime=0f;
+    public void Stop(float stoppingTime)
+    {
+        this.stoppingTime = stoppingTime;
+    }
+
     public bool IsFinished()
     {
         return remainingTime <= 0f;
@@ -32,14 +38,21 @@ public class PlayerAttackRemaining : MonoBehaviour {
 
     void Update()
     {
-        if (remainingTime > 0)
+        if (stoppingTime <= 0)
         {
-            remainingTime -= Time.deltaTime;
-            text.text = remainingTime.ToString("#0.00");
-            if (remainingTime <= 0)
+            if (remainingTime > 0)
             {
-                text.text = "";
+                remainingTime -= Time.deltaTime;
+                text.text = remainingTime.ToString("#0.00");
+                if (remainingTime <= 0)
+                {
+                    text.text = "";
+                }
             }
+        }
+        else
+        {
+            stoppingTime -= Time.deltaTime;
         }
     }
 }
